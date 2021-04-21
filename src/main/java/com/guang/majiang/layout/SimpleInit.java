@@ -1,14 +1,12 @@
 package com.guang.majiang.layout;
 
-import com.guang.majiang.common.CardStatus;
-import com.guang.majiang.common.CardType;
-import com.guang.majiang.common.Direction;
-import com.guang.majiang.common.ImageRoot;
+import com.guang.majiang.common.*;
 import com.guang.majiang.image.BackgroundMyImage;
 import com.guang.majiang.image.CardFaceImage;
 import com.guang.majiang.image.CardImage;
 import com.guang.majiang.player.Player;
 import com.guang.majiang.player.PlayerCard;
+import com.guang.majiang.player.PlayerNode;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.stage.Screen;
@@ -34,9 +32,7 @@ public final class SimpleInit implements Init {
 
     private CardImage cardImage;
 
-    private List<CardImage> cards;
-
-    private static PlayerCard[] playerCards;
+    private LinkedList<CardImage> cards;
 
     private static Map<Character, Integer> points = new HashMap<>(3);
 
@@ -84,14 +80,14 @@ public final class SimpleInit implements Init {
     }
 
     @Override
-    public List<CardImage> addCards() {
+    public LinkedList<CardImage> addCards() {
 
         // 1.加载麻将图片
         Load load = new LoadImpl();
 
         List<ImageView> cards = load.loads(ImageRoot.MAJIANG_IMAGE_ROOT.getPath());
 
-        List<CardImage> images = new ArrayList<>();
+        LinkedList<CardImage> images = new LinkedList<>();
 
         for (ImageView card : cards) {
 
@@ -116,64 +112,64 @@ public final class SimpleInit implements Init {
 
                 // 首先加载麻将背面图片
                 CardFaceImage cardFaceImage = addFaceDown();
-
                 CardImage c = new CardImage("card", filePath, name, card,
                         card.getImage().getHeight(), card.getImage().getWidth(),
                         cardType, value, CardStatus.STORAGE, cardFaceImage);
-
-                images.add(c);
-
+                images.offer(c);
             }
-
         }
+
+        // 洗牌
+        Collections.shuffle(images);
 
         return images;
     }
 
     @Override
-    public PlayerCard[] addPlayerCard() {
+    public PlayerNode<Player> addPlayerCard() {
 
         System.out.println("棋牌的数量：" + cards.size());
         // 游戏初始化 四位玩家
-        playerCards = new PlayerCard[4];
 
-        playerCards[0] = new PlayerCard(new Player("1", "张三", Direction.UNDER, false, 0), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), playerCards);
-        playerCards[1] = new PlayerCard(new Player("2", "李四", Direction.LEFT, false, 0), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), playerCards);
-        playerCards[2] = new PlayerCard(new Player("3", "王五", Direction.ABOVE, false, 0), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), playerCards);
-        playerCards[3] = new PlayerCard(new Player("4", "王麻子", Direction.RIGHT, false, 0), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), playerCards);
-        // 洗牌
-        Collections.shuffle(cards);
+        PlayerNode<Player> under = new PlayerNode<>(
+                new Player("1", "张三", Direction.UNDER, false, 0,
+                        new PlayerCard(new ArrayList<>(), new ArrayList<>(), new ArrayList<>())));
 
-        LinkedList<CardImage> handCards = new LinkedList<>(cards);
+        PlayerNode<Player> left = new PlayerNode<>(new Player("2", "李四", Direction.LEFT, false, 0,
+                new PlayerCard(new ArrayList<>(), new ArrayList<>(), new ArrayList<>())));
+
+        PlayerNode<Player> above = new PlayerNode<>(new Player("3", "王五", Direction.ABOVE, false, 0,
+                new PlayerCard(new ArrayList<>(), new ArrayList<>(), new ArrayList<>())));
+
+        PlayerNode<Player> right = new PlayerNode<>(new Player("4", "王麻子", Direction.RIGHT, false, 0,
+                new PlayerCard(new ArrayList<>(), new ArrayList<>(), new ArrayList<>())));
+
+        under.next = right;
+        right.prev = under;
+
+        right.next = above;
+        above.prev = right;
+
+        above.next = left;
+        left.prev = above;
+
+        left.next = under;
+        under.prev = left;
 
         // 确定庄家
         int r = new Random().nextInt(4);
 
-        System.out.println("庄家为： " + r);
-
-        playerCards[r].getPlayer().setBookmaker(true);
-        playerCards[r].getPlayer().setIsRound(1);
-        // 模拟发牌
-        for (int i = 0; i < 4; i++) {
-
-            // 初始手牌数
-            int countCardHand = i == r ? 14 : 13;
-
-            for (int j = 0; j < countCardHand; j++) {
-                CardImage c = handCards.poll();
-                playerCards[i].getCards().add(c);
-                // 设置手牌状态
-                assert c != null;
-                c.setCardStatus(CardStatus.HOLD);
-            }
-
+        PlayerNode<Player> bookmaker = under;
+        while (r > 0) {
+            bookmaker = bookmaker.next;
+            r --;
         }
+        Player p = bookmaker.item;
+        System.out.println("庄家为： " + p.getDirection());
 
-        for (PlayerCard playerCard : playerCards) {
-            playerCard.start();
-        }
-
-        return playerCards;
+        p.setBookmaker(true);
+        p.setIsRound(1);
+        return under;
     }
 
 
@@ -186,7 +182,6 @@ public final class SimpleInit implements Init {
                 return (c - '0') + points.get(chars[0]);
             }
         }
-
         return -1;
     }
 
@@ -226,8 +221,42 @@ public final class SimpleInit implements Init {
         cardFaceImage.setFaceDownRight(faceDownRight);
 
         return cardFaceImage;
-
     }
 
+    public List<ImageView> loadSpecialImage(String... names) {
+        List<ImageView> eventImages = new ArrayList<>();
+        Load load = new LoadImpl();
+        for (String name : names) {
+            String path = ImageRoot.EVENT_IMAGE_ROOT.getPath() + File.separator +
+                                name;
+            ImageView img = load.load(path);
+            img.setFitWidth(img.getFitWidth() / 2);
+            img.setFitHeight(img.getFitHeight() / 2);
+            if(eventImages.size() == 0) {
+                img.setX(GlobalConstant.BG_WEITH - 6 * img.getFitWidth());
+            }else {
+                img.setX(eventImages.get(eventImages.size() - 1).getX() + img.getFitWidth());
+            }
+            img.setY(GlobalConstant.BG_HEIGHT - 3 * GlobalConstant.CARD_HEIGHT);
+            img.setVisible(false);
+            img.setId(name);
+            eventImages.add(img);
+        }
+        ImageView ignore = eventImages.get(eventImages.size() - 1);
+        ignore.setX(ignore.getX() + 30);
+        return eventImages;
+    }
+
+    public ImageView loadArrow(String name) {
+        Load load = new LoadImpl();
+        String path = ImageRoot.ARROW_IMAGE_ROOT.getPath() + File.separator +
+                name;
+        ImageView arrow = load.load(path);
+        arrow.setFitHeight(arrow.getFitHeight() / 10);
+        arrow.setFitWidth(arrow.getFitWidth() / 10);
+        arrow.setId("arrow");
+        arrow.setVisible(false);
+        return arrow;
+    }
 
 }

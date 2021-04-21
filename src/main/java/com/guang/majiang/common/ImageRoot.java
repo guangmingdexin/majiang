@@ -11,8 +11,13 @@ public enum ImageRoot {
 
      MAJIANG_IMAGE_ROOT("image"),
 
-     BACKGROUNG_IMAGE_ROOT("background");
+     BACKGROUNG_IMAGE_ROOT("background"),
 
+     EVENT_IMAGE_ROOT("event"),
+
+     ARROW_IMAGE_ROOT("arrow"),
+
+     GAME_CLIENT_CONFIG("config");
 
      private final String root = System.getProperty("user.dir") + File.separator + "src\\main\\resources\\";
 

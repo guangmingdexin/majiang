@@ -2,15 +2,9 @@ package com.guang.majiang.image;
 
 import com.guang.majiang.common.CardStatus;
 import com.guang.majiang.common.CardType;
-import com.guang.majiang.event.CardEvent;
-import com.guang.majiang.event.SimpleOperationFunc;
-import com.guang.majiang.player.PlayerCard;
 import javafx.scene.image.ImageView;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 /**
  * @ClassName CardImage
@@ -21,7 +15,7 @@ import java.util.List;
  **/
 @Getter
 @Setter
-public class CardImage extends MyImage  {
+public class CardImage extends MyImage implements Comparable<CardImage> {
 
     private double height;
 
@@ -48,4 +42,8 @@ public class CardImage extends MyImage  {
     }
 
 
+    @Override
+    public int compareTo(CardImage o) {
+        return this.getValue() - o.getValue();
+    }
 }

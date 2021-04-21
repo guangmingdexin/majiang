@@ -2,7 +2,8 @@ package com.guang.majiang.layout;
 
 import com.guang.majiang.image.BackgroundMyImage;
 import com.guang.majiang.image.CardImage;
-import com.guang.majiang.player.PlayerCard;
+import com.guang.majiang.player.Player;
+import com.guang.majiang.player.PlayerNode;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface Init {
     List<CardImage> addCards();
 
     // 初始化玩家手牌
-    PlayerCard[] addPlayerCard();
+    PlayerNode<Player> addPlayerCard();
 
     // 条件头像
 

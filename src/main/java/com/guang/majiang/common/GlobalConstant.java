@@ -3,7 +3,6 @@ package com.guang.majiang.common;
 import com.guang.majiang.image.CardImage;
 import com.guang.majiang.image.MyImage;
 import com.guang.majiang.layout.SimpleInit;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +18,6 @@ import java.util.List;
 @Setter
 @Getter
 public class GlobalConstant {
-
 
     public static final int BG_HEIGHT;
 
@@ -41,7 +39,7 @@ public class GlobalConstant {
 
     public static final int MIDDLEY;
 
-    static volatile GlobalConstant INSTANCE;
+    public static final int MIDDLEFTY;
 
     static {
         SimpleInit init = new SimpleInit();
@@ -62,27 +60,17 @@ public class GlobalConstant {
 
         MIDDLEX = (GlobalConstant.BG_WEITH - GlobalConstant.CARD_WIDTH) / 2;
         MIDDLEY = (GlobalConstant.BG_HEIGHT - GlobalConstant.CARD_HEIGHT) / 2;
+
+        MIDDLEFTY = (int) getStart(GlobalConstant.BG_HEIGHT, GlobalConstant.MAX_TOTAL_HIGHT) + 14 * FACE_DOWN_LEFT_HEIGHT;
+
     }
 
     private GlobalConstant() {
 
-
     }
 
-    public static GlobalConstant getInstance() {
-
-        //
-        if(INSTANCE == null) {
-
-            synchronized (INSTANCE) {
-                if(INSTANCE == null) {
-                    return new GlobalConstant();
-                }
-            }
-        }
-
-        return INSTANCE;
-
+    public static double getStart(double width, double maxWidth) {
+        return Math.abs(width - maxWidth) / 2;
     }
 
 }
