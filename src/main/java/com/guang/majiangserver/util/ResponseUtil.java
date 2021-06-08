@@ -1,6 +1,6 @@
 package com.guang.majiangserver.util;
 
-import com.guang.majiangclient.client.common.Event;
+import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.entity.AuthResponse;
 import com.guang.majiangclient.client.message.AuthResponseMessage;
 
@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * @ClassName ResponseUtil
- * @Description TODO
+ * @Description
  * @Author guangmingdexin
  * @Date 2021/4/20 18:29
  * @Version 1.0

@@ -1,6 +1,6 @@
 package com.guang.majiangclient.client.handle.action;
 
-import com.guang.majiangclient.client.common.Action;
+import com.guang.majiangclient.client.common.annotation.Action;
 import com.guang.majiangclient.client.entity.User;
 import com.guang.majiangclient.client.message.AuthResponseMessage;
 import io.netty.channel.ChannelHandlerContext;

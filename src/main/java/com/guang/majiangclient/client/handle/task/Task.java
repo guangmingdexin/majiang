@@ -1,7 +1,6 @@
 package com.guang.majiangclient.client.handle.task;
 
-import com.guang.majiangclient.client.common.Event;
-import com.guang.majiangclient.client.entity.AuthResponse;
+import com.guang.majiangclient.client.common.enums.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,16 +14,25 @@ import lombok.Setter;
  **/
 @Getter
 @Setter
-@AllArgsConstructor
 public class Task<T> {
 
     private Event event;
 
+    // 需要发送的数据类型
     private T data;
 
+    public Task(Event event, T data) {
+        this.event = event;
+        this.data = data;
+    }
 
     @Override
     public boolean equals(Object obj) {
+
+        if(this == obj) {
+            return true;
+        }
+
         if(obj instanceof Task) {
             return this.event == ((Task) obj).event;
         }
@@ -33,6 +41,6 @@ public class Task<T> {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return event.hashCode() + data.hashCode();
     }
 }

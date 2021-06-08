@@ -2,7 +2,7 @@ package com.guang.majiangserver.handle.decodec;
 
 import com.guang.majiangclient.client.common.GenericMessage;
 import com.guang.majiangclient.client.common.MessageFactory;
-import com.guang.majiangclient.client.common.MessageVersion;
+import com.guang.majiangclient.client.common.enums.MessageVersion;
 import com.guang.majiangclient.client.util.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,7 +34,7 @@ public class GenericPackageClassDecoder extends MessageToMessageDecoder<ByteBuf>
         // 读取类型
         short t = in.readShort();
         // 读取数据包长度
-        short l = in.readShort();
+        int l = in.readInt();
         if(l < 0 || l > GenericMessage.PKG_MAX_LENGTH) {
             throw new IllegalArgumentException("数据包数据超过最大长度！");
         }

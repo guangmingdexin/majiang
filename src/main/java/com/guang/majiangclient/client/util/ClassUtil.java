@@ -1,13 +1,11 @@
 package com.guang.majiangclient.client.util;
 
-import com.guang.majiangclient.client.common.ClassInfo;
+import com.guang.majiangclient.client.common.annotation.ClassInfo;
+import com.guang.majiangclient.client.entity.User;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.io.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.*;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -17,7 +15,7 @@ import java.util.jar.JarFile;
 
 /**
  * @ClassName ClassUtil
- * @Description TODO 操作 Class 工具类
+ * @Description 操作 Class 工具类
  * @Author guangmingdexin
  * @Date 2021/4/11 10:40
  * @Version 1.0
@@ -262,4 +260,73 @@ public final class ClassUtil {
         }
         return null;
     }
+
+    public static Object mapToObj(Map<String, Object> map, Class<?> clazz) {
+        try {
+            Object o = clazz.newInstance();
+            // 获取所有属性名
+            Field[] fields = clazz.getDeclaredFields();
+
+            Map<String, Method> allMethods = getAllMethods(User.class);
+            for (Field field : fields) {
+                String name = field.getName();
+                if(map.containsKey(name)) {
+                    String setMethod = "set" + name.substring(0, 1).toUpperCase() + name.substring(1);
+                    Method method = allMethods.get(setMethod);
+                    if(method != null) {
+                        method.invoke(o, map.get(name));
+                    }
+                }
+            }
+
+            return o;
+        } catch (InstantiationException | IllegalAccessException |  InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static Map<String, Method> getAllMethods(Class<?> clazz) {
+        Method[] methods = clazz.getMethods();
+        Map<String, Method> map = new HashMap<>(methods.length);
+        for (Method method : methods) {
+            String name = method.getName();
+            map.put(name, method);
+        }
+        return map;
+    }
+
+    /**
+     * 判断 某个对象上是否存在某个注解
+     *
+     * @param obj
+     * @param anno
+     * @return
+     */
+    public static boolean exits(Object obj, Class anno) {
+        Class<?> clazz = obj.getClass();
+        Annotation annotation = clazz.getAnnotation(anno);
+        return annotation == null;
+    }
+
+    public static Object copyObj(Object obj) {
+
+        try {
+            ByteArrayOutputStream array = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(array);
+            oos.writeObject(obj);
+            oos.close();
+
+            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(array.toByteArray()));
+            return ois.readObject();
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
 }

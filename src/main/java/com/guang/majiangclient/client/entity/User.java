@@ -7,7 +7,7 @@ import lombok.Setter;
 
 /**
  * @ClassName User
- * @Description TODO
+ * @Description
  * @Author guangmingdexin
  * @Date 2021/3/23 9:19
  * @Version 1.0
@@ -34,17 +34,21 @@ public class User {
 
     }
 
-    public User(String tel) {
-        this.tel = tel;
-    }
 
     public User(String tel, String pwd) {
         this.tel = tel;
         this.pwd = pwd;
     }
 
+
     @Override
     public String toString() {
-        return JsonUtil.objToString(this);
+        return "User{" +
+                "userId=" + userId +
+                ", userName='" + userName + '\'' +
+                ", tel='" + tel + '\'' +
+                ", pwd='" + pwd + '\'' +
+                ", avatar=" + avatar +
+                '}';
     }
 }

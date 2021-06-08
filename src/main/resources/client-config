@@ -1,0 +1,15 @@
+# 图片存放路径
+images: image/
+rotate_image: rotate_image/
+hu: event/hu.png
+gang: event/kong.png
+pong: event/pong.png
+ignore: event/ignore.png
+face-down: face-down.png
+face-down-left: face-down-left.png
+face-down-right: face-down-right.png
+
+
+# server 配置
+server-ip: 127.0.0.1
+server-port: 7000

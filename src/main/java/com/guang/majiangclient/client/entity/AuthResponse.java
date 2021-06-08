@@ -1,6 +1,6 @@
 package com.guang.majiangclient.client.entity;
 
-import com.guang.majiangclient.client.common.Event;
+import com.guang.majiangclient.client.common.enums.Event;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * @ClassName AuthResponse
- * @Description TODO
+ * @Description
  * @Author guangmingdexin
  * @Date 2021/4/8 14:36
  * @Version 1.0

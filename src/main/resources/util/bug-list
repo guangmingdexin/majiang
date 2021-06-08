@@ -1,0 +1,35 @@
+1. 多个玩家进行随机匹配，会出现玩家信息不完善（direction = null, base64 = null）
+# 1. 是否为 direction 分配算法出现问题（调整为固定数据进行尝试）
+# 确定为 direction 的分配算法有问题
+代码：
+boolean[] dire = new boolean[NEED_MATCH_PLAYER_COUNT];
+ for (GameUser player : matchPoolPlayer) {
+
+   while(player.getDirection() == null) {
+                   // 计算 hashCode
+                   int i  = (System.identityHashCode(player) % 4);
+                   // 死循环？造成玩家信息不完善
+                   // 但是为什么会造成 匹配成功的信息出现？
+                   if(!dire[i]) {
+                       player.setDirection(Direction.valueOf(i));
+                       dire[i] = true;
+                   }
+                   System.out.println("look for direction " + i);
+               }
+ }
+
+ 2. 在将 房间信息发送给不同玩家时，无法通过修改房间信息，来改变发送内容
+ 代码：
+ for (GameUser player : room.getPlayers()) {
+                 List<Integer> useCards = player.getGameInfoCard().getUseCards();
+                 Collections.sort(useCards);
+                 room.setNumCards(useCards);
+                 Channel channel = ServerCache.getChannel(player.getUserId());
+                 AuthResponseMessage response = new AuthResponseMessage();
+                 // TODO 是否能保证发送 room 对象不同
+                 room.setNumCards(player.getGameInfoCard().getUseCards());
+                 ResponseUtil.responseBuildFactory(response, room, 200, Event.RANDOMGAME, "发牌成功！", true);
+                 channel.writeAndFlush(response);
+                 System.out.println("发送成功！");
+             }
+         });

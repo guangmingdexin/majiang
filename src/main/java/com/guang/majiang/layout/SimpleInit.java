@@ -73,9 +73,8 @@ public final class SimpleInit implements Init {
         bg.setFitWidth(width);
         bg.setFitHeight(height);
 
-        BackgroundMyImage background = new BackgroundMyImage(id, filePath, "bg_image",
+        return new BackgroundMyImage(id, filePath, "bg_image",
                 bg, bg.getImage().getHeight(), bg.getImage().getWidth());
-        return background;
 
     }
 

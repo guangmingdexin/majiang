@@ -21,7 +21,8 @@ public class ClientInHandle extends SimpleChannelInboundHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
-        System.out.println("接收到的消息" + o);
+        // System.out.println("接收到的消息" + o);
+        // System.out.println(ctx.channel());
         AuthResponseMessage message = (AuthResponseMessage) o;
         AuthResponse response = message.getResponse();
         ClientAction action = ActionFactory.action(response.getEvent());

@@ -6,7 +6,7 @@ import lombok.Setter;
 
 /**
  * @ClassName GenericMessage
- * @Description TODO
+ * @Description 消息
  * @Author guangmingdexin
  * @Date 2021/4/1 9:34
  * @Version 1.0
@@ -22,10 +22,10 @@ public abstract class GenericMessage implements Message {
     public final static byte[] PKG_SUFFIX = new byte[]{(byte)0xFF, (byte)0xFE, 0x06, 0x08};
 
     // 数据最大长度
-    public static final int PKG_MAX_LENGTH = 2048;
+    public static final int PKG_MAX_LENGTH = Integer.MAX_VALUE - 16;
 
     // 数据包总长度
-    protected short totalLen;
+    protected int totalLen;
 
     // 协议的版本 (如何进行解码)
     protected short version;
@@ -33,7 +33,7 @@ public abstract class GenericMessage implements Message {
     protected short channel;
 
     // 数据长度
-    protected short length;
+    protected int length;
 
 
     @Override

@@ -1,11 +1,13 @@
 package com.guang.majiangclient.client.common;
 
+import com.guang.majiangclient.client.common.annotation.Package;
+
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @ClassName MessageFactory
- * @Description TODO
+ * @Description
  * @Author guangmingdexin
  * @Date 2021/4/6 9:42
  * @Version 1.0

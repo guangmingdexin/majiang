@@ -19,21 +19,12 @@ import java.util.List;
 public class GenericPackageDecoder extends ByteToMessageDecoder {
 
     // 头尾字节长度
-    public static final int HEADER_LENGTH = 8;
-
-    public static final int TAIL_LENGTH = 8;
-
-    public static final int MESSAGE_INFO_LENGTH = 6;
-
-    public static final short TOTAL_LEN = 2;
-
-    // 数据最大长度
-    public static final int PKG_MAX_LENGTH = 2048;
+    public static final int TOTAL_LEN = 4;
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> list) throws Exception {
 
-        System.out.println("读取数据包！");
+        // System.out.println("读取数据包！");
         // 添加一个字段在包头 为该数据包的总长度
         // 首先读取该字段
         // 半包问题 --- 缓冲区数据不足一个数据包
@@ -46,8 +37,8 @@ public class GenericPackageDecoder extends ByteToMessageDecoder {
             // 判断该数据包长度
             // 记录当前读指针位置
             in.markReaderIndex();
-            short totalLen = in.readShort();
-            if(totalLen > PKG_MAX_LENGTH || totalLen < 22) {
+            int totalLen = in.readInt();
+            if(totalLen > GenericMessage.PKG_MAX_LENGTH || totalLen < 16) {
                 throw new IllegalArgumentException("数据包长度值错误！");
             }
             if(!in.isReadable(totalLen)) {

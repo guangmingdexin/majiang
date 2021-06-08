@@ -1,8 +1,7 @@
 package com.guang.majiangclient.client.handle.action;
 
-import com.guang.majiangclient.client.common.Action;
-import com.guang.majiangclient.client.common.Event;
-import com.guang.majiangclient.client.util.ClassUtil;
+import com.guang.majiangclient.client.common.annotation.Action;
+import com.guang.majiangclient.client.common.enums.Event;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;

@@ -4,12 +4,36 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.guang.majiangserver.mapper.InfoMapper">
 
+    <resultMap id="userInfoResult" type="User">
+        <id property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="tel" column="tel" />
+        <result property="pwd" column="pwd" />
+        <association property="avatar" resultMap="avatarResult" />
+    </resultMap>
+    
+    <resultMap id="avatarResult" type="Avatar">
+        <id property="avatarId" column="avatar_id" />
+        <result property="path" column="path" />
+        <result property="imageName" column="image_name" />
+        <result property="fileType" column="file_type" />
+        <result property="fileSize" column="file_size" />
+    </resultMap>
+
 <!--    通过用户电话查询用户信息-->
-    <select id="getUserInfoByTel" resultType="User" parameterType="string">
+    <select id="getUserInfoByTel" resultMap="userInfoResult" parameterType="string">
         SELECT
-            *
+            i.user_id,
+            i.user_name,
+            i.tel,
+            i.pwd,
+            a.avatar_id,
+            a.path
         FROM
-            info
+            info i
+        JOIN
+            avatar a
+        USING(avatar_id)
         WHERE
 	        tel = #{tel}
     </select>
@@ -18,9 +42,30 @@
     <insert id="register" parameterType="User">
         INSERT INTO
 	        info
-	        ( user_name, tel, pwd )
+	        (tel, pwd )
         VALUES
-	        ( #{userName}, #{tel}, #{pwd} )
+	        (#{tel}, #{pwd} )
     </insert>
+
+<!--    插入头像-->
+    <insert id="insertAvatar" parameterType="Avatar">
+        INSERT IGNORE INTO
+            avatar
+            (path, image_name, file_type, file_size)
+        VALUES
+            (#{path}, #{imageName}, #{fileType}, #{fileSize})
+    </insert>
+
+    <select id="getAvatarPath" parameterType="long" resultType="string">
+        SELECT
+            a.path
+        FROM
+            avatar a
+        LEFT JOIN
+            info i
+        USING(avatar_id)
+        WHERE
+            i.user_id = #{userId}
+    </select>
 
 </mapper>

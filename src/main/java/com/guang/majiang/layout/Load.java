@@ -20,7 +20,7 @@ public interface Load {
      * 加载图片
      *
      * @param src 图片
-     * @return
+     * @return Imageview 对象
      */
     ImageView load(String src);
 

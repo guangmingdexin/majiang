@@ -1,5 +1,6 @@
 package com.guang.majiangserver.mapper;
 
+import com.guang.majiangclient.client.entity.Avatar;
 import com.guang.majiangclient.client.entity.User;
 
 /**
@@ -26,4 +27,20 @@ public interface InfoMapper {
      * @return 影响的行数
      */
     int register(User user);
+
+    /**
+     * 插入头像
+     *
+     * @param avatar
+     * @return
+     */
+    int insertAvatar(Avatar avatar);
+
+    /**
+     * 获取用户头像的路径
+     *
+     * @param uid 用户 id
+     * @return 用户头像路径
+     */
+    String getAvatarPath(Long uid);
 }

@@ -1,6 +1,5 @@
 package com.guang.majiangserver.handle.action;
 
-import com.guang.majiangclient.client.common.Action;
 import com.guang.majiangclient.client.util.ClassUtil;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @ClassName FactoryAction
- * @Description TODO
+ * @Description
  * @Author guangmingdexin
  * @Date 2021/4/8 14:51
  * @Version 1.0
@@ -49,6 +48,7 @@ public final class ActionFactory {
         for (Class<?> clazz : classes) {
             ServerAction action;
             try {
+                // TODO 如果 action 有参数，需要重新设计
                 action = (ServerAction) clazz.newInstance();
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
@@ -57,7 +57,7 @@ public final class ActionFactory {
             // 获取 ServerAction 的泛型实际类型
             Class<?> request = ClassUtil.findInterfaceParameter(action, ServerAction.class, 0, 0);
             // 判断是否存在
-            // TODO 批次注册不允许二次注册
+            //  批次注册不允许二次注册
             if(factory.containsKey(request)) {
                 return;
             }

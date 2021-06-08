@@ -1,7 +1,6 @@
 package com.guang.majiangserver.handle;
 
-import com.guang.majiangclient.client.common.Event;
-import com.guang.majiangclient.client.entity.AuthResponse;
+import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.message.AuthResponseMessage;
 import com.guang.majiangserver.handle.action.ActionFactory;
 import com.guang.majiangserver.handle.action.ServerAction;
@@ -13,11 +12,9 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 
-import java.util.Date;
-
 /**
  * @ClassName GameServerHandler
- * @Description TODO
+ * @Description
  * @Author guangmingdexin
  * @Date 2021/3/23 8:34
  * @Version 1.0
@@ -34,6 +31,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler {
     @Override
     public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
         Channel channel = ctx.channel();
+        System.out.println("server: "  + channel);
         System.out.println("[客户端]" + channel.remoteAddress() + "加入游戏！");
         // 使用一个全局 channel 管理器
         group.add(channel);
@@ -55,12 +53,13 @@ public class GameServerHandler extends SimpleChannelInboundHandler {
 
         serverAction.execute(ctx, group, o, new AuthResponseMessage());
 
+        // System.out.println(ctx.channel().eventLoop());
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
          // TODO 将异常日志写入日志文件
-        // cause.printStackTrace();
+         cause.printStackTrace();
         System.out.println("服务器发生异常！");
         AuthResponseMessage response = new AuthResponseMessage();
         ResponseUtil.responseBuildFactory(response, null, 500, Event.EXCEPTION, "服务其出现异常", false);
