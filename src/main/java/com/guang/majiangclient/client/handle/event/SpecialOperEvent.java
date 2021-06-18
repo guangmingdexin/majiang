@@ -1,6 +1,7 @@
 package com.guang.majiangclient.client.handle.event;
 
-import com.guang.majiangclient.client.common.annotation.Action;
+import com.guang.majiangclient.client.cache.CacheUtil;
+import com.guang.majiangclient.client.common.annotation.RunnableEvent;
 import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.common.enums.GameEvent;
 import com.guang.majiangclient.client.entity.GameInfoRequest;
@@ -10,9 +11,6 @@ import com.guang.majiangclient.client.handle.task.Task;
 import com.guang.majiangclient.client.layout.ClientLayout;
 import com.guang.majiangclient.client.message.RandomMatchRequestMessage;
 import com.guang.majiangclient.client.util.ConfigOperation;
-import com.guang.majiangclient.client.util.ImageUtil;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import lombok.AllArgsConstructor;
 
 /**
@@ -23,7 +21,7 @@ import lombok.AllArgsConstructor;
  * @Date 2021/6/7 15:10
  * @Version 1.0
  **/
-@Action(event = Event.UIEVENT)
+@RunnableEvent(value = Event.UIEVENT)
 @AllArgsConstructor
 public class SpecialOperEvent implements Runnable{
 
@@ -35,25 +33,27 @@ public class SpecialOperEvent implements Runnable{
         Service center = ConfigOperation.getCenter();
 
         int res = info.getRes();
+        System.out.println("SpecialOperEvent-res: " + res);
 
         ClientLayout.pong.setVisible(true);
         ClientLayout.gang.setVisible(true);
         ClientLayout.hu.setVisible(true);
         ClientLayout.ignore.setVisible(true);
-
-        if((res & GameEvent.Pong.intValue()) == 1) {
+        if((res & GameEvent.Pong.intValue()) == GameEvent.Pong.intValue()) {
             ClientLayout.pong.setOpacity(1);
         }else {
             ClientLayout.pong.setOpacity(0.5);
         }
 
-        if((res & GameEvent.Gang.intValue()) == 1) {
+        if(((res & GameEvent.Gang1.intValue()) == GameEvent.Gang1.intValue())
+        || ((res & GameEvent.Gang2.intValue()) == GameEvent.Gang2.intValue())
+                || ((res & GameEvent.Gang3.intValue()) == GameEvent.Gang3.intValue())) {
             ClientLayout.gang.setOpacity(1);
         }else {
             ClientLayout.gang.setOpacity(0.5);
         }
 
-        if((res & GameEvent.Hu.intValue()) == 1) {
+        if((res & GameEvent.Hu.intValue()) == GameEvent.Hu.intValue()) {
             ClientLayout.hu.setOpacity(1);
         }else {
             ClientLayout.hu.setOpacity(0.5);
@@ -62,12 +62,13 @@ public class SpecialOperEvent implements Runnable{
         ClientLayout.pong.setOnMouseClicked(event -> {
             // 发送消息
             // 等待回复
+            System.out.println("pong!");
             center.submit(
                     new Task<>(
                             Event.RANDOMGAME,
                             new GameInfoRequest(
-                                    new PlayGameInfo(info.getRoomId(), info.getUserId(), info.getValue(),
-                                            info.getDirection(), GameEvent.Ack, info.getRes(), GameEvent.Pong.intValue(), true)
+                                    new PlayGameInfo(info.getRoomId(), CacheUtil.getGameUserInfo().getUserId(), info.getValue(),
+                                            CacheUtil.getGameUserInfo().getDirection(), GameEvent.AckEvent, info.getRes(), GameEvent.Pong.intValue(), true)
                             )), RandomMatchRequestMessage.class, Event.RANDOMGAME
 
             );
@@ -78,8 +79,8 @@ public class SpecialOperEvent implements Runnable{
                     new Task<>(
                             Event.RANDOMGAME,
                             new GameInfoRequest(
-                                    new PlayGameInfo(info.getRoomId(), info.getUserId(), info.getValue(),
-                                            info.getDirection(), GameEvent.Ack, info.getRes(), GameEvent.Gang.intValue(), true)
+                                    new PlayGameInfo(info.getRoomId(), CacheUtil.getGameUserInfo().getUserId(), info.getValue(),
+                                            CacheUtil.getGameUserInfo().getDirection(), GameEvent.AckEvent, info.getRes(), GameEvent.Gang2.intValue(), true)
                             )), RandomMatchRequestMessage.class, Event.RANDOMGAME
 
             );
@@ -90,8 +91,8 @@ public class SpecialOperEvent implements Runnable{
                     new Task<>(
                             Event.RANDOMGAME,
                             new GameInfoRequest(
-                                    new PlayGameInfo(info.getRoomId(), info.getUserId(), info.getValue(),
-                                            info.getDirection(), GameEvent.Ack, info.getRes(), GameEvent.Hu.intValue(), true)
+                                    new PlayGameInfo(info.getRoomId(), CacheUtil.getGameUserInfo().getUserId(), info.getValue(),
+                                            CacheUtil.getGameUserInfo().getDirection(), GameEvent.AckEvent, info.getRes(), GameEvent.Hu.intValue(), true)
                             )), RandomMatchRequestMessage.class, Event.RANDOMGAME
 
             );
@@ -102,8 +103,8 @@ public class SpecialOperEvent implements Runnable{
                     new Task<>(
                             Event.RANDOMGAME,
                             new GameInfoRequest(
-                                    new PlayGameInfo(info.getRoomId(), info.getUserId(), info.getValue(),
-                                            info.getDirection(), GameEvent.Ack, info.getRes(), GameEvent.Ignore.intValue(), true)
+                                    new PlayGameInfo(info.getRoomId(), CacheUtil.getGameUserInfo().getUserId(), info.getValue(),
+                                            CacheUtil.getGameUserInfo().getDirection(), GameEvent.AckEvent, info.getRes(), GameEvent.Ignore.intValue(), false)
                             )), RandomMatchRequestMessage.class, Event.RANDOMGAME
 
             );

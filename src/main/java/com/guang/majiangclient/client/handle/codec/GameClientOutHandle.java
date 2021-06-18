@@ -1,4 +1,4 @@
-package com.guang.majiangclient.client.handle.out;
+package com.guang.majiangclient.client.handle.codec;
 
 import io.netty.channel.*;
 

@@ -19,16 +19,13 @@ import java.util.List;
 @Setter
 public class PlayGameHandCardsInfo {
 
-    private Room room;
-
     // 手牌
     private List<Integer> cards;
 
     // 庄家位置
     private Direction marker;
 
-    public PlayGameHandCardsInfo(Room room) {
-        this.room = room;
+    public PlayGameHandCardsInfo() {
         this.cards = new LinkedList<>();
         initialCard();
         shuffle();

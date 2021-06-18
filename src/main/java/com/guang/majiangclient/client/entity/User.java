@@ -29,6 +29,8 @@ public class User {
     // 原因未知
     private Avatar avatar;
 
+    private int score;
+
 
     public User() {
 

@@ -45,4 +45,16 @@ public class AuthResponse {
     public void isFail() {
         result = false;
     }
+
+    @Override
+    public String toString() {
+        return "AuthResponse{" +
+                "date=" + date +
+                ", body=" + body +
+                ", code=" + code +
+                ", msg='" + msg + '\'' +
+                ", event=" + event +
+                ", result=" + result +
+                '}';
+    }
 }

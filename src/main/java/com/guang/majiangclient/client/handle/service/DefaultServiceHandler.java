@@ -1,6 +1,7 @@
 package com.guang.majiangclient.client.handle.service;
 
 import com.guang.majiangclient.client.GameClient;
+import com.guang.majiangclient.client.common.annotation.RunnableEvent;
 import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.common.annotation.Package;
 import com.guang.majiangclient.client.handle.task.Task;
@@ -50,6 +51,17 @@ public class DefaultServiceHandler extends ServiceHandler {
 
     @Override
     public void handle(Runnable task) {
+        Class<?> clazz = task.getClass();
+        RunnableEvent annotation = clazz.getAnnotation(RunnableEvent.class);
+        if(annotation == null || annotation.value() != Event.UIEVENT) {
+            // 主线程自己执行
+            task.run();
+        }else {
+            System.out.println("这是一个 ui 线程任务 交给 ui 处理器执行");
+            if(nextHandler != null) {
+                nextHandler.handle(task);
+            }
+        }
 
     }
 

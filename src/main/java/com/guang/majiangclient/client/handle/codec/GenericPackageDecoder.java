@@ -1,11 +1,10 @@
-package com.guang.majiangserver.handle.decodec;
+package com.guang.majiangclient.client.handle.codec;
 
 import com.guang.majiangclient.client.common.GenericMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,8 +30,6 @@ public class GenericPackageDecoder extends ByteToMessageDecoder {
 
         // 粘包问题 --- 缓冲区数据超过一个数据包
         while (in.isReadable(TOTAL_LEN)) {
-            System.out.println("读取数据包！数据包长度：" + in.writerIndex());
-
             // 该数据包总长度
             // 判断该数据包长度
             // 记录当前读指针位置
@@ -44,7 +41,6 @@ public class GenericPackageDecoder extends ByteToMessageDecoder {
             if(!in.isReadable(totalLen)) {
                 // 将读指针恢复到以前的位置
                 // 准备下一次读取
-                System.out.println("缓冲区 数据包还不完整！");
                 in.resetReaderIndex();
                 return;
             }

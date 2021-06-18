@@ -231,4 +231,7 @@ public final class ImageUtil {
         view.setFitHeight(view.getFitWidth() * size);
         view.setFitWidth(view.getFitWidth() * size);
     }
+
+
+
 }

@@ -13,17 +13,15 @@ public enum Event {
     GAMEINFO("GAMEINFO"),
     // 特殊事件触发标志
     SPCIALEVENT("SPECIALEVENT"),
-    EXCEPTION("EXCEPTION"),
-    DEFAULTEVENT("DEFAULTEVENT");
+    DEFAULTEVENT("DEFAULTEVENT"),
+    FRIEND("FRIEND"),
+    PING("PING");
 
-    private String ui;
+    private String event;
 
 
-    private Event(String ui) {
-        this.ui = ui;
+    private Event(String event) {
+        this.event = event;
     }
 
-    public String getUi() {
-        return ui;
-    }
 }

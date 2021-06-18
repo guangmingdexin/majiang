@@ -1,4 +1,4 @@
-package com.guang.majiangserver.handle.decodec;
+package com.guang.majiangclient.client.handle.codec;
 
 import com.guang.majiangclient.client.common.GenericMessage;
 import com.guang.majiangclient.client.common.MessageFactory;
@@ -61,7 +61,6 @@ public class GenericPackageClassDecoder extends MessageToMessageDecoder<ByteBuf>
 
     private void decodeV10(List<Object> out, byte[] data, Class<?> clazz) {
         // 获取消息包携带的 bean 对象
-
         Object o = JsonUtil.byteToObj(data, clazz);
         // 还需要将整个消息包 转换为对象
         // 通过反射 调用 decode 方法

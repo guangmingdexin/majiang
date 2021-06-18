@@ -27,7 +27,6 @@ public class MatchAction implements ClientAction {
         AuthResponse response = message.getResponse();
         System.out.println("收到的信息！" + response.getMsg());
         Service center = ConfigOperation.getCenter();
-        Room o = (Room)JsonUtil.mapToObj((Map<String, Object>) response.getBody(), Room.class);
-        center.submit(new RandomMatchUIEvent(o, response.isResult()));
+        center.submit(new RandomMatchUIEvent(response));
     }
 }

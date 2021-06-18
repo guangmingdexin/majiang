@@ -3,6 +3,7 @@ package com.guang.majiangserver.util;
 import com.guang.majiangclient.client.util.ImageUtil;
 import com.guang.majiangclient.client.util.JedisUtil;
 import com.guang.majiangserver.config.ConfigOperation;
+import com.guang.majiangserver.game.ServerGameLog;
 import com.guang.majiangserver.mapper.InfoMapper;
 import io.netty.channel.Channel;
 import lombok.Getter;
@@ -20,7 +21,11 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class ServerCache {
 
-    private static ConcurrentHashMap<Long, Channel> group = new ConcurrentHashMap<>();
+    private final static ConcurrentHashMap<Long, Channel> group = new ConcurrentHashMap<>();
+
+    private final static ConcurrentHashMap<Long, ServerGameLog> logs = new ConcurrentHashMap<>();
+
+    public final static ConcurrentHashMap<String, Long> channelPlayer = new ConcurrentHashMap<>();
 
     public static Channel getChannel(Long channelId) {
         return group.get(channelId);
@@ -30,14 +35,38 @@ public class ServerCache {
         group.put(channelId, channel);
     }
 
-    public static ConcurrentHashMap<Long, Channel> getGroup() {
-        return group;
+    public static void writeLog(long roomId, ServerGameLog log) {
+        logs.put(roomId, log);
+    }
+
+    public static ServerGameLog readLog(long roomId) {
+        return logs.get(roomId);
+    }
+
+    public static void add(String channelId, Long userId) {
+        channelPlayer.put(channelId, userId);
+    }
+
+    public static Long getUserId(String channelId) {
+        return channelPlayer.get(channelId);
+    }
+
+    public static String channelId(Channel channel) {
+        if(channel == null) {
+            return "null";
+        }else {
+            return channel.id().asShortText();
+        }
+    }
+
+    public static void removeUserId(String channelId) {
+        channelPlayer.remove(channelId);
     }
 
     public static String getAvatar(Long uid) {
-        Jedis jedis = JedisUtil.getJedis();
+
         String key = "avatar:" + uid;
-        String base64 = jedis.get(key);
+        String base64 = JedisUtil.get(key);
         if(base64 != null) {
             return base64;
         }else {
@@ -50,14 +79,14 @@ public class ServerCache {
             }else {
                 base64 = ImageUtil.encoderBase64(path, true);
             }
-            jedis.set(key, base64);
+            JedisUtil.set(key, base64);
         }
         return base64;
     }
 
     public static String getAvatar(String key, String path) {
-        Jedis jedis = JedisUtil.getJedis();
-        String base64 = jedis.get(key);
+
+        String base64 = JedisUtil.get(key);
         if(base64 == null) {
             // 加载头像资源
             // 判断是否为默认头像
@@ -66,7 +95,7 @@ public class ServerCache {
             }else {
                 base64 = ImageUtil.encoderBase64(path, true);
             }
-            jedis.set(key, base64);
+            JedisUtil.set(key, base64);
         }
         return base64;
     }

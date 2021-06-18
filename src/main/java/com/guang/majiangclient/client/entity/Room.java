@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.guang.majiangclient.client.common.enums.Direction;
 import com.guang.majiangclient.client.common.enums.GameEvent;
+import com.guang.majiangclient.client.handle.log.GameLog;
+import com.guang.majiangserver.game.PlayGameHandCardsInfo;
+import com.guang.majiangserver.game.ServerGameLog;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -60,7 +63,18 @@ public class Room implements Serializable {
 
     // 保存特殊事件的 信息
     @JsonIgnore
-    private transient LinkedList<PlayGameInfo> infos;
+    private transient LinkedList<PlayGameInfo> specialEventInfos;
+
+    @JsonIgnore
+    private transient PlayGameHandCardsInfo gameInfos;
+
+    @JsonIgnore
+    private transient ServerGameLog log;
+
+    /**
+     * 当前玩家回合
+     */
+    private Direction around;
 
 
     public Room(long roomId, HashSet<GameUser> players, GameEvent gameEvent, AtomicInteger waitNum) {
@@ -82,6 +96,18 @@ public class Room implements Serializable {
         return null;
     }
 
+    public GameUser findGameUser(Direction dire) {
+        if(players != null && !players.isEmpty()) {
+            for (GameUser player : players) {
+                if(player.getDirection() == dire) {
+                    return player;
+                }
+            }
+        }
+        return null;
+    }
+
+
     public Direction findCurAroundUser() {
         if(players != null && !players.isEmpty()) {
             for (GameUser player : players) {
@@ -91,6 +117,10 @@ public class Room implements Serializable {
             }
         }
         return null;
+    }
+
+    public void nextAround(Direction direction) {
+        players.forEach((gameUser -> gameUser.getGameInfoCard().setAroundPlayerDire(direction)));
     }
 
     @Override

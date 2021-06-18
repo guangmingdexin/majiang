@@ -4,7 +4,6 @@ import com.guang.majiangclient.client.common.enums.Direction;
 import com.guang.majiangclient.client.entity.GameUser;
 import com.guang.majiangclient.client.entity.User;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,7 +20,13 @@ public final class CacheUtil {
 
     private static GameUser gameUserCache = null;
 
-    private static LRU<Direction, GameUser> avatarUserCache = new LRU<>(4, 0.75F, true);
+    private static Direction cur = null;
+
+    private static LRU<Direction, GameUser> lru = new LRU<>(4, 0.75F, true);
+    /**
+     * 游戏过程中进行 特殊事件判断
+     */
+    private static boolean specialEvent = false;
 
     public static User getUserInfo() {
         return userCache;
@@ -40,23 +45,51 @@ public final class CacheUtil {
     }
 
     public static void addCacheGameUser(Direction key, GameUser value) {
-        avatarUserCache.put(key, value);
+        lru.put(key, value);
     }
 
     public static GameUser getCacheGameUser(Direction key) {
-        return avatarUserCache.get(key);
+        return lru.get(key);
     }
 
+    public static Direction getCurDire() {
+        return cur;
+    }
+
+    public static void setCurDire(Direction dire) {
+        cur = dire;
+    }
+
+    public static void next(Direction direction) {
+        lru.forEach((key, value) -> {
+            value.getGameInfoCard().setAroundPlayerDire(direction);
+        });
+        CacheUtil.setCurDire(direction);
+        System.out.println("next-lru: " + lru);
+    }
+
+    public static boolean around() {
+        return cur == gameUserCache.getDirection();
+    }
 
     public static LRU<Direction, GameUser> getGameUsers() {
-        return avatarUserCache;
+        return lru;
     }
+
+    public static boolean getSpecialEvent() {
+        return specialEvent;
+    }
+
+    public static void setSpecialEvent(boolean event) {
+        specialEvent = event;
+    }
+
 
    public static class LRU<T, K> extends LinkedHashMap<T, K> {
 
         private int capacity;
 
-        public LRU(int initialCapacity, float loadFactor, boolean accessOrder) {
+        LRU(int initialCapacity, float loadFactor, boolean accessOrder) {
             super(initialCapacity, loadFactor, accessOrder);
             this.capacity = initialCapacity;
         }
@@ -66,4 +99,5 @@ public final class CacheUtil {
             return size() > capacity;
         }
     }
+
 }

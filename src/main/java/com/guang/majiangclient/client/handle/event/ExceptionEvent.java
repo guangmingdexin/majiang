@@ -11,7 +11,7 @@ import javafx.scene.control.Alert;
  * @Date 2021/4/19 11:00
  * @Version 1.0
  **/
-@RunnableEvent(value = Event.EXCEPTION)
+@RunnableEvent(value = Event.UIEVENT)
 public class ExceptionEvent implements Runnable {
 
     private String msg;

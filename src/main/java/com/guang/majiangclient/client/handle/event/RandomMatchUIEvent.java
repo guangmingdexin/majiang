@@ -7,11 +7,13 @@ import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.common.enums.GameEvent;
 import com.guang.majiangclient.client.common.annotation.RunnableEvent;
 import com.guang.majiangclient.client.entity.*;
+import com.guang.majiangclient.client.handle.log.GameLog;
 import com.guang.majiangclient.client.handle.task.Task;
 import com.guang.majiangclient.client.message.RandomMatchRequestMessage;
 import com.guang.majiangclient.client.handle.service.ServiceCenter;
 import com.guang.majiangclient.client.util.ConfigOperation;
 import com.guang.majiangclient.client.util.ImageUtil;
+import com.guang.majiangclient.client.util.JsonUtil;
 import javafx.scene.image.ImageView;
 import org.apache.ibatis.io.Resources;
 
@@ -28,18 +30,18 @@ import java.util.*;
 @RunnableEvent(value = Event.UIEVENT)
 public class RandomMatchUIEvent implements Runnable {
 
+    private AuthResponse response;
 
-    private Room  room;
-
-    private boolean result;
-
-    public RandomMatchUIEvent(Room room, boolean result) {
-        this.room = room;
-        this.result = result;
+    public RandomMatchUIEvent(AuthResponse response) {
+        this.response = response;
     }
 
     @Override
     public void run() {
+
+       Room room = (Room) JsonUtil.mapToObj((Map<String, Object>) response.getBody(), Room.class);
+        boolean result = response.isResult();
+
         if(result) {
             // 获取游戏阶段
             GameEvent event = room.getGameEvent();
@@ -82,28 +84,41 @@ public class RandomMatchUIEvent implements Runnable {
 
                     Direction cur = null;
                     HashMap<Direction, GameInfoCard> infoCards = new HashMap<>(4);
+                    // 设置当前回合
+                    CacheUtil.setCurDire(room.getAround());
                     for (GameUser player : players) {
                         GameInfoCard gameInfoCard = player.getGameInfoCard();
+                        // 在使用的时候才进行初始化
+                        // 出牌的时候进行初始化
+                        List<CardImage> takeOutCarsImages = gameInfoCard.getTakeOutCarsImages();
+                        if(takeOutCarsImages == null) {
+                            takeOutCarsImages = new ArrayList<>();
+                            gameInfoCard.setTakeOutCarsImages(takeOutCarsImages);
+                        }
                         if(player.getUserId() == CacheUtil.getUserInfo().getUserId()) {
                             gameInfoCard.setUseCards(numCards);
                             gameInfoCard.buildCard(numCards, load, roomId, player.getUserId());
                             cur = player.getDirection();
+                            CacheUtil.addGameUser(player);
                         }else {
                             gameInfoCard.buildCardDown();
                         }
                         infoCards.put(player.getDirection(), gameInfoCard);
                         CacheUtil.addCacheGameUser(player.getDirection(), player);
-                        // 继续加载
-//                        LinkedHashMap<Integer, CardImage[]> pg = gameInfoCard.getPg();
-//
-//                        if(pg != null) {
-//                            for (Map.Entry<Integer, CardImage[]> entry : pg.entrySet()) {
-//
-//                            }
-//                        }
                     }
-                        center.submit(new CardBuildEvent(cur, infoCards));
+                    center.submit(new CardBuildEvent(cur, infoCards));
+                    // 手牌初始化
 
+                    GameLog.offer(new PlayGameInfo(
+                            roomId,
+                            CacheUtil.getUserInfo().getUserId(),
+                            -1,
+                            cur,
+                            GameEvent.InitialGame,
+                            0,
+                            0,
+                            false
+                            ));
 
                 } catch (IOException e) {
                     e.printStackTrace();

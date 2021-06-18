@@ -1,10 +1,10 @@
 package com.guang.majiangserver;
 
+import com.guang.majiangclient.client.handle.codec.GenericPackageClassDecoder;
 import com.guang.majiangclient.client.handle.codec.GenericPackageCodec;
+import com.guang.majiangclient.client.handle.codec.GenericPackageDecoder;
 import com.guang.majiangserver.config.ConfigOperation;
 import com.guang.majiangserver.handle.GameServerHandler;
-import com.guang.majiangserver.handle.decodec.GenericPackageClassDecoder;
-import com.guang.majiangserver.handle.decodec.GenericPackageDecoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -13,6 +13,9 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName GameServer
@@ -49,16 +52,22 @@ public class GameServer {
                     //设置保持活动连接个数
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     // 为 workGroup添加管道，handler
+                    // TODO handler 顺序非常重要 先处理心跳信息
                     .childHandler(new ChannelInitializer<NioSocketChannel>() {
                         @Override
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             ChannelPipeline pipeline = channel.pipeline();
                             // 加入解码器
+                           // pipeline.addLast("decoder-str", new StringDecoder());
                             pipeline.addLast("decoder", new GenericPackageDecoder());
                             pipeline.addLast("classDecoder", new GenericPackageClassDecoder());
                             // 加入编码器
+                           // pipeline.addLast("encoder-str", new StringEncoder());
                             pipeline.addLast("encoder", new GenericPackageCodec());
-                            pipeline.addLast(new GameServerHandler());
+                            pipeline.addLast("ping", new IdleStateHandler(30, 0,
+                                    0, TimeUnit.SECONDS));
+
+                            pipeline.addLast("business", new GameServerHandler());
                         }
                     });
             // 启动配置

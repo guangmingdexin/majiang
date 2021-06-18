@@ -38,10 +38,10 @@ public class ServiceUIHandler extends ServiceHandler {
         }else {
             // 如果当前处理器已经为最后一个节点
             // 打印信息
+            System.out.println("这不是一个 ui 任务，交给下一个处理执行！" + task);
             if(nextHandler != null) {
                 nextHandler.handle(task);
             }
-            System.out.println("没有处理器可以处理这个任务！");
         }
 
     }

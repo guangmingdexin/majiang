@@ -240,42 +240,67 @@ public class Algorithm {
     }
 
 
-    public static void sortInsert(List<Integer> arr, Integer item) {
+    /**
+     * @param arr
+     * @param item
+     * @return
+     */
+    public static int  sortInsert(List<Integer> arr, Integer item) {
         //
         if(arr == null) {
-            return;
+            return -1;
         }
 
         if(arr.size() == 0) {
             arr.add(item);
         }
 
-        int index = 0;
+        int index = arr.size();
 
         for (int i = 0; i < arr.size(); i++) {
-            if(item > arr.get(i)) {
+            if(arr.get(i) > item) {
                 index = i;
-            }else {
                 break;
             }
         }
 
-        if(index != 0) {
-            index += 1;
-        }
         arr.add(index , item);
+
+        return index;
     }
 
-//    public static void main(String[] args) {
-//        List<Integer> list = new ArrayList<>();
-//
+    public static void main(String[] args) {
+//        List<Integer> list = Arrays.asList(11, 11, 17, 103, 105, 106, 107, 109, 109, 1004, 1005, 1006, 1009);
+//        List<Integer> copyList = new ArrayList<>(list);
+
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(4);
+        list.add(7);
+        list.add(9);
+
+        int index = sortInsert(list, 7);
+        System.out.println("list：" + list);
+        System.out.println("index: " + index);
+
+
+        //
 //        list.add(1);
-//        list.add(1);
-//        list.add(1);
+//        list.add(2);
+//        list.add(2);
 //        list.add(10);
 //        list.add(11);
 //        list.add(11);
-//
+//        for (int i = 1; i <= 2; i++) {
+//            int index = Algorithm.binarySearch(copyList, 109);
+//            if (index < 0) {
+//                throw new NullPointerException("手牌中不存在这张牌！");
+//            }
+//            System.out.println("index：" + index);
+//            System.out.println("copyList；" + copyList);
+//            copyList.remove(index);
+//        }
+
 //        int[] h = {11, 12, 13, 14, 14, 15, 16, 16, 16, 16, 17, 18, 19, 19};
 //        int[] d = {11, 12, 12, 13, 13, 14, 15, 15};
 //
@@ -284,8 +309,8 @@ public class Algorithm {
 //       // System.out.println(isHu(l));
 //       sortInsert(list, 18);
 //        sortInsert(list, -1);
-//       sortInsert(list, 9);
-//       sortInsert(list, 12);
+////       sortInsert(list, 9);
+//       sortInsert(list, 11);
 //        System.out.println(list);
-//    }
+    }
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 /**
  * @ClassName PlayTakeOutCardInfo
  * @Author guangmingdexin
@@ -17,7 +19,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayGameInfo {
+public class PlayGameInfo implements Serializable {
 
     private long roomId;
 
@@ -49,29 +51,9 @@ public class PlayGameInfo {
     private int oper;
 
     /**
-     * 特殊事件响应包
+     * 特殊事件响应包(true 代表有特殊事件， false 代表无特殊事件)
      */
     private boolean ack;
-
-    public PlayGameInfo(long roomId, long userId, int value, Direction direction, GameEvent event, int res, boolean ack) {
-        this.roomId = roomId;
-        this.userId = userId;
-        this.value = value;
-        this.direction = direction;
-        this.event = event;
-        this.res = res;
-        this.ack = ack;
-    }
-
-    public PlayGameInfo(PlayGameInfo info, int res) {
-        this.roomId = info.roomId;
-        this.userId = info.userId;
-        this.value = info.value;
-        this.direction = info.direction;
-        this.event = info.event;
-        this.res = res;
-    }
-
 
     public PlayGameInfo(int value, GameEvent event, long roomId, long userId) {
         this.value = value;
@@ -90,13 +72,18 @@ public class PlayGameInfo {
         this.roomId = roomId;
     }
 
+
     @Override
     public String toString() {
         return "PlayGameInfo{" +
-                "value=" + value +
+                "roomId=" + roomId +
+                ", userId=" + userId +
+                ", value=" + value +
                 ", direction=" + direction +
                 ", event=" + event +
                 ", res=" + res +
+                ", oper=" + oper +
+                ", ack=" + ack +
                 '}';
     }
 }

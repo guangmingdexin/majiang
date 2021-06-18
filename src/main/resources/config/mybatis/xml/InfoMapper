@@ -68,4 +68,54 @@
             i.user_id = #{userId}
     </select>
 
+    <select id="findAllUsers" resultMap="userInfoResult">
+        SELECT
+            i.user_id,
+            i.user_name,
+            i.tel,
+            a.avatar_id,
+            a.path
+        FROM
+            info i
+        JOIN
+            avatar a
+        USING(avatar_id)
+    </select>
+
+    <update id="incrScore" parameterType="int">
+        update
+            info
+        set
+            score = score +  #{score}
+        where
+            user_id = #{uid}
+    </update>
+
+    <update id="decrScore" parameterType="int">
+        update
+            info
+        set
+            score = score -  #{score}
+        where
+            user_id = #{uid}
+    </update>
+
+    <update id="updateScore" parameterType="int">
+        update
+            info
+        set
+            score = #{score}
+        where
+            user_id = #{uid}
+    </update>
+
+    <select id="getInfoScore" parameterType="int">
+        select
+            score
+        from
+            info
+        where
+            user_id = #{uid}
+    </select>
+
 </mapper>

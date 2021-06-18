@@ -24,6 +24,7 @@
     </environments>
     <mappers>
         <mapper resource="config/mybatis/xml/InfoMapper" />
+        <mapper resource="config/mybatis/xml/GameInfoMapper.xml"/>
 <!--        <package name="com.guang.majiangserver.mapper"/>-->
     </mappers>
 </configuration>

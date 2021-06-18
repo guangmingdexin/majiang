@@ -51,8 +51,7 @@ public class AvatarBuildEvent implements Runnable {
             ImageView viewLeft = ImageUtil.bytesConvertToImage(bytes,80, 80, 90);
             ImageView viewRight = ImageUtil.bytesConvertToImage(bytes, 80, 80, 0);
             ImageView viewTop = ImageUtil.bytesConvertToImage(bytes, 80, 80, 270);
-            Avatar avatar = new Avatar(base64, bytes, view, viewLeft, viewRight, viewTop,
-                    gameUser.getScore());
+            Avatar avatar = new Avatar(base64, bytes, view, viewLeft, viewRight, viewTop);
             avatars.put(gameUser.getDirection(), avatar);
         }
 
@@ -60,6 +59,8 @@ public class AvatarBuildEvent implements Runnable {
         Direction rightDir = Direction.valueOf((cur.getDirection() + 1) % 4);
         Direction topDir = Direction.valueOf((cur.getDirection() + 2) % 4);
         Direction leftDir = Direction.valueOf((cur.getDirection() + 3) % 4);
+
+
 
         Label bottom = new Label("0", avatars.get(cur).getImage());
         bottom.setContentDisplay(ContentDisplay.TOP);

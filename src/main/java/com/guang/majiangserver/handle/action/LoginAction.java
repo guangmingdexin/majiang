@@ -36,6 +36,8 @@ public class LoginAction implements ServerAction<LoginRequestMessage, AuthRespon
         User u = mapper.getUserInfoByTel(tel);
         if(u != null && user.getPwd().equals(u.getPwd())) {
 
+            ServerCache.add(ServerCache.channelId(ctx.channel()), u.getUserId());
+
             Avatar avatar = u.getAvatar();
             String key = "avatar:" + u.getUserId();
             String base64 = ServerCache.getAvatar(key, avatar.getPath());

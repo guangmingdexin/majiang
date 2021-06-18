@@ -7,16 +7,16 @@ import com.guang.majiangclient.client.common.enums.GameEvent;
 import com.guang.majiangclient.client.entity.*;
 import com.guang.majiangclient.client.message.AuthResponseMessage;
 import com.guang.majiangclient.client.message.RandomMatchRequestMessage;
+import com.guang.majiangclient.client.util.CommonUtil;
 import com.guang.majiangclient.client.util.JedisUtil;
-import com.guang.majiangserver.config.ConfigOperation;
 import com.guang.majiangserver.game.PlayGameHandCardsInfo;
 import com.guang.majiangserver.game.PlayGameTask;
+import com.guang.majiangserver.game.ServerGameLog;
 import com.guang.majiangserver.util.ServerCache;
 import com.guang.majiangserver.util.ResponseUtil;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.group.ChannelGroup;
-import redis.clients.jedis.Jedis;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -37,16 +37,13 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RandomMatchAction implements ServerAction<RandomMatchRequestMessage, AuthResponseMessage>{
 
     // 匹配池
-    private static ConcurrentHashMap<Long, GameUser> pool = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<Long, GameUser> pool = new ConcurrentHashMap<>();
 
     // 玩家需要匹配的个数
     private static int NEED_MATCH_PLAYER_COUNT = 4;
 
     // 匹配线程
     private static ScheduledExecutorService shedule =  Executors.newSingleThreadScheduledExecutor();
-
-    // 匹配顺序
-    private static PriorityQueue<GameUser> priority = new PriorityQueue<>();
 
     // 房间号
     private static AtomicLong roomId = new AtomicLong(0);
@@ -60,7 +57,7 @@ public class RandomMatchAction implements ServerAction<RandomMatchRequestMessage
         shedule.scheduleAtFixedRate(() -> {
             //System.out.println("开始匹配！");
             try {
-                match(pool, priority);
+                match(pool);
             }catch (Exception e) {
                 System.out.println("出现异常");
                 e.printStackTrace();
@@ -108,76 +105,116 @@ public class RandomMatchAction implements ServerAction<RandomMatchRequestMessage
             if(waitNum.decrementAndGet() == 0) {
                 // 执行任务
                 room.getWaitNum().compareAndSet(0, 4);
-                PlayGameTask.addTakeOutCardsTask(new PlayGameHandCardsInfo(room), NEED_MATCH_PLAYER_COUNT);
+                PlayGameHandCardsInfo info = new PlayGameHandCardsInfo();
+                room.setGameInfos(info);
+                PlayGameTask.addTakeOutCardsTask(info, NEED_MATCH_PLAYER_COUNT, room);
             }
         }else if(event == GameEvent.TakeOutCard) {
             // 校验 用户出的牌是否正确
             // 校验 是否该用户出牌
             // 需要在房间信息中保留应该出牌的玩家方向
+            // 玩家有特殊事件时不能出牌
+            System.out.println("准备出牌：" + playGameInfo.getValue());
+            HashSet<GameUser> players = room.getPlayers();
+            for (GameUser player : players) {
+                if(!Objects.equals(JedisUtil.get("oper_event:" + player.getUserId()), "0")) {
+                    // 还有特殊事件未处理，无法进行下一步
+                    return;
+                }
+            }
             long userId = playGameInfo.getUserId();
             int value = playGameInfo.getValue();
             GameUser gameUser = room.findGameUser(userId);
             List<Integer> useCards = gameUser.getGameInfoCard().getUseCards();
             List<Integer> takeOutCards = gameUser.getGameInfoCard().getTakeOutCards();
             int i = useCards.indexOf(value);
-            if(i != -1 && gameUser.gameUserIsAround()) {
+            System.out.println("useCards: " + useCards);
+            System.out.println("value: " + value);
+            // 需要即时的更新回合切换信息
+            if(i != -1 && room.getAround() == gameUser.getDirection()) {
                useCards.remove(i);
                // 向其他玩家发送信息
                 takeOutCards.add(value);
                 PlayGameInfo info = new PlayGameInfo(roomId, -1, value, gameUser.getDirection(),
-                        GameEvent.TakeOutCard, -1, false);
+                        GameEvent.TakeOutCard, 0, 0, false);
                 PlayGameTask.addTakeOutCardTask(userId, info, room);
-            }else {
-                throw new NullPointerException("玩家手中没有这张牌！");
-            }
-        }else if(event == GameEvent.Ack) {
-            System.out.println("ack: " + playGameInfo.isAck());
-            System.out.println("room: " + room);
-            // TODO 一个玩家可能点击多次事件（通过数据库记录状态）
-            Jedis jedis = JedisUtil.getJedis();
-            String operEvent = jedis.get("oper_event:" + playGameInfo.getUserId());
 
-            if("1".equals(operEvent)) {
+                ServerGameLog log = ServerCache.readLog(roomId);
+                log.offer(playGameInfo);
+
+            }else {
+                System.out.println("curDir：" + gameUser.getDirection());
+                throw new NullPointerException("玩家不能出这张牌！");
+            }
+        }else if(event == GameEvent.AckEvent) {
+
+            CommonUtil.checkSpecialEvent(playGameInfo);
+            // TODO 一个玩家可能点击多次事件（通过数据库记录状态）
+            String operEvent = JedisUtil.get("oper_event:" + playGameInfo.getUserId());
+            if(playGameInfo.isAck()) {
+                System.out.println("接收特殊事件..." + room.getWaitNum().get() + " " + ctx.channel());
+                System.out.println("ackevent: " + playGameInfo);
+                // 设置 operEvent 为 1
+               JedisUtil.set("oper_event:" + playGameInfo.getUserId(), "2");
+            }else {
+                JedisUtil.set("oper_event:" + playGameInfo.getUserId(), "0");
+            }
+
+            if("2".equals(operEvent)) {
                 // 表明 该玩家本次事件已经选择
                 return;
             }
-
+            // TODO 存在线程安全问题
             AtomicInteger waitNum = room.getWaitNum();
             synchronized (room) {
-                LinkedList<PlayGameInfo> values = room.getInfos();
+                LinkedList<PlayGameInfo> values = room.getSpecialEventInfos();
                 if(values == null) {
                     values = new LinkedList<>();
                 }
                 values.offer(playGameInfo);
+                room.setSpecialEventInfos(values);
             }
             // 准备玩家减一
             if(waitNum.get() < 0) {
                 throw new IllegalArgumentException("线程问题！");
             }
-            if(playGameInfo.isAck() && waitNum.decrementAndGet() == 0) {
+            if(waitNum.decrementAndGet() == 0) {
                 // 执行任务
                 room.getWaitNum().compareAndSet(0, 4);
-                System.out.println("开始执行摸牌任务了！");
-                jedis.set("oper_event:" + playGameInfo.getUserId(), "1");
                 PlayGameTask.addSpcialTask(room);
             }
+        }else if(event == GameEvent.AckAround) {
+            // 分为两种情况
+            // 1. 都没有特殊事件发生，自动切换到下一个回合
+            // 2. 发生特殊事件，由客户端主动请求切换到下一个回合
+            // 3. 无论有无特殊事件，必须是出牌之后才能切换回合（胡牌事件除外！）
+            HashSet<GameUser> players = room.getPlayers();
+            JedisUtil.set("oper_event:" + playGameInfo.getUserId(), "0");
+            // 1. pong
+            for (GameUser player : players) {
+                if (!"0".equals(JedisUtil.get("oper_event:" + player.getUserId()))) {
+                    // 还没有准备好
+                    return;
+                }
+
+            }
+            PlayGameTask.nextAround(room, playGameInfo, true);
         }
     }
 
-    private static void match(ConcurrentHashMap<Long, GameUser> pool,
-                       PriorityQueue<GameUser> priority) {
+    private static void match(ConcurrentHashMap<Long, GameUser> pool) {
 
         // 通过减少匹配算法的复杂度，即最先等待的优先匹配
         HashSet<GameUser> matchPoolPlayer = new HashSet<>();
-
-        // TODO 线程安全问题如何解决
         // 先获取等待时间最长的 4 个玩家，出队
         int curMatchIndex = 0;
         // 进行参数校验
-        if(pool.size() != priority.size()) {
-            throw new IllegalArgumentException("出现线程问题！赶紧解决");
-        }
-        if(priority.size() >= NEED_MATCH_PLAYER_COUNT) {
+        if(pool.size() >= NEED_MATCH_PLAYER_COUNT) {
+            PriorityQueue<GameUser> priority = new PriorityQueue<>(
+                    (o1, o2) -> (int) (o2.getStartMatchTime() - o1.getStartMatchTime()));
+            pool.forEach((aLong, gameUser) -> {
+                priority.offer(gameUser);
+            });
             while (curMatchIndex < NEED_MATCH_PLAYER_COUNT && !priority.isEmpty()) {
                 GameUser m = priority.poll();
                 matchPoolPlayer.add(m);
@@ -197,7 +234,6 @@ public class RandomMatchAction implements ServerAction<RandomMatchRequestMessage
 
     public static void putMatchPool(Long userId, GameUser gameUser) {
         pool.put(userId, gameUser);
-        priority.offer(gameUser);
     }
 
     public  static void removeMatchPool(Long userId) {
@@ -209,15 +245,16 @@ public class RandomMatchAction implements ServerAction<RandomMatchRequestMessage
         long id = roomId.incrementAndGet();
         Room room = new Room(id, matchPoolPlayer, GameEvent.InitialGame, new AtomicInteger(NEED_MATCH_PLAYER_COUNT));
         roomInfos.put(id, room);
+        ServerCache.writeLog(id, new ServerGameLog());
         // 设置玩家位置
         Direction[] directions = new Direction[]{Direction.UNDER, Direction.ABOVE, Direction.LEFT, Direction.RIGHT};
         int i = 0;
-
         for (GameUser player : matchPoolPlayer) {
             player.setEndMatchTime(System.currentTimeMillis());
             // 加载玩家头像
             player.setBase64(ServerCache.getAvatar(player.getUserId()));
-            player.setDirection(directions[i ++]);
+            // 设置玩家位置
+            player.setDirection(directions[i++]);
         }
 
         for (GameUser player : matchPoolPlayer) {

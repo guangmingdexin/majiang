@@ -16,16 +16,26 @@ public enum GameEvent {
     TakeCard(102),
     // 出牌
     TakeOutCard(103),
+    // 事件确认标志
+    AckEvent(-99),
     // 回合转换标志
-    Ack(-99),
+    AckAround(-98),
     // 碰
-    Pong(1 ),
-    // 杠
-    Gang(1 << 1),
+    Pong(1 << 1),
+    // 巴杠
+    Gang1(1 << 2),
+    // 直杠
+    Gang2(1 << 3),
+    // 暗杠
+    Gang3(1 << 4),
     // 胡
-    Hu(1 << 2),
+    Hu(1 << 5),
+    // 两家同时 胡牌
+    Hu2(1 << 6),
+    // 三级同时胡牌
+    Hu3(1 << 7),
     // 忽滤
-    Ignore(-99);
+    Ignore(1);
 
     int state;
 

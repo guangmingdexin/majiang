@@ -16,8 +16,12 @@ public enum MessageType {
     Login(3),
     // 游戏包信息
     RandomGame(4),
+    // 好友请求
+    Friend(5),
     // 响应包信息
-    Response(99);
+    Response(99),
+    // 心跳包
+    Ping(101);
 
     private short type;
 

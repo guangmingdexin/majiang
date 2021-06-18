@@ -1,11 +1,13 @@
 package com.guang.majiangclient.client.entity;
 
 import com.guang.majiangclient.client.common.enums.Direction;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @ClassName GameUser
@@ -14,17 +16,16 @@ import java.io.Serializable;
  * @Version 1.0
  **/
 
-@NoArgsConstructor
+
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class GameUser implements Comparable<GameUser>, Serializable {
 
     private long userId;
 
     private String userName;
-
-    // 玩家分数
-    private int score;
 
     private Direction direction;
 
@@ -43,19 +44,25 @@ public class GameUser implements Comparable<GameUser>, Serializable {
     // 玩家头像 base64编码
     private String base64;
 
-    public GameUser(long userId, String userName, int score, Direction direction, long startMatchTime, long endMatchTime, String channelId) {
+    private Date createTime;
+
+    public GameUser(long userId, String userName, Direction direction, long startMatchTime, long endMatchTime, String channelId) {
         this.userId = userId;
         this.userName = userName;
-        this.score = score;
         this.direction = direction;
         this.startMatchTime = startMatchTime;
         this.endMatchTime = endMatchTime;
         this.channelId = channelId;
     }
 
+    public GameUser(long userId, Date createTime) {
+        this.userId = userId;
+        this.createTime = createTime;
+    }
+
     public boolean gameUserIsAround() {
         if(gameInfoCard != null) {
-            return gameInfoCard.getAroundPlayerDire() == gameInfoCard.getCur();
+            return gameInfoCard.around();
         }
         return false;
     }
@@ -96,7 +103,6 @@ public class GameUser implements Comparable<GameUser>, Serializable {
         return "GameUser{" +
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
-                ", rank=" + score +
                 ", direction=" + direction +
                 ", startMatchTime=" + startMatchTime +
                 ", endMatchTime=" + endMatchTime +

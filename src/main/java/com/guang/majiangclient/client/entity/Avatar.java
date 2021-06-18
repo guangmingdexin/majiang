@@ -65,7 +65,7 @@ public class Avatar {
     }
 
     public Avatar(String base64, byte[] binaryImage, ImageView image, ImageView left,
-                  ImageView right, ImageView top, int score) {
+                  ImageView right, ImageView top) {
 
         this.binaryImage = binaryImage;
         this.base64 = base64;

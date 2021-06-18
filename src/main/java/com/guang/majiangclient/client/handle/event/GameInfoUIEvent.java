@@ -6,6 +6,7 @@ import com.guang.majiangclient.client.common.enums.Direction;
 import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.common.enums.GameEvent;
 import com.guang.majiangclient.client.entity.*;
+import com.guang.majiangclient.client.handle.log.GameLog;
 import com.guang.majiangclient.client.handle.service.Service;
 import com.guang.majiangclient.client.handle.task.Task;
 import com.guang.majiangclient.client.layout.ClientLayout;
@@ -58,12 +59,11 @@ public class GameInfoUIEvent implements Runnable {
                 int split = cur.getDirection() - takeOutDir.getDirection();
                 GameInfoCard gameInfoCard = user.getGameInfoCard();
                 List<CardImage> takeOutCarsImages = gameInfoCard.getTakeOutCarsImages();
-                if(takeOutCarsImages == null) {
-                    takeOutCarsImages = new ArrayList<>();
-                }
-                gameInfoCard.setTakeOutCarsImages(takeOutCarsImages);
                 int res = 0;
                 if(split == 0) {
+                    System.out.println("caCheUtil: " + CacheUtil.getGameUserInfo());
+                    System.out.println("lru: " + CacheUtil.getGameUsers());
+                    // 获取出的牌
                     CardImage cardImage = takeOutCarsImages.get(takeOutCarsImages.size() - 1);
                     ClientLayout.gBottomGd.getChildren().remove(cardImage.getCard());
                     // 如果是自己的客户端 则 takeOutCarsImage 的 size 从 1 开始
@@ -71,8 +71,11 @@ public class GameInfoUIEvent implements Runnable {
                     // 所以 GridPane 中 （0， 1） 坐标无法使用
                     int row = (takeOutCarsImages.size() - 1) / 9;
                     int col = (takeOutCarsImages.size() - 1) % 9;
+                    System.out.println("col-row: " + col + "-" + row);
                     ClientLayout.oBottom.add(cardImage.getCard(), col, row);
                 }else {
+                    System.out.println("caCheUtil: " + CacheUtil.getGameUserInfo());
+                    System.out.println("lru: " + CacheUtil.getGameUsers());
                     List<Integer> takeOutCards = gameInfoCard.getTakeOutCards();
                     takeOutCards.add(value);
 
@@ -116,6 +119,9 @@ public class GameInfoUIEvent implements Runnable {
                     CacheUtil.addGameUser(cacheGameUser);
 
                     if(info.getRes() != 0) {
+                        // 有特殊事件发生
+                        CacheUtil.setSpecialEvent(true);
+                        System.out.println("specialEvent：" + CacheUtil.getSpecialEvent());
                         center.submit(new SpecialOperEvent(info));
                         return;
                     }
@@ -124,7 +130,7 @@ public class GameInfoUIEvent implements Runnable {
                 }
                 // 直接发送确认包
                 // 服务器判断是否有特殊事件
-                System.out.println("roomId:  " + info.getRoomId());
+                System.out.println("没有特殊事件，请求进行回合切换！");
                 center.submit(
                         new Task<>(
                                 Event.RANDOMGAME,
@@ -134,17 +140,19 @@ public class GameInfoUIEvent implements Runnable {
                                                 CacheUtil.getUserInfo().getUserId(),
                                                 value,
                                                 cur,
-                                                GameEvent.Ack,
+                                                GameEvent.AckEvent,
                                                 0,
-                                                true
+                                                0,
+                                                false
                                         ))
                         ),
                         RandomMatchRequestMessage.class,
                         Event.RANDOMGAME);
+                // 记录出牌日志
+                GameLog.offer(info);
 
             }
         }
-
     }
 
 }

@@ -1,15 +1,19 @@
 package com.guang.majiangclient.client;
 
-import com.guang.majiangclient.client.handle.codec.ClientInHandle;
-import com.guang.majiangclient.client.handle.codec.GenericPackageCodec;
-import com.guang.majiangclient.client.handle.out.GameClientOutHandle;
-import com.guang.majiangserver.handle.decodec.GenericPackageClassDecoder;
-import com.guang.majiangserver.handle.decodec.GenericPackageDecoder;
+import com.guang.majiangclient.client.handle.codec.*;
+import com.guang.majiangclient.client.handle.fault.Ping;
+import com.guang.majiangclient.client.util.CommonUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.timeout.IdleStateHandler;
 import lombok.Getter;
+
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * @ClassName GameClient
@@ -52,12 +56,17 @@ public class GameClient {
                         // 加入解码器
                         // 加入编码器
 
-                        pipeline.addLast("decoder", new GenericPackageDecoder());
+                        pipeline.addLast("decoder-package", new GenericPackageDecoder());
                         pipeline.addLast("classDecoder", new GenericPackageClassDecoder());
+                    //    pipeline.addLast("decoder-str", new StringDecoder());
+                        pipeline.addLast("idleState", new IdleStateHandler(CommonUtil.READ_TIME_OUT, CommonUtil.WRITE_TIME_OUT,
+                                CommonUtil.READ_WRITE_TIME_OUT, TimeUnit.SECONDS));
                         pipeline.addLast("client", new ClientInHandle());
 
-                        pipeline.addLast("encoder", new GenericPackageCodec());
+                      //  pipeline.addLast("encoder-str", new StringEncoder());
+                        pipeline.addLast("encoder-package", new GenericPackageCodec());
                         pipeline.addLast("connect", new GameClientOutHandle());
+                        pipeline.addLast("ping", new Ping());
                     }
                 });
 

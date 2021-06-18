@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guang.majiangserver.mapper.GameInfoMapper">
+
+
+    <resultMap id="avatarResult" type="Avatar">
+        <id property="avatarId" column="avatar_id" />
+        <result property="path" column="path" />
+        <result property="imageName" column="image_name" />
+        <result property="fileType" column="file_type" />
+        <result property="fileSize" column="file_size" />
+    </resultMap>
+
+
+    <resultMap id="friendInfoResult" type="User">
+            <id property="userId" column="user_id" />
+            <result property="userName" column="user_name" />
+            <result property="score" column="score" />
+            <association property="avatar" resultMap="avatarResult" />
+    </resultMap>
+
+    <select id="getAllFriendsById" parameterType="long" resultMap="friendInfoResult">
+        # 1. 查询所有好友
+        # 2. 获取好友信息
+        # 3. 分页限制（优化）
+        SELECT 
+            o.user_id,
+            o.user_name,
+            o.avatar_id,
+            a.path,
+            o.score
+        FROM
+            info o
+                    
+        JOIN
+            avatar a
+        USING(avatar_id)
+
+        WHERE
+            o.user_id
+        IN (SELECT
+                        f.friend_id
+                FROM
+                        info i
+                JOIN
+                        friend f
+                USING(user_id)
+        
+                WHERE 
+                    i.user_id = #{userId})
+
+                ORDER BY o.score desc
+    </select>
+
+    <select id="getFriendById" resultType="int">
+        SELECT
+            count(*)
+        FROM
+            friend
+        WHERE
+            user_id = #{userId}
+        AND
+            friend_id = #{friendId}
+    </select>
+
+    <select id="getUserInfoById" parameterType="long" resultType="User">
+        select
+            user_id,
+            user_name,
+            score
+        from
+            info
+        where
+            user_id = #{uid}
+    </select>
+
+
+    <insert id="addGameInfo" parameterType="GameUser">
+        INSERT INTO
+            game_info
+            (user_id, create_time, score)
+        VALUES
+            (#{userId}, #{createTime}, #{score})
+    </insert>
+
+    <insert id="addFriendInfo" >
+        INSERT INTO
+            friend
+            (user_id, friend_id)
+        VALUES
+            (#{userId}, #{friendId}), (#{friendId}, #{userId})
+    </insert>
+
+</mapper>

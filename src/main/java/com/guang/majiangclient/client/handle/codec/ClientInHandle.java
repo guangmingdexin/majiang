@@ -4,8 +4,13 @@ import com.guang.majiangclient.client.entity.AuthResponse;
 import com.guang.majiangclient.client.handle.action.ActionFactory;
 import com.guang.majiangclient.client.handle.action.ClientAction;
 import com.guang.majiangclient.client.message.AuthResponseMessage;
+import com.guang.majiangclient.client.message.PingRequestMessage;
+import com.guang.majiangclient.client.util.CommonUtil;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.AllArgsConstructor;
 
 /**
@@ -21,7 +26,7 @@ public class ClientInHandle extends SimpleChannelInboundHandler {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object o) throws Exception {
-        // System.out.println("接收到的消息" + o);
+         System.out.println("接收到的消息" + o);
         // System.out.println(ctx.channel());
         AuthResponseMessage message = (AuthResponseMessage) o;
         AuthResponse response = message.getResponse();

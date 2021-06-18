@@ -5,12 +5,14 @@ import com.guang.majiangclient.client.GameClient;
 import com.guang.majiangclient.client.cache.CacheUtil;
 import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.common.enums.GameEvent;
+import com.guang.majiangclient.client.entity.Friend;
 import com.guang.majiangclient.client.entity.GameInfoRequest;
 import com.guang.majiangclient.client.entity.GameUser;
 import com.guang.majiangclient.client.entity.PlayGameInfo;
-import com.guang.majiangclient.client.handle.task.Task;
-import com.guang.majiangclient.client.message.RandomMatchRequestMessage;
 import com.guang.majiangclient.client.handle.service.Service;
+import com.guang.majiangclient.client.handle.task.Task;
+import com.guang.majiangclient.client.message.FriendRequestMessage;
+import com.guang.majiangclient.client.message.RandomMatchRequestMessage;
 import com.guang.majiangclient.client.util.ConfigOperation;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -51,7 +53,7 @@ public class StartMenu extends Application {
         aloneGameMenu.setGraphic(aloneGame);
 
         aloneGame.setOnMouseClicked(event -> {
-            new Layout().start(new Stage());
+          //  new Layout().start(new Stage());
         });
 
         Menu onlineGame = new Menu("联机");
@@ -68,7 +70,6 @@ public class StartMenu extends Application {
                                         new GameUser(
                                                 CacheUtil.getUserInfo().getUserId(),
                                                 CacheUtil.getUserInfo().getUserName(),
-                                                0,
                                                 null,
                                                 System.currentTimeMillis(),
                                                 -1,
@@ -76,7 +77,7 @@ public class StartMenu extends Application {
                                         new PlayGameInfo(GameEvent.InitialGame))),
                         RandomMatchRequestMessage.class,
                         Event.RANDOMGAME);
-                primaryStage.close();
+              //  primaryStage.close();
             } catch (Exception ex) {
                 System.out.println("匹配失败！");
                 ex.printStackTrace();
@@ -85,9 +86,25 @@ public class StartMenu extends Application {
 
         onlineGame.getItems().addAll(randomMatch, friendMatch);
 
+        Menu friendMenu = new Menu();
+        Label friendMenuItem = new Label("好友列表");
+
+        friendMenu.setGraphic(friendMenuItem);
+        friendMenuItem.setOnMouseClicked(event -> {
+            // 启动 friendList
+            System.out.println("获取好友列表！");
+
+            center.submit(
+                    new Task<>(
+                        Event.FRIEND,
+                        new Friend(CacheUtil.getUserInfo().getUserId(), "get")),
+                    FriendRequestMessage.class,
+                    Event.FRIEND);
+        });
+
         Menu setUpMenu = new Menu("设置");
 
-        menuBar.getMenus().addAll(aloneGameMenu, onlineGame, setUpMenu);
+        menuBar.getMenus().addAll(aloneGameMenu, onlineGame, friendMenu, setUpMenu);
 
         primaryStage.setScene(scene);
         primaryStage.show();

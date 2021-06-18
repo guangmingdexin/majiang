@@ -16,7 +16,7 @@ import io.netty.channel.ChannelHandlerContext;
  * @Date 2021/4/19 11:04
  * @Version 1.0
  **/
-@Action(event = Event.EXCEPTION)
+
 public class ExceptionAction implements ClientAction{
     @Override
     public void excute(ChannelHandlerContext ctx, AuthResponseMessage message) {
