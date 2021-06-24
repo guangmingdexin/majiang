@@ -264,32 +264,6 @@ public class PlayGameTask {
                         Direction around = room.getAround();
                         GameUser gameUser = room.findGameUser(around);
 
-//                        Transaction multi = JedisUtil.multi();
-//                        try {
-//                            int addScore = JedisUtil.zincrby("score", 1, String.valueOf(poll.getUserId()));
-//                            int decrbyScore = JedisUtil.zincrby("score", -1, String.valueOf(gameUser.getUserId()));
-//                            if(multi == null) {
-//                                throw new NullPointerException();
-//                            }
-//                            multi.exec();
-//                            if(decrbyScore < 0){
-//                                JedisUtil.zadd("score", 0, String.valueOf(gameUser.getUserId()));
-//                            }
-//                        }catch (Exception e) {
-//                            if(multi != null) {
-//                                multi.discard();
-//                            }
-//                            SqlSessionFactory sqlSessionFactory = ConfigOperation.getSqlSessionFactory();
-//                            SqlSession sqlSession = sqlSessionFactory.openSession();
-//                            InfoMapper mapper = sqlSession.getMapper(InfoMapper.class);
-//
-//                            int s = mapper.getInfoScore(gameUser.getUserId());
-//                            if(s > 0) {
-//                                mapper.decrScore(gameUser.getUserId(), 1);
-//                            }
-//                            mapper.incrScore(poll.getUserId(), 1);
-//                            sqlSession.commit();
-//                        }
                     }
 
                     poll.setEvent(GameEvent.value(poll.getOper()));

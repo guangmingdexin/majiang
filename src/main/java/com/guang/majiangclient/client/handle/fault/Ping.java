@@ -23,7 +23,6 @@ public class Ping extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("ping");
         super.channelActive(ctx);
         Channel channel = ctx.channel();
         ping(channel);
