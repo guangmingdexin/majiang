@@ -15,7 +15,7 @@ import java.util.Set;
 public class ClassUtil {
 
     public static void main(String[] args) {
-        Set<Class<?>> classes = com.guang.majiangclient.client.util.ClassUtil.getClassFromPath("com.guang.majiangclient.client.message",
+        Set<Class<?>> classes = com.guang.majiangclient.client.util.ClassUtil.getClassFromPath("com.guang.majiangclient.server.message",
                 Package.class, true);
 
 //        for (Class<?> aClass : classes) {

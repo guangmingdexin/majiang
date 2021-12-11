@@ -61,7 +61,7 @@ public class GameClient {
                     //    pipeline.addLast("decoder-str", new StringDecoder());
                         pipeline.addLast("idleState", new IdleStateHandler(CommonUtil.READ_TIME_OUT, CommonUtil.WRITE_TIME_OUT,
                                 CommonUtil.READ_WRITE_TIME_OUT, TimeUnit.SECONDS));
-                        pipeline.addLast("client", new ClientInHandle());
+                        pipeline.addLast("server", new ClientInHandle());
 
                       //  pipeline.addLast("encoder-str", new StringEncoder());
                         pipeline.addLast("encoder-package", new GenericPackageCodec());

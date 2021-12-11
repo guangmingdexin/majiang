@@ -67,10 +67,10 @@ public final class ConfigOperation {
         // 注册工厂
         // 注册所有的消息实体类
         // packageName 应该使用配置文件处理
-        MessageFactory.registerAll(ClassUtil.getClassFromPath("com.guang.majiangclient.client.message",
+        MessageFactory.registerAll(ClassUtil.getClassFromPath("com.guang.majiangclient.server.message",
                 Package.class, true));
 
-        ActionFactory.registerAll(ClassUtil.getClassFromPath("com.guang.majiangclient.client.handle.action",
+        ActionFactory.registerAll(ClassUtil.getClassFromPath("com.guang.majiangclient.server.handle.action",
                 Action.class, true));
     }
 

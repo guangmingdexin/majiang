@@ -41,7 +41,7 @@ public class ConfigOperation {
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
             // 注册所有的消息实体类
             // packageName 应该使用配置文件处理
-            MessageFactory.registerAll(ClassUtil.getClassFromPath("com.guang.majiangclient.client.message",
+            MessageFactory.registerAll(ClassUtil.getClassFromPath("com.guang.majiangclient.server.message",
                     Package.class, true));
 
             // 注册所有的业务处理类

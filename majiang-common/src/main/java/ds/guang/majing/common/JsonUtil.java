@@ -1,8 +1,11 @@
-package com.guang.majiangclient.client.util;
+package ds.guang.majing.common;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @ClassName JsonUtil
@@ -18,7 +21,9 @@ public final class JsonUtil {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    public static String objToString(Object obj) {
+    public static String objToJson(Object obj) {
+
+        Objects.requireNonNull(obj, "null don't convert to json");
 
         try {
             return mapper.writeValueAsString(obj);
