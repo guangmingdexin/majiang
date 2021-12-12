@@ -13,3 +13,5 @@ face-down-right: face-down-right.png
 # server 配置
 server-ip: 127.0.0.1
 server-port: 7000
+
+ssl-jks-path: ssl/clientStore.jks

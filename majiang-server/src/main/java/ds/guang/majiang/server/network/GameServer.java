@@ -58,6 +58,8 @@ public class GameServer {
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             ChannelPipeline pipeline = channel.pipeline();
                             pipeline.addLast("codec", new HttpServerCodec());
+                            pipeline.addLast("aggregator", new HttpObjectAggregator(1024*1024));
+                            pipeline.addLast("handler", new HttpRequestHandler());
                           //  pipeline.addLast("aggregator", new HttpObjectAggregator());
 //                            pipeline.addLast("ping", new IdleStateHandler(30, 0,
 //                                    0, TimeUnit.SECONDS));
@@ -70,7 +72,7 @@ public class GameServer {
 
             // 绑定一个端口并且同步，生成了一个 ChannelFuture 对象
             ChannelFuture channelFuture = bootstrap.bind(port).sync();
-
+            System.out.println("服务器, 启动成功！");
             // 对关闭通道进行监听
             channelFuture.channel().closeFuture().sync();
         } catch (InterruptedException e) {

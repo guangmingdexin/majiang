@@ -11,3 +11,6 @@ redis.idle: 30
 
 # mybatis 存放路径
 mybatis.config: config/mybatis/xml/mybatis-config
+
+
+ssl-jks-path: ssl/serverStore.jks

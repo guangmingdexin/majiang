@@ -54,7 +54,7 @@ public class RandomMatchAction implements ServerAction<RandomMatchRequestMessage
     private static ChannelGroup channelGroup;
 
     static {
-        shedule.scheduleAtFixedRate(() -> {
+        shedule.scheduleWithFixedDelay(() -> {
             //System.out.println("开始匹配！");
             try {
                 match(pool);

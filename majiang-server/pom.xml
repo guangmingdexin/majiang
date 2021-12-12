@@ -11,5 +11,12 @@
 
     <artifactId>majiang-server</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>majiang</groupId>
+            <artifactId>majiang-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
 </project>

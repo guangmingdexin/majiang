@@ -1,6 +1,9 @@
 package ds.guang.majing.client.event;
 
 
+import ds.guang.majing.common.DsResult;
+
+import java.util.concurrent.Callable;
 
 /**
  *
@@ -11,8 +14,8 @@ package ds.guang.majing.client.event;
  * @author guangyong.deng
  * @date 2021-12-08 15:40
  */
-public interface Event {
+public interface Event<T> {
 
-
+    T call();
 
 }

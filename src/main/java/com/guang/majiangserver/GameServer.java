@@ -5,6 +5,7 @@ import com.guang.majiangclient.client.handle.codec.GenericPackageCodec;
 import com.guang.majiangclient.client.handle.codec.GenericPackageDecoder;
 import com.guang.majiangserver.config.ConfigOperation;
 import com.guang.majiangserver.handle.GameServerHandler;
+import com.guang.majiangserver.security.SslOneWayContextFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -13,8 +14,10 @@ import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 
+import javax.net.ssl.SSLEngine;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,6 +60,13 @@ public class GameServer {
                         @Override
                         protected void initChannel(NioSocketChannel channel) throws Exception {
                             ChannelPipeline pipeline = channel.pipeline();
+
+                            // 获取 server 密钥仓库地址
+                            String jksPath = ConfigOperation.config.get("ssl-jks-path").toString();
+                            SSLEngine engine = SslOneWayContextFactory.getServerContext(jksPath).createSSLEngine();
+                            engine.setUseClientMode(false);//设置为服务器模式
+
+                            pipeline.addLast("ssl", new SslHandler(engine));
                             // 加入解码器
                            // pipeline.addLast("decoder-str", new StringDecoder());
                             pipeline.addLast("decoder", new GenericPackageDecoder());

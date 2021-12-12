@@ -1,6 +1,10 @@
 package gameTest;
 
+import java.math.BigDecimal;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * @ClassName WaitNum
@@ -18,6 +22,10 @@ public class WaitNum {
         System.out.println(waitNum.decrementAndGet());
         System.out.println(waitNum.decrementAndGet());
         System.out.println(waitNum.decrementAndGet());
+
+        BigDecimal bigDecimal = new BigDecimal("0.1");
+
+        bigDecimal.add(new BigDecimal("0.3"));
 
     }
 }

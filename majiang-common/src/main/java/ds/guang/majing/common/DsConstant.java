@@ -7,6 +7,11 @@ package ds.guang.majing.common;
 public final class DsConstant {
 
     /**
+     * 当前版本
+     */
+    public final static String VERSION = "V3";
+
+    /**
      * 用户事件类型
      */
     public final static String USER_EVENT = "USER_EVENT";
