@@ -14,7 +14,7 @@ import java.util.concurrent.Callable;
  * @author guangyong.deng
  * @date 2021-12-08 15:40
  */
-public interface Event<T> {
+public interface Event<R, T> {
 
     T call();
 

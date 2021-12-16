@@ -1,15 +1,14 @@
 package ds.guang.majiang.server.network;
 
 import ds.guang.majing.common.DsMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.state.LoginState;
+import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.*;
-import io.netty.util.CharsetUtil;
 
-import java.util.Map;
 
 /**
  * @author guangyong.deng
@@ -17,31 +16,37 @@ import java.util.Map;
  */
 public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> {
 
+    private final static StateMachine<String, String, DsResult> MACHINE = new StateMachine<>();
+
+    static {
+        LoginState login = new LoginState("111");
+        login.onEvent("login-event", "");
+
+        MACHINE.registerState(login);
+        MACHINE.start();
+    }
+
     @Override
     protected void channelRead0(ChannelHandlerContext context, HttpObject httpObject) throws Exception {
-        System.out.println(httpObject);
+
         // 判断 msg 是否为 http 请求
         if(httpObject instanceof FullHttpRequest) {
             FullHttpRequest request = (FullHttpRequest) httpObject;
             DecoderResult result = request.decoderResult();
             if (!result.isSuccess()) {
-                System.out.println("无法解码！");
+                ResponseUtil.response(DsMessage.build("-1", "-1", DsResult.error("无法解码！")));
                 return;
             }
-
             DsMessage message = (DsMessage)HttpRequestParser.getClassContent(request, DsMessage.class);
-
             System.out.println(message);
-
-            // 回复信息给浏览器 [http]
-            ByteBuf content = Unpooled.copiedBuffer("hello 我是服务器", CharsetUtil.UTF_8);
-
+            // 根据不同业务调用不同的处理逻辑
+            DsResult reply = MACHINE.event(message.getServiceNo(), message);
+            reply = reply == null ?  DsResult.empty() : reply;
+            //  构造返回消息
+            DsMessage copyMessage = DsMessage.copy(message).setData(reply);
+            System.out.println("回传的数据：" + copyMessage);
             // 构造一个 http 的响应 即 httpResponse
-            DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);
-
-            response.headers().add(HttpHeaderNames.CONTENT_TYPE, "text/plain; charset=utf-8");
-            response.headers().add(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-            context.writeAndFlush(response);
+            context.writeAndFlush(ResponseUtil.response(copyMessage));
         }
 
     }

@@ -31,11 +31,19 @@ public class Demo extends Application {
         // 1.创建一个按钮
         GridPane grid = new GridPane();
         Button button = new Button("demo");
+
+        /**
+         * 1.点击按钮
+         * 2.发送请求
+         * 3.回调
+         */
+        Button game = new Button("开始游戏！");
+
         DsResult result = DsResult.ok();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         button.setOnAction(event -> {
             System.out.println("登陆开始了！");
-            User u = new User("guangmingdexin", "111");
+            User u = new User("guangmingdexin", "123");
             // 1.向事件中心发送消息，触发方法
             // 2.消息处理之后能够处理回调
             // 这段代码就是业务代码，如何封装为一个 event 由 如何由 action 执行
@@ -50,8 +58,6 @@ public class Demo extends Application {
             // 2.event 封装为一个 runnable
             // 3.仿照类似于 Flux 的订阅，消费者模式 调用远程服务即可以封装为 数据源
                 // 而具体的业务代码即可以看作消费者
-
-
            CompletableFuture.supplyAsync(
                     () -> {
                         try {
@@ -76,8 +82,6 @@ public class Demo extends Application {
             // 注册一个回调函数
             // 当执行函数做完之后，自动执行回调函数，再由 JavaFx 线程执行此函数
             // 需要传入另一个线程执行传入的结果，同时还需要保留 线程的引用
-
-
         });
 
 

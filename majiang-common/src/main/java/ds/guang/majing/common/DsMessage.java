@@ -37,7 +37,6 @@ public class DsMessage implements Serializable {
     }
 
     public static DsMessage build(String serviceNo, String requestNo, Object data) {
-
         // id 都为随机8位字符串（默认状态）
         return new DsMessage(UUID.randomUUID().toString().substring(0, 8),
                             serviceNo,
@@ -47,6 +46,19 @@ public class DsMessage implements Serializable {
                             LocalDateTime.now()
                 );
     }
+
+    public static DsMessage copy(DsMessage dsMessage) {
+
+        return new DsMessage()
+                .setId(dsMessage.getId())
+                .setServiceNo(dsMessage.getServiceNo())
+                .setRequestNo(dsMessage.getRequestNo())
+                .setData(dsMessage.getData())
+                .setVersion(dsMessage.getVersion())
+                .setDate(dsMessage.getDate());
+
+    }
+
 
     public String getId() {
         return id;
@@ -101,6 +113,8 @@ public class DsMessage implements Serializable {
         this.date = date;
         return this;
     }
+
+
 
     @Override
     public String toString() {

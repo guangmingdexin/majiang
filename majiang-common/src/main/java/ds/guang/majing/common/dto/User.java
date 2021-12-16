@@ -1,17 +1,18 @@
 package ds.guang.majing.common.dto;
 
+import java.io.Serializable;
+
 /**
  * @author guangyong.deng
  * @date 2021-12-08 16:10
  */
-public class User  {
+public class User implements Serializable {
 
     private String username;
 
     private String password;
 
     public User() {
-
     }
 
     public User(String username, String password) {

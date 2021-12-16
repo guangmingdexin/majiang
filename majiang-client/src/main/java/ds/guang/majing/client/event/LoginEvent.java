@@ -20,12 +20,12 @@ import java.io.IOException;
  * @author guangyong.deng
  * @date 2021-12-10 15:26
  */
-public class LoginEvent extends AbstractEvent<DsResult> {
+public class LoginEvent extends AbstractEvent<String, DsResult> {
 
     private User user;
 
     public LoginEvent(User user) {
-        super(DsConstant.USER_EVENT);
+        super("Login_Event", DsConstant.USER_EVENT);
         this.user = user;
     }
 
@@ -45,7 +45,7 @@ public class LoginEvent extends AbstractEvent<DsResult> {
         // 创建Post请求
         HttpPost httpPost = new HttpPost("http://localhost:9001/");
         // 创建报文
-        DsMessage message = DsMessage.build("1", "1", user);
+        DsMessage message = DsMessage.build(id, "1", user);
         StringEntity entity = new StringEntity(JsonUtil.objToJson(message), "UTF-8");
         // post请求是将参数放在请求体里面传过去的;这里将entity放入post请求体中
         httpPost.setEntity(entity);
