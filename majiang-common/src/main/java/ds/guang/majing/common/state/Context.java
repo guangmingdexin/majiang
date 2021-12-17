@@ -1,7 +1,5 @@
 package ds.guang.majing.common.state;
 
-import ds.guang.majing.common.event.Event;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 

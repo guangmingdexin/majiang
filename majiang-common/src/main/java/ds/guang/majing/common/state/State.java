@@ -1,7 +1,5 @@
 package ds.guang.majing.common.state;
 
-import ds.guang.majing.common.event.Event;
-
 /**
  * @author guangyong.deng
  * @date 2021-12-17 14:20

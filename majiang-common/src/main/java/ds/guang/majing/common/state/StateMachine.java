@@ -1,8 +1,6 @@
 package ds.guang.majing.common.state;
 
 
-import ds.guang.majing.common.event.Event;
-
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

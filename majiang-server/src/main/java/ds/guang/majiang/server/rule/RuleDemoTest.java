@@ -1,6 +1,5 @@
 package ds.guang.majiang.server.rule;
 
-import ds.guang.majing.common.event.Event;
 import ds.guang.majing.common.state.StateMachine;
 
 /**

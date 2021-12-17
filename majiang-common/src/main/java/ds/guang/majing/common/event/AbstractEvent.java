@@ -1,4 +1,4 @@
-package ds.guang.majing.client.event;
+package ds.guang.majing.common.event;
 
 /**
  *

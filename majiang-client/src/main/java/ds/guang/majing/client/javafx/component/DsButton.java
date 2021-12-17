@@ -1,6 +1,5 @@
 package ds.guang.majing.client.javafx.component;
 
-import ds.guang.majing.client.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

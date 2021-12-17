@@ -1,7 +1,5 @@
 package ds.guang.majing.common.state;
 
-import ds.guang.majing.common.event.Event;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
