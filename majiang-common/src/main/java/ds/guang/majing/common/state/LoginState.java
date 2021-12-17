@@ -10,7 +10,7 @@ import ds.guang.majing.common.dto.User;
  * @author guangyong.deng
  * @date 2021-12-13 16:28
  */
-public class LoginState extends State<String, String, DsResult> {
+public class LoginState extends AbstractStateImpl<String, String, DsResult> {
 
     /**
      * @param id 状态ID

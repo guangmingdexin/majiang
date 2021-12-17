@@ -1,6 +1,5 @@
 package ds.guang.majing.client.javafx.component;
 
-import ds.guang.majing.client.action.Action;
 import ds.guang.majing.client.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,11 +15,8 @@ public class DsButton extends Button {
         super(text);
     }
 
-    public void setOnAction(EventHandler<ActionEvent> value,
-                            Action<Event, String> action,
-                            Event event) {
         // 图形渲染
-        super.setOnAction(value);
+
         // 业务动作
         // 产生一个问题，有多个不同事件 比如出牌事件发生 如何自动对应到相应的行为
         // 同样如果有返回值，如何利用好返回值
@@ -33,8 +29,7 @@ public class DsButton extends Button {
 
         // 二：策略模式
         // 在使用的时候直接传入 父接口，根据多态特性调用相应的 处理方法
-        action.action(event);
-    }
+
 
     public void setOnAction(EventHandler<ActionEvent> value, Event event) {
             super.setOnAction(value);

@@ -27,4 +27,14 @@ public final class DsConstant {
     public static final int CODE_ERROR = 500;
 
 
+    /**
+     *  状态 id 常量
+     *
+     */
+    public static final String STATE_INITIAL_ID = "STATE_INITIAL_ID";
+
+    public static final String STATE_PLATFORM_ID = "STATE_PLATFORM_ID";
+
+    public static final String STATE_PREPARE_ID = "STATE_PREPARE_ID";
+
 }

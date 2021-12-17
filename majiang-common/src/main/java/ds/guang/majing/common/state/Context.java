@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Context implements Runnable {
 
-    private State state;
+    private AbstractStateImpl state;
 
     private Event event;
 
@@ -29,7 +29,7 @@ public class Context implements Runnable {
 
     private volatile boolean mark;
 
-    public Context(State state,
+    public Context(AbstractStateImpl state,
                    Event event,
                    Condition condition,
                    Condition nextCondition,
@@ -49,11 +49,11 @@ public class Context implements Runnable {
         this.mark = mark;
     }
 
-    public State getState() {
+    public AbstractStateImpl getState() {
         return state;
     }
 
-    public Context setState(State state) {
+    public Context setState(AbstractStateImpl state) {
         this.state = state;
         return this;
     }
