@@ -1,13 +1,17 @@
 package ds.guang.majing.common.state;
 
 
+import ds.guang.majing.common.event.Event;
+
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
  * 状态机
+ * @author guangmingdexin
  * @param <T> 状态ID的类型
  * @param <E> 事件ID的类型
  * Created by ygl_h on 2017/7/17.
@@ -55,6 +59,7 @@ public class StateMachine<T,E,R> implements State.Notify<T> {
     public void registerInitialState(State<T,E,R> initState) {
         initStateId = initState.getId();
         states.add(initState);
+        initState.setNotify(this);
     }
 
     /**
@@ -92,6 +97,9 @@ public class StateMachine<T,E,R> implements State.Notify<T> {
 
     @Override
     public void nextState(T nextStateId, Object data) {
+
+        int loopCount = 0;
+
         if (currentState != null) {
           //  logger.i(TAG, "状态变化，离开："+currentState.id);
             currentState.exit();
@@ -101,7 +109,13 @@ public class StateMachine<T,E,R> implements State.Notify<T> {
                 currentState = state;
                 break;
             }
+            loopCount ++;
         }
+        if(loopCount == states.size()) {
+            // 没有找到下一个状态
+            throw new NullPointerException("don't find next state!");
+        }
+
         if (currentState != null) {
            // logger.i(TAG, "状态变化，进入："+currentState.id);
             currentState.entry(data);
@@ -110,6 +124,29 @@ public class StateMachine<T,E,R> implements State.Notify<T> {
 
     public void setLogger(Logger logger) {
       //  this.logger = logger;
+    }
+
+    /**
+     *
+     * 手动切换状态
+     *
+     * @param stateId
+     * @param data
+     */
+    public void setCurrentState(T stateId, Object data) {
+        Objects.requireNonNull(stateId, "state don't null");
+        if(currentState.getId().equals(stateId)) {
+            return;
+        }
+        states.forEach(s -> {
+            if(stateId.equals(s.getId())) {
+                // 状态发生了切换
+                currentState = s;
+                currentState.entry(data);
+            }
+        });
+
+        throw new NullPointerException("don't find the state");
     }
 }
 

@@ -1,5 +1,7 @@
 package ds.guang.majing.common.state;
 
+import ds.guang.majing.common.event.Event;
+
 /**
  * @author guangyong.deng
  * @date 2021-12-17 14:20
@@ -17,6 +19,7 @@ public interface State<T, E, R> {
    default State<T,E,R> onEvent(final E eventId, final T nextState) {
        return onEvent(eventId, nextState, null);
    }
+
 
     State<T,E,R> onEvent(final E eventId, final T nextState, final Handler<R> handler);
 

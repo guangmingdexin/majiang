@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.util.StdConverter;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import ds.guang.majing.common.player.Player;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -109,6 +111,11 @@ public final class JsonUtil {
     }
 
 
+    public static Class<? extends StdConverter> getConverter() {
+        Converter converter = new Converter();
+        return converter.getClass();
+    }
+
     static final class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
 
         final static LocalDateTimeSerializer INSTANCE = new LocalDateTimeSerializer();
@@ -132,4 +139,7 @@ public final class JsonUtil {
             return LocalDateTime.parse(jsonParser.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
     }
+
+
+
 }

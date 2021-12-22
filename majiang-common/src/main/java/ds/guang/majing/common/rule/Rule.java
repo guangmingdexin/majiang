@@ -1,4 +1,4 @@
-package ds.guang.majiang.server.rule;
+package ds.guang.majing.common.rule;
 
 /**
  *
@@ -19,7 +19,12 @@ public interface Rule<T, R> {
      * @param t 游戏类型
      * @return
      */
-    Rule create(T t);
+    Rule<T, R> create(T t);
 
+    /**
+     * 获取规则执行状态机
+     *
+     * @return R
+     */
     R getRuleActor();
 }

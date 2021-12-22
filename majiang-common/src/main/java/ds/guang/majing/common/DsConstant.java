@@ -31,20 +31,28 @@ public final class DsConstant {
      *  状态 id 常量
      *
      */
-    public static final String STATE_INITIAL_ID = "STATE_INITIAL_ID";
+    public static final String STATE_LOGIN_ID = "STATE_LOGIN_ID";
 
     public static final String STATE_PLATFORM_ID = "STATE_PLATFORM_ID";
 
     public static final String STATE_PREPARE_ID = "STATE_PREPARE_ID";
 
+    public static final String STATE_MATCH_FRIEND_ID = "STATE_MATCH_FRIEND_ID";
+
+    public static final String STATE_INITIAL_ID = "STATE_INITIAL_ID";
+
 
     /**
      * 事件 id 常量
      */
+    public static final String EVENT_LOGIN_ID = "EVENT_LOGIN_ID";
+
     public static final String EVENT_INITIAL_ID = "EVENT_INITIAL_ID";
 
     public static final String EVENT_PLATFORM_ID = "EVENT_PLATFORM_ID";
 
     public static final String EVENT_PREPARE_ID = "EVENT_PREPARE_ID";
+
+    public static final String EVENT_MATCH_FRIEND_ID = "EVENT_MATCH_FRIEND_ID";
 
 }

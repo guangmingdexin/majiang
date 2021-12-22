@@ -1,5 +1,7 @@
 package ds.guang.majing.client.javafx.component;
 
+import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -30,7 +32,7 @@ public class DsButton extends Button {
         // 在使用的时候直接传入 父接口，根据多态特性调用相应的 处理方法
 
 
-    public void setOnAction(EventHandler<ActionEvent> value, Event event) {
+    public void setOnAction(EventHandler<ActionEvent> value, Event<String> event) {
             super.setOnAction(value);
             // 1.获取工厂
             // 2.调用

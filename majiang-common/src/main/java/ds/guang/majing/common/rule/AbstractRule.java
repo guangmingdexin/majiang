@@ -1,6 +1,6 @@
-package ds.guang.majiang.server.rule;
+package ds.guang.majing.common.rule;
 
-import ds.guang.majiang.server.player.Player;
+
 import ds.guang.majing.common.state.StateMachine;
 
 /**
@@ -15,16 +15,22 @@ import ds.guang.majing.common.state.StateMachine;
  */
 public abstract class AbstractRule<T, R> implements Rule<T, R> {
 
-    protected Player player;
+    protected String ruleId;
 
     protected R stateMachine;
 
     @Override
+    @SuppressWarnings("unchecked")
     public R getRuleActor() {
+        if(stateMachine == null) {
+            R r = (R) new StateMachine<>();
+            this.stateMachine = r;
+            return r;
+        }
         return stateMachine;
     }
 
-    public Rule setStateMachine(R stateMachine) {
+    public Rule<T, R> setStateMachine(R stateMachine) {
         this.stateMachine = stateMachine;
         return this;
     }

@@ -18,6 +18,9 @@ public class DsResult extends LinkedHashMap<String, Object> implements Serializa
      */
     private static final long serialVersionUID = 1L;
 
+    public DsResult() {
+    }
+
     public DsResult(int code, String msg, Object data) {
         this.setCode(code);
         this.setMsg(msg);

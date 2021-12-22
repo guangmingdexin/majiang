@@ -2,6 +2,8 @@ package ds.guang.majiang.server.rule;
 
 import ds.guang.majing.common.DsConstant;
 import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.rule.AbstractRule;
+import ds.guang.majing.common.rule.Rule;
 import ds.guang.majing.common.state.AbstractStateImpl;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
@@ -35,7 +37,7 @@ public class PlayerChuanMaRule extends AbstractRule<String, StateMachine<String,
         @Override
         public State<String, String, Object> onEvent(String eventId, String nextState) {
 
-            return onEvent(eventId, nextState, handle -> {
+            return onEvent(eventId, nextState, data -> {
                 System.out.println("进入下一个状态");
                 //
                 return this;
@@ -59,7 +61,7 @@ public class PlayerChuanMaRule extends AbstractRule<String, StateMachine<String,
             @Override
             public State<String, String, Object> onEvent(String eventId, String nextState) {
 
-                return onEvent(eventId, nextState, handler -> {
+                return onEvent(eventId, nextState, data -> {
                     //
                     System.out.println("摸牌！");
                     return this;

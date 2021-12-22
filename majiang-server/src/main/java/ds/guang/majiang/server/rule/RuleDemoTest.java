@@ -1,5 +1,8 @@
 package ds.guang.majiang.server.rule;
 
+import ds.guang.majing.common.DsConstant;
+import ds.guang.majing.common.event.Event;
+import ds.guang.majing.common.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
 
 /**
@@ -18,7 +21,7 @@ public class RuleDemoTest {
 
         ruleActor.start();
 
-        ruleActor.event(new Event<>("test-event"));
+        ruleActor.event(new Event<>(DsConstant.EVENT_INITIAL_ID, null));
 
     }
 }

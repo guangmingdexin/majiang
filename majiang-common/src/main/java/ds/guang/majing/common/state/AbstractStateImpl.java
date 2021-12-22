@@ -1,5 +1,7 @@
 package ds.guang.majing.common.state;
 
+import ds.guang.majing.common.event.Event;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -88,6 +90,7 @@ public abstract class AbstractStateImpl<T, E, R> implements State<T, E, R> {
         return onEvent(eventId, nextState, null);
     }
 
+    
     /**
      * 绑定状态跳转事件处理
      * @param eventId 事件ID
@@ -147,9 +150,9 @@ public abstract class AbstractStateImpl<T, E, R> implements State<T, E, R> {
 
     @Override
     public R handle(Event<E> event) {
-        Handler<R> handler = handlerMap.get(event.id);
+        Handler<R> handler = handlerMap.get(event.getId());
         if (handler != null) {
-            return handler.handle(event.data);
+            return handler.handle(event.getData());
         }
         return null;
     }

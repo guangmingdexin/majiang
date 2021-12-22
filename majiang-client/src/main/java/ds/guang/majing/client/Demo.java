@@ -1,9 +1,14 @@
 package ds.guang.majing.client;
 
 
-import ds.guang.majing.client.event.LoginEvent;
+import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
+import ds.guang.majing.common.DsConstant;
 import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.cache.DsGlobalCache;
+import ds.guang.majing.common.cache.DsGlobalCacheDefaultImpl;
 import ds.guang.majing.common.dto.User;
+import ds.guang.majing.common.rule.Rule;
+import ds.guang.majing.common.state.StateMachine;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,6 +34,7 @@ public class Demo extends Application {
         GridPane grid = new GridPane();
         Button button = new Button("demo");
 
+        DsGlobalCache cache = new DsGlobalCacheDefaultImpl();
         /**
          * 1.点击按钮
          * 2.发送请求
@@ -36,8 +42,14 @@ public class Demo extends Application {
          */
         Button game = new Button("开始游戏！");
 
-        DsResult result = DsResult.ok();
-        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Rule<String, StateMachine<String, String, DsResult>> rule = new PlatFormRuleImpl();
+
+        rule.create("");
+
+        StateMachine<String, String, DsResult> ruleActor = rule.getRuleActor();
+
+        System.out.println("ruleActor: " + ruleActor);
+
         button.setOnAction(event -> {
             System.out.println("登陆开始了！");
             User u = new User("guangmingdexin", "123");
@@ -55,34 +67,25 @@ public class Demo extends Application {
             // 2.event 封装为一个 runnable
             // 3.仿照类似于 Flux 的订阅，消费者模式 调用远程服务即可以封装为 数据源
                 // 而具体的业务代码即可以看作消费者
-           CompletableFuture.supplyAsync(
-                    () -> {
-                        try {
-                            return new LoginEvent(u).call();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return DsResult.error();
-                    }).thenApply(dsResult -> {
-                           if(result.isOk()) {
-                               // 进入游戏
-                               System.out.println("thread-name: " + Thread.currentThread().getName() + " success 进入游戏!");
-                           }else {
-                               // 跳出弹框
-                           }
-                           return dsResult;
-                     }).exceptionally(ex -> {
-                       System.out.println("发生异常"+ex.getMessage());
-                       return null;
-                     });
+            ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, u);
+            ruleActor.event(DsConstant.EVENT_LOGIN_ID, u);
 
             // 注册一个回调函数
             // 当执行函数做完之后，自动执行回调函数，再由 JavaFx 线程执行此函数
             // 需要传入另一个线程执行传入的结果，同时还需要保留 线程的引用
         });
 
+        game.setOnAction(event -> {
+
+            Object data = DsGlobalCache.getInstance().getObject("guangmingdexin");
+            ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
+            ruleActor.event(DsConstant.EVENT_PREPARE_ID,
+                    data);
+        });
+
 
         grid.add(button, 0, 0, 2, 1);
+        grid.add(game, 0, 1, 2, 1);
         Scene scene = new Scene(grid, 300, 275);
         primaryStage.setScene(scene);
 
