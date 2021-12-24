@@ -15,6 +15,9 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.6" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.6" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0" level="project" />
+    <orderEntry type="library" name="Maven: com.github.ben-manes.caffeine:caffeine:2.9.3" level="project" />
+    <orderEntry type="library" name="Maven: org.checkerframework:checker-qual:3.19.0" level="project" />
+    <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.10.0" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-all:4.1.70.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.70.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec:4.1.70.Final" level="project" />

@@ -1,6 +1,7 @@
-package ds.guang.majiang.server.network;
+package ds.guang.majiang.server;
 
 
+import ds.guang.majiang.server.network.HttpRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;

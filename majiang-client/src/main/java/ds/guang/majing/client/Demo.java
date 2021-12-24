@@ -44,43 +44,39 @@ public class Demo extends Application {
 
         Rule<String, StateMachine<String, String, DsResult>> rule = new PlatFormRuleImpl();
 
-        rule.create("");
+        rule.create("V3-PLATFORM");
 
         StateMachine<String, String, DsResult> ruleActor = rule.getRuleActor();
 
         System.out.println("ruleActor: " + ruleActor);
 
         button.setOnAction(event -> {
+            // TODO 多次点击登录 会出现返回值不一致的情况
+            // TODO 异步状态下，在无法获取服务端的响应下就进行了状态的转换
+            // TODO 巨大隐患，当服务器没有即使响应之后
+            // 原因：点击事件之后，服务器的状态机 和 客户端的状态机 状态不一致
+            // 我应该维护一个状态机 map，根据用户 id 或者 其他标识符 作为 key
+            // 并需要时刻同步两个状态机的状态一致，缓存
             System.out.println("登陆开始了！");
             User u = new User("guangmingdexin", "123");
-            // 1.向事件中心发送消息，触发方法
-            // 2.消息处理之后能够处理回调
-            // 这段代码就是业务代码，如何封装为一个 event 由 如何由 action 执行
 
-            // 返回值如何解决
-            // 这样的话，不如直接到 Runnable 接口
-            // 而且如何解决 同步异步问题
-            // 比如另一个线程 完成了任务如何通知 javafx 线程让他进行跳转
-            // 又需要大量处理完全不需要，直接同步处理
+            CompletableFuture.runAsync(() -> {
+                ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, u);
+                ruleActor.event(DsConstant.EVENT_LOGIN_ID, u);
 
-            // 1.经过测试必定需要异步框架处理，不然性能太差
-            // 2.event 封装为一个 runnable
-            // 3.仿照类似于 Flux 的订阅，消费者模式 调用远程服务即可以封装为 数据源
-                // 而具体的业务代码即可以看作消费者
-            ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, u);
-            ruleActor.event(DsConstant.EVENT_LOGIN_ID, u);
-
-            // 注册一个回调函数
-            // 当执行函数做完之后，自动执行回调函数，再由 JavaFx 线程执行此函数
-            // 需要传入另一个线程执行传入的结果，同时还需要保留 线程的引用
+            });
         });
 
         game.setOnAction(event -> {
 
             Object data = DsGlobalCache.getInstance().getObject("guangmingdexin");
-            ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
-            ruleActor.event(DsConstant.EVENT_PREPARE_ID,
-                    data);
+            System.out.println("准备匹配玩家，构造房间！" + data);
+
+            CompletableFuture.runAsync(() -> {
+                ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
+                ruleActor.event(DsConstant.EVENT_PREPARE_ID, data);
+            });
+
         });
 
 

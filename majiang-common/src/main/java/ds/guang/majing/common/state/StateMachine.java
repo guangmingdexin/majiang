@@ -118,6 +118,7 @@ public class StateMachine<T,E,R> implements State.Notify<T> {
 
         if (currentState != null) {
            // logger.i(TAG, "状态变化，进入："+currentState.id);
+            // TODO 无论请求状态变化是否成功，这里都会进行状态转换
             currentState.entry(data);
         }
     }
@@ -146,7 +147,10 @@ public class StateMachine<T,E,R> implements State.Notify<T> {
             }
         });
 
-        throw new NullPointerException("don't find the state");
+        if(currentState.getId() != stateId) {
+            throw new NullPointerException("don't find the next state");
+        }
+
     }
 }
 

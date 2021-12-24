@@ -4,10 +4,14 @@ import ds.guang.majing.common.DsConstant;
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.cache.DsGlobalCache;
 import ds.guang.majing.common.dto.GameUser;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
+
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * @author guangmingdexin
@@ -31,15 +35,18 @@ public class PrepareRequest extends Request {
     }
 
     @Override
-    public DsResult call()  {
+    protected void before(Runnable task) {
 
-        DsResult result = super.call();
+    }
 
+
+    @Override
+    protected DsResult after(DsResult result) {
         if(result != null && result.isOk()) {
             System.out.println("准备进入游戏！");
             return result;
         }
-
         return DsResult.error();
     }
+
 }

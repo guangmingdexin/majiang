@@ -13,8 +13,16 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.function.Supplier;
 
-public abstract class Request {
+/**
+ *
+ * 封装的 http 请求
+ *
+ */
+public abstract class Request implements AsycTask {
 
     protected  CloseableHttpClient httpClient;
 
@@ -27,10 +35,41 @@ public abstract class Request {
     protected String header;
 
 
+    /**
+     * 提交任务
+     */
+    protected abstract void before(Runnable task);
+
+    /**
+     *
+     * 异步执行任务的回调
+     *
+     * @param future future
+     * @return dsResult
+     */
+    protected abstract DsResult after(DsResult future);
+
+
+    /**
+     * 按照流程执行
+     */
+    public final DsResult execute(Runnable task, Object data) {
+        before(task);
+
+        return after(asynHttpPost(data));
+    }
+
+    /**
+     *
+     * 发起 http 请求
+     *
+     * @return
+     */
     public DsResult call() {
+
+        System.out.println("发起请求的线程-" + Thread.currentThread().getName());
         // 1.向远程服务器发送准备游戏的请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
-
         DsMessage reply = null;
         DsResult result = null;
         CloseableHttpResponse response = null;
@@ -43,7 +82,6 @@ public abstract class Request {
                 reply = (DsMessage) JsonUtil.stringToObj(EntityUtils.toString(responseEntity), DsMessage.class);
                 result = (DsResult) JsonUtil.mapToObj(reply.getData(), DsResult.class);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             return DsResult.error(e.getMessage());
@@ -61,9 +99,13 @@ public abstract class Request {
                 e.printStackTrace();
             }
         }
-
         return result;
     }
+
+    public DsResult asynHttpPost(Object data) {
+        return call();
+    }
+
 
     public Request setHttpClient(CloseableHttpClient httpClient) {
         this.httpClient = httpClient;

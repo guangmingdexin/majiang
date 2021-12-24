@@ -143,8 +143,12 @@ public class DsResult extends LinkedHashMap<String, Object> implements Serializa
         return new DsResult(code, msg, data);
     }
 
+    public static DsResult empty(String msg) {
+        return new DsResult(-1, msg, null);
+    }
+
     public static DsResult empty() {
-        return new DsResult(-1, null, null);
+        return empty(null);
     }
 
     public boolean isOk() {
