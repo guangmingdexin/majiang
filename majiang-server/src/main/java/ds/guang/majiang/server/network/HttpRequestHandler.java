@@ -30,14 +30,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                 return;
             }
             DsMessage message = (DsMessage)HttpRequestParser.getClassContent(request, DsMessage.class);
-            System.out.println(message);
+
             // 根据不同业务调用不同的处理逻辑
             DsResult reply = StateMachines.get(message.getServiceNo()).event(message.getServiceNo(), message);
-            System.out.println("reply: " + reply);
             reply = reply == null ?  DsResult.empty() : reply;
             //  构造返回消息
             DsMessage copyMessage = DsMessage.copy(message).setData(reply);
-            System.out.println("回传的数据：" + copyMessage);
             // 构造一个 http 的响应 即 httpResponse
             context.writeAndFlush(ResponseUtil.response(copyMessage));
         }
@@ -46,7 +44,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("连接上线！");
+        // System.out.println("连接上线！");
     }
 
     @Override

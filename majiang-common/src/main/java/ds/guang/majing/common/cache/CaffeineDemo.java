@@ -25,14 +25,27 @@ public class CaffeineDemo {
 
         int hash = UUID.randomUUID().toString().hashCode();
 
-        int start = 0b1000;
+        int start = 0b1100;
 
-        System.out.println("0b" + Integer.toBinaryString(start));
+      //  System.out.println("0b" + Integer.toBinaryString(12));
 
-        System.out.println("0b" + Integer.toBinaryString(start << 2));
+     //   System.out.println("0b" + Integer.toBinaryString(start));
+        // 第 4 段 ，
+        int offset = (start << 2);
+        System.out.println("0b" + Integer.toBinaryString(offset) + "--" + offset);
 
+        // System.out.println("0b" + Long.toBinaryString(64L));
+        long mask = 0xfL << offset;
+        System.out.println("0b" + Long.toBinaryString(mask) + "----" + mask);
+
+        long result = (1L << offset);
+        System.out.println("0b" + Long.toBinaryString(result) + result);
         // 流程模拟 假设 start = 0b1000 正好为 8
         //  index 不同的下标假设 为 5
+        // start << 2 相当于 64 位中的下标 （这个怎么理解）
+        // 64 = 100 0000
+        // 0000 0000 0000 0000 0000 0000 0000 0000
+        // 2^6
 
     }
 

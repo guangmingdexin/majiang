@@ -3,11 +3,10 @@ package ds.guang.majiang.server.pool;
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
 import ds.guang.majing.common.player.Player;
 import ds.guang.majing.common.exception.DsBasicException;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.util.internal.shaded.org.jctools.queues.MpscChunkedArrayQueue;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -31,7 +30,8 @@ public class MatchPoolImpl implements MatchPool {
      */
     private int playerCount;
 
-    private Deque<Player> deque = new LinkedBlockingDeque<>();
+   // private Deque<Player> deque = new LinkedBlockingDeque<>();
+   MpscChunkedArrayQueue<Player> deque;
 
     private final int DEFAULT_LIMIT_CAPACITY = 10240;
 
@@ -43,6 +43,7 @@ public class MatchPoolImpl implements MatchPool {
     public MatchPoolImpl() {
         this.limit = DEFAULT_LIMIT_CAPACITY;
         this.playerCount = 4;
+        this.deque = new MpscChunkedArrayQueue<>(limit);
     }
 
     /**
@@ -54,18 +55,27 @@ public class MatchPoolImpl implements MatchPool {
      * 会不会无限创建线程
      * 会不会出现 oom
      */
-    private ExecutorService schedule = new ThreadPoolExecutor(1,
-            1,
-            0L,
-            TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(1024),
-            new ThreadFactory() {
-               final AtomicInteger i = new AtomicInteger(1);
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "match-pool-thread-" + i.get());
-                }
-            });
+//    private ExecutorService schedule = new ThreadPoolExecutor(1,
+//            1,
+//            0L,
+//            TimeUnit.SECONDS,
+//            new ArrayBlockingQueue<>(1024),
+//            new ThreadFactory() {
+//               final AtomicInteger i = new AtomicInteger(1);
+//                @Override
+//                public Thread newThread(Runnable r) {
+//                    return new Thread(r, "match-pool-thread-" + i.get());
+//                }
+//            });
+
+
+    private ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
+        final AtomicInteger i = new AtomicInteger(1);
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "match-pool-thread-" + i.get());
+        }
+    });
 
 
     @Override
@@ -74,6 +84,20 @@ public class MatchPoolImpl implements MatchPool {
             return;
         }
         isStart.compareAndSet(false, true);
+        // 这里是否需要再开一个线程/ 周期性的 每隔 5秒请求一次
+        schedule.schedule(() -> {
+            if(deque.size() < playerCount) {
+                // 不用处理
+            }else {
+                //
+                List<Player> players = new ArrayList<>(playerCount);
+                while (!deque.isEmpty()) {
+                    players.add(deque.poll());
+                }
+                // 获取 Channel 写入数据
+
+            }
+        }, 10, TimeUnit.SECONDS);
     }
 
     @Override
@@ -107,19 +131,9 @@ public class MatchPoolImpl implements MatchPool {
     }
 
     @Override
-    public Future<List<Player>> match() {
+    public void match() {
+        // 这里是否需要再开一个线程/ 周期性的 每隔 5秒请求一次
+//        schedule.schedule();
 
-        Future<List<Player>> matchResult = schedule.submit(() -> {
-            for (; ; ) {
-                if (deque.size() < playerCount) {
-                    Thread.sleep(1000);
-                } else {
-                    List<Player> players = new ArrayList<>();
-                    players.add(deque.poll());
-                    return players;
-                }
-            }
-        });
-        return matchResult;
     }
 }
