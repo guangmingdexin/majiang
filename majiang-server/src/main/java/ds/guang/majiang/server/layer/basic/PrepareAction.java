@@ -1,22 +1,18 @@
 package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majiang.server.room.FourRoom;
+import ds.guang.majiang.server.room.RoomManager;
+import ds.guang.majing.common.ClassUtil;
 import ds.guang.majing.common.DsConstant;
-import ds.guang.majing.common.player.Player;
-import ds.guang.majiang.server.pool.MatchPool;
+import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.player.Player;
 import ds.guang.majing.common.room.Room;
-import ds.guang.majing.common.state.AbstractStateImpl;
 import ds.guang.majing.common.state.State;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.*;
 
-import static ds.guang.majing.common.DsConstant.EVENT_PREPARE_ID;
-import static ds.guang.majing.common.DsConstant.STATE_INITIAL_ID;
-import static ds.guang.majing.common.DsConstant.STATE_PREPARE_ID;
+import static ds.guang.majing.common.DsConstant.*;
 
 /**
  * @author guangmingdexin
@@ -24,39 +20,73 @@ import static ds.guang.majing.common.DsConstant.STATE_PREPARE_ID;
 @StateMatchAction(value = STATE_PREPARE_ID)
 public class PrepareAction implements Action {
 
-    private MatchPool matchPool;
-
-    private static final int PLAYER_COUNT = 4;
-
 
     @Override
+    @SuppressWarnings("unchecked")
     public void handler(State state) {
 
         state.onEntry(data -> {
-            System.out.println("进入 prepare 状态！");
+
+            System.out.println("进入 prepare 状态！" + data);
+            // 随便洗牌
+           // Room room = getRoomById(data);
+
             return null;
         });
 
-        state.onEvent(EVENT_PREPARE_ID, STATE_INITIAL_ID, data -> {
-
-            // 1.获取游戏玩家 id，加入游戏池中，如果游戏池中存在四位玩家则直接组成一个房间
-            // 如果没有匹配好，直接阻塞？
-            Future<List<Player>> matchResult = matchPool.match();
-            List<Player> players = null;
-            try {
-                players = matchResult.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+        state.onEvent(EVENT_POST_HANDCARD_ID, data -> {
+            Objects.requireNonNull(data, "data must be not empty!");
+            Room room = getRoomById(data);
+            Player player = room.findPlayerById(preGameUserInfoKey(((DsMessage)data).getRequestNo()));
+            if(player != null) {
+                return DsResult.data(player.getCards());
             }
-            // 判断 players 是否匹配成功！
-            if(matchResult.isDone() && players != null && players.size() >= PLAYER_COUNT) {
-
-                Room room = new FourRoom(PLAYER_COUNT, players);
-                return DsResult.data(room);
-            }
-
-            return DsResult.error("游戏匹配失败！");
+            return DsResult.error("获取手牌失败！");
         });
 
     }
+
+
+    /**
+     * @param data
+     * @return
+     */
+    private Room getRoomById(Object data) {
+
+        // 获取房间管理器
+        RoomManager roomManager = RoomManager.getInstance();
+        // 获取 房间 id
+        DsMessage message = ClassUtil.convert(data, DsMessage.class);
+
+        return roomManager.get(DsConstant.preRoomInfoPrev(message.getRequestNo()));
+    }
+
+
+    /**
+     *
+     * 洗牌算法
+     * 随机生成一个 1-n 的随机数，从最后一个数组开始
+     * 不断交换 card[random]，card[i]
+     *
+     * @param cards 初始手牌
+     */
+    private List<Integer> shuffle(List<Integer> cards) {
+
+        Random rand = new Random();
+
+        List<Integer> copyCards = new ArrayList<>(cards);
+
+        // 洗牌
+        for (int i = copyCards.size() - 1; i >= 0 ; i--) {
+            int randInd = rand.nextInt(i);
+            // 交换
+            Integer temp = copyCards.get(i);
+            copyCards.set(i, copyCards.get(randInd));
+            copyCards.set(randInd, temp);
+        }
+
+        return Collections.unmodifiableList(copyCards);
+
+    }
+
 }

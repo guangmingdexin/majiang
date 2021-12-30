@@ -3,9 +3,11 @@ package ds.guang.majing.client;
 
 import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
 import ds.guang.majing.common.DsConstant;
+import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.cache.DsGlobalCache;
-import ds.guang.majing.common.cache.DsGlobalCacheDefaultImpl;
+import ds.guang.majing.common.cache.Cache;
+import ds.guang.majing.common.cache.CacheDefaultImpl;
+import ds.guang.majing.common.dto.GameUser;
 import ds.guang.majing.common.dto.User;
 import ds.guang.majing.common.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
@@ -15,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.util.UUID;
 import java.util.concurrent.*;
 
 /**
@@ -34,7 +37,7 @@ public class Demo extends Application {
         GridPane grid = new GridPane();
         Button button = new Button("demo");
 
-        DsGlobalCache cache = new DsGlobalCacheDefaultImpl();
+        Cache cache = new CacheDefaultImpl();
         /**
          * 1.点击按钮
          * 2.发送请求
@@ -50,28 +53,34 @@ public class Demo extends Application {
 
         System.out.println("ruleActor: " + ruleActor);
 
+        // 1.状态同步
+        // 生成一个 requestNo 作为测试
+        String requestNo = UUID.randomUUID().toString().substring(5);
+
         button.setOnAction(event -> {
             // TODO 多次点击登录 会出现返回值不一致的情况
             // TODO 异步状态下，在无法获取服务端的响应下就进行了状态的转换
             // TODO 巨大隐患，当服务器没有即使响应之后
+            // TODO 同样还是服务器-客户端状态如何保持一致（在客户端发送正式请求前，先
+            //  发送一个预请求，用来同步服务器-客户端状态，或者在处理请求时进行判断，主要是
+            //  两者状态不一致应该以谁为准----那还用说----服务器）
             // 原因：点击事件之后，服务器的状态机 和 客户端的状态机 状态不一致
             // 我应该维护一个状态机 map，根据用户 id 或者 其他标识符 作为 key
             // 并需要时刻同步两个状态机的状态一致，缓存
             System.out.println("登陆开始了！");
             User u = new User("guangmingdexin", "123");
-
+            DsMessage data = DsMessage.build(DsConstant.EVENT_LOGIN_ID, requestNo, u);
             CompletableFuture.runAsync(() -> {
-                ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, u);
-                ruleActor.event(DsConstant.EVENT_LOGIN_ID, u);
+                ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, data);
+                ruleActor.event(DsConstant.EVENT_LOGIN_ID, data);
 
             });
         });
 
         game.setOnAction(event -> {
-
-            Object data = DsGlobalCache.getInstance().getObject("guangmingdexin");
-            System.out.println("准备匹配玩家，构造房间！" + data);
-
+            GameUser  gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
+            DsMessage data = DsMessage.build(DsConstant.EVENT_PREPARE_ID, requestNo, gameUser.getUserId());
+            System.out.println("准备匹配玩家，构造房间！" + gameUser);
             CompletableFuture.runAsync(() -> {
                 ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
                 ruleActor.event(DsConstant.EVENT_PREPARE_ID, data);

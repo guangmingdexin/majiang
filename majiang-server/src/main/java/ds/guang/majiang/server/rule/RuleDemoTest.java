@@ -13,15 +13,6 @@ public class RuleDemoTest {
 
     public static void main(String[] args) {
 
-        Rule<String, StateMachine<String, String, Object>> rule = new PlayerChuanMaRule();
-
-        rule.create("川麻");
-
-        StateMachine<String, String, Object> ruleActor = rule.getRuleActor();
-
-        ruleActor.start();
-
-        ruleActor.event(new Event<>(DsConstant.EVENT_INITIAL_ID, null));
 
     }
 }

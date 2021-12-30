@@ -1,5 +1,7 @@
 package ds.guang.majing.common.player;
 
+import ds.guang.majing.common.dto.GameUser;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -45,5 +47,8 @@ public interface Player extends Cloneable, Serializable {
      * @return
      */
     boolean remove(int cardNum);
+
+
+    GameUser getGameUserInfo();
 
 }

@@ -16,7 +16,7 @@ import java.util.Map;
  * @author guangyong.deng
  * @date 2021-12-13 11:17
  */
-public abstract class AbstractStateImpl<T, E, R> implements State<T, E, R> {
+public abstract class AbstractStateImpl<T, E, R extends Result> implements State<T, E, R> {
 
     /**
      * 状态ID
@@ -106,7 +106,11 @@ public abstract class AbstractStateImpl<T, E, R> implements State<T, E, R> {
            if(handler != null) {
                r = handler.handle(data);
            }
-           notify.nextState(nextState, data);
+           // 需要通过结果来判断处理事件成功，如果成功，则可以进入下一个状态，否则
+           if(r != null && r.success() && nextState != null) {
+               System.out.println("进入下一个状态......！");
+               notify.nextState(nextState, data);
+           }
            return r;
        });
        return this;

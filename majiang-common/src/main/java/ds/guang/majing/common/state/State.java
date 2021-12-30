@@ -6,7 +6,7 @@ import ds.guang.majing.common.event.Event;
  * @author guangyong.deng
  * @date 2021-12-17 14:20
  */
-public interface State<T, E, R> {
+public interface State<T, E, R extends Result> {
 
    T getId();
 

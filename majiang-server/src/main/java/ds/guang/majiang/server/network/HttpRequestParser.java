@@ -80,6 +80,7 @@ public class HttpRequestParser {
 
     public static Object getClassContent(FullHttpRequest request, Class<?> clazz) {
         String content = getJsonPostContent(request);
+        System.out.println("content: " + content);
         return JsonUtil.stringToObj(content, clazz);
     }
 

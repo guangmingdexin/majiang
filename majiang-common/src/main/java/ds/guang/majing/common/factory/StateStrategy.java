@@ -1,5 +1,6 @@
 package ds.guang.majing.common.factory;
 
+import ds.guang.majing.common.state.Result;
 import ds.guang.majing.common.state.State;
 
 import java.util.function.Supplier;
@@ -8,7 +9,7 @@ import java.util.function.Supplier;
  * @author guangyong.deng
  * @date 2021-12-23 9:25
  */
-public interface StateStrategy<T, E, R> {
+public interface StateStrategy<T, E, R extends Result> {
 
 
     /**

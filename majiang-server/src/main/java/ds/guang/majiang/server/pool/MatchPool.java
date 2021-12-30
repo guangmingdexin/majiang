@@ -57,4 +57,15 @@ public interface MatchPool {
      * @return 匹配成功的玩家
      */
    Future<List<Player>> match();
+
+
+    /**
+     *
+     * 返回实例对象
+     *
+     * @return matchPool
+     */
+   static MatchPool getInstance() {
+       return MatchPoolImpl.INSTANCE;
+   }
 }

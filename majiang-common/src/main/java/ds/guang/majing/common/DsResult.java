@@ -1,6 +1,8 @@
 package ds.guang.majing.common;
 
 
+import ds.guang.majing.common.state.Result;
+
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,7 +13,7 @@ import java.util.Map;
  * @author guangyong.deng
  * @date 2021-11-17 14:37
  */
-public class DsResult extends LinkedHashMap<String, Object> implements Serializable {
+public class DsResult extends LinkedHashMap<String, Object> implements Result, Serializable {
 
     /**
      * 序列化版本号
@@ -153,6 +155,12 @@ public class DsResult extends LinkedHashMap<String, Object> implements Serializa
 
     public boolean isOk() {
         return this.get("code").equals(DsConstant.CODE_SUCCESS);
+    }
+
+
+    @Override
+    public boolean success() {
+        return isOk();
     }
 
     @Override

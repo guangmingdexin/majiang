@@ -3,7 +3,7 @@ package ds.guang.majing.common.cache;
 /**
  * @author asus
  */
-public interface DsGlobalCache {
+public interface Cache {
 
     /** 常量，表示一个key永不过期 (在一个key被标注为永远不过期时返回此值) */
     long NEVER_EXPIRE = -1;
@@ -11,7 +11,7 @@ public interface DsGlobalCache {
     /** 常量，表示系统中不存在这个缓存 (在对不存在的key获取剩余存活时间时返回此值) */
      long NOT_VALUE_EXPIRE = -2;
 
-    DsGlobalCache INSTANCE = new DsGlobalCacheDefaultImpl();
+     Cache INSTANCE = new CacheDefaultImpl();
 
     /**
      *
@@ -19,7 +19,7 @@ public interface DsGlobalCache {
      *
      * @return
      */
-    static DsGlobalCache getInstance() {
+    static Cache getInstance() {
         return INSTANCE;
     }
 

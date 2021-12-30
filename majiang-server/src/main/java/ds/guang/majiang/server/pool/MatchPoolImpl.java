@@ -17,9 +17,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class MatchPoolImpl implements MatchPool {
 
-    private AtomicBoolean isStart = new AtomicBoolean();
+    private AtomicBoolean isStart = new AtomicBoolean(false);
 
     private AtomicBoolean isValid = new AtomicBoolean(true);
+
+    public static final MatchPool INSTANCE = new MatchPoolImpl();
 
     /**
      * 单个游戏可以容纳的最大玩家数量
@@ -35,15 +37,12 @@ public class MatchPoolImpl implements MatchPool {
 
     private final int DEFAULT_LIMIT_CAPACITY = 10240;
 
-    public MatchPoolImpl(int limit, int playerCount) {
-        this.limit = limit;
-        this.playerCount = playerCount;
-    }
 
     public MatchPoolImpl() {
         this.limit = DEFAULT_LIMIT_CAPACITY;
-        this.playerCount = 4;
+        this.playerCount = 2;
     }
+
 
     /**
      * 记录所有玩家开始匹配的时间
@@ -88,7 +87,7 @@ public class MatchPoolImpl implements MatchPool {
 
     @Override
     public boolean addPlayer(Player player) {
-        if(isValid.get() && isStart.get()) {
+        if(!isValid() || !isStart()) {
             throw new DsBasicException("加入游戏匹配池失败！");
         }
         if(deque.size() >= limit) {
@@ -100,6 +99,9 @@ public class MatchPoolImpl implements MatchPool {
 
     @Override
     public boolean removePlayer(Player player) {
+        if(!isValid() || !isStart()) {
+            throw new DsBasicException("加入游戏匹配池失败！");
+        }
         if(deque.isEmpty()) {
             return false;
         }
@@ -109,13 +111,23 @@ public class MatchPoolImpl implements MatchPool {
     @Override
     public Future<List<Player>> match() {
 
+        if(!isValid() || !isStart()) {
+            throw new DsBasicException("加入游戏匹配池失败！");
+        }
+        System.out.println("当前处理匹配线程---" + Thread.currentThread().getName() + "当前的线程池对象... " + this + playerCount);
+
         Future<List<Player>> matchResult = schedule.submit(() -> {
+            System.out.println("开始匹配一次：" + Thread.currentThread().getName());
             for (; ; ) {
                 if (deque.size() < playerCount) {
                     Thread.sleep(1000);
                 } else {
-                    List<Player> players = new ArrayList<>();
-                    players.add(deque.poll());
+                    Thread.sleep(10000);
+                    List<Player> players = new ArrayList<>(4);
+                    while (!deque.isEmpty()) {
+                        players.add(deque.poll());
+                    }
+                   // Thread.sleep(10000);
                     return players;
                 }
             }
