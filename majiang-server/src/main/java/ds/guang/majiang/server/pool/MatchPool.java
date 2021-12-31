@@ -1,9 +1,7 @@
 package ds.guang.majiang.server.pool;
 
 import ds.guang.majing.common.player.Player;
-import io.netty.channel.ChannelHandlerContext;
 
-import java.nio.channels.Channel;
 import java.util.List;
 import java.util.concurrent.Future;
 
@@ -58,5 +56,16 @@ public interface MatchPool {
      *
      * @return 匹配成功的玩家
      */
-   void match();
+   Future<List<Player>> match();
+
+
+    /**
+     *
+     * 返回实例对象
+     *
+     * @return matchPool
+     */
+   static MatchPool getInstance() {
+       return MatchPoolImpl.INSTANCE;
+   }
 }

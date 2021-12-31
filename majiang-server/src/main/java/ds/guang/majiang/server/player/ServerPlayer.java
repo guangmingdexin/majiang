@@ -16,8 +16,14 @@ public class ServerPlayer implements Player  {
 
     private GameUser gameUser;
 
+
     @JsonSerialize(converter = Converter.class)
     private List<Integer> cards;
+
+
+    public ServerPlayer(GameUser gameUser) {
+        this.gameUser = gameUser;
+    }
 
     @Override
     public List<Integer> getCards() {
@@ -37,6 +43,11 @@ public class ServerPlayer implements Player  {
     @Override
     public boolean remove(int cardNum) {
         return false;
+    }
+
+    @Override
+    public GameUser getGameUserInfo() {
+        return gameUser;
     }
 
 

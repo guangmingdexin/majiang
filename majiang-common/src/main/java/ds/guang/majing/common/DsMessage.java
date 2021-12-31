@@ -1,8 +1,10 @@
 package ds.guang.majing.common;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -22,6 +24,7 @@ public class DsMessage implements Serializable {
     private String version;
 
     private LocalDateTime date;
+
 
     public DsMessage() {
     }
@@ -57,6 +60,27 @@ public class DsMessage implements Serializable {
                 .setVersion(dsMessage.getVersion())
                 .setDate(dsMessage.getDate());
 
+    }
+
+    public static DsMessage copy(DsMessage dsMessage, String[] filedName, Object[] values) {
+
+        Objects.requireNonNull(filedName, "filed don't null");
+
+        DsMessage copy = copy(dsMessage);
+        Class<? extends DsMessage> ds = copy.getClass();
+        try {
+            int index = 0;
+            for (String name : filedName) {
+                Field field = ds.getDeclaredField(name);
+                if(values[index] != null) {
+                    field.set(copy, values[index ++]);
+                }
+            }
+
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return copy;
     }
 
 

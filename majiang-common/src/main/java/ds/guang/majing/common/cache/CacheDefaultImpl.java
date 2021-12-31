@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author asus
  */
-public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
+public class CacheDefaultImpl implements Cache {
 
     /**
      * 数据集合
@@ -19,7 +19,7 @@ public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
      */
     public Map<String, Long> expireMap = new ConcurrentHashMap<>();
 
-    public DsGlobalCacheDefaultImpl() {
+    public CacheDefaultImpl() {
         initRefreshThread();
     }
 
@@ -33,16 +33,16 @@ public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
 
     @Override
     public void set(String key, String value, long timeout) {
-        if(timeout == 0 || timeout <= DsGlobalCache.NOT_VALUE_EXPIRE)  {
+        if(timeout == 0 || timeout <= Cache.NOT_VALUE_EXPIRE)  {
             return;
         }
         dataMap.put(key, value);
-        expireMap.put(key, (timeout == DsGlobalCache.NEVER_EXPIRE) ? (DsGlobalCache.NEVER_EXPIRE) : (System.currentTimeMillis() + timeout * 1000));
+        expireMap.put(key, (timeout == Cache.NEVER_EXPIRE) ? (Cache.NEVER_EXPIRE) : (System.currentTimeMillis() + timeout * 1000));
     }
 
     @Override
     public void update(String key, String value) {
-        if(getKeyTimeout(key) == DsGlobalCache.NOT_VALUE_EXPIRE) {
+        if(getKeyTimeout(key) == Cache.NOT_VALUE_EXPIRE) {
             return;
         }
         dataMap.put(key, value);
@@ -75,16 +75,16 @@ public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
 
     @Override
     public void setObject(String key, Object object, long timeout) {
-        if(timeout == 0 || timeout <= DsGlobalCache.NOT_VALUE_EXPIRE)  {
+        if(timeout == 0 || timeout <= Cache.NOT_VALUE_EXPIRE)  {
             return;
         }
         dataMap.put(key, object);
-        expireMap.put(key, (timeout == DsGlobalCache.NEVER_EXPIRE) ? (DsGlobalCache.NEVER_EXPIRE) : (System.currentTimeMillis() + timeout * 1000));
+        expireMap.put(key, (timeout == Cache.NEVER_EXPIRE) ? (Cache.NEVER_EXPIRE) : (System.currentTimeMillis() + timeout * 1000));
     }
 
     @Override
     public void updateObject(String key, Object object) {
-        if(getKeyTimeout(key) == DsGlobalCache.NOT_VALUE_EXPIRE) {
+        if(getKeyTimeout(key) == Cache.NOT_VALUE_EXPIRE) {
             return;
         }
         // 无动作
@@ -117,7 +117,7 @@ public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
     void clearKeyByTimeout(String key) {
         Long expirationTime = expireMap.get(key);
         // 清除条件：如果不为空 && 不是[永不过期] && 已经超过过期时间
-        if(expirationTime != null && expirationTime != DsGlobalCache.NEVER_EXPIRE && expirationTime < System.currentTimeMillis()) {
+        if(expirationTime != null && expirationTime != Cache.NEVER_EXPIRE && expirationTime < System.currentTimeMillis()) {
             dataMap.remove(key);
             expireMap.remove(key);
         }
@@ -133,11 +133,11 @@ public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
         Long expire = expireMap.get(key);
         // 如果根本没有这个值
         if(expire == null) {
-            return DsGlobalCache.NOT_VALUE_EXPIRE;
+            return Cache.NOT_VALUE_EXPIRE;
         }
         // 如果被标注为永不过期
-        if(expire == DsGlobalCache.NEVER_EXPIRE) {
-            return DsGlobalCache.NEVER_EXPIRE;
+        if(expire == Cache.NEVER_EXPIRE) {
+            return Cache.NEVER_EXPIRE;
         }
         // ---- 计算剩余时间并返回
         long timeout = (expire - System.currentTimeMillis()) / 1000;
@@ -145,7 +145,7 @@ public class DsGlobalCacheDefaultImpl implements DsGlobalCache {
         if(timeout < 0) {
             dataMap.remove(key);
             expireMap.remove(key);
-            return DsGlobalCache.NOT_VALUE_EXPIRE;
+            return Cache.NOT_VALUE_EXPIRE;
         }
         return timeout;
     }

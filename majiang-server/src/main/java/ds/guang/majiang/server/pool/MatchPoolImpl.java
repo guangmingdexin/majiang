@@ -3,10 +3,11 @@ package ds.guang.majiang.server.pool;
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
 import ds.guang.majing.common.player.Player;
 import ds.guang.majing.common.exception.DsBasicException;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.util.internal.shaded.org.jctools.queues.MpscChunkedArrayQueue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,9 +17,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class MatchPoolImpl implements MatchPool {
 
-    private AtomicBoolean isStart = new AtomicBoolean();
+    private AtomicBoolean isStart = new AtomicBoolean(false);
 
     private AtomicBoolean isValid = new AtomicBoolean(true);
+
+    public static final MatchPool INSTANCE = new MatchPoolImpl();
 
     /**
      * 单个游戏可以容纳的最大玩家数量
@@ -30,21 +33,16 @@ public class MatchPoolImpl implements MatchPool {
      */
     private int playerCount;
 
-   // private Deque<Player> deque = new LinkedBlockingDeque<>();
-   MpscChunkedArrayQueue<Player> deque;
+    private Deque<Player> deque = new LinkedBlockingDeque<>();
 
     private final int DEFAULT_LIMIT_CAPACITY = 10240;
 
-    public MatchPoolImpl(int limit, int playerCount) {
-        this.limit = limit;
-        this.playerCount = playerCount;
-    }
 
     public MatchPoolImpl() {
         this.limit = DEFAULT_LIMIT_CAPACITY;
-        this.playerCount = 4;
-        this.deque = new MpscChunkedArrayQueue<>(limit);
+        this.playerCount = 2;
     }
+
 
     /**
      * 记录所有玩家开始匹配的时间
@@ -59,7 +57,7 @@ public class MatchPoolImpl implements MatchPool {
             1,
             0L,
             TimeUnit.SECONDS,
-            new LinkedBlockingDeque<>(1024),
+            new ArrayBlockingQueue<>(1024),
             new ThreadFactory() {
                final AtomicInteger i = new AtomicInteger(1);
                 @Override
@@ -69,34 +67,12 @@ public class MatchPoolImpl implements MatchPool {
             });
 
 
-
     @Override
     public void start() {
         if(isStart()) {
             return;
         }
         isStart.compareAndSet(false, true);
-        // 这里是否需要再开一个线程/ 周期性的 每隔 5秒请求一次
-        // 我应该自定义一个时间周期任务，只有一个线程在执行否则一定出现问题
-
-        schedule.submit(() -> {
-
-//            for (;;) {
-//                if (deque.size() < playerCount) {
-//                    // 不用处理
-//                    Thread.sleep(5000);
-//                } else {
-//                    //
-//                    List<Player> players = new ArrayList<>(playerCount);
-//                    while (!deque.isEmpty()) {
-//                        players.add(deque.poll());
-//                    }
-//                    // 获取 Channel 写入数据
-//
-//                }
-//            }
-        });
-
     }
 
     @Override
@@ -111,7 +87,7 @@ public class MatchPoolImpl implements MatchPool {
 
     @Override
     public boolean addPlayer(Player player) {
-        if(isValid.get() && isStart.get()) {
+        if(!isValid() || !isStart()) {
             throw new DsBasicException("加入游戏匹配池失败！");
         }
         if(deque.size() >= limit) {
@@ -123,6 +99,9 @@ public class MatchPoolImpl implements MatchPool {
 
     @Override
     public boolean removePlayer(Player player) {
+        if(!isValid() || !isStart()) {
+            throw new DsBasicException("加入游戏匹配池失败！");
+        }
         if(deque.isEmpty()) {
             return false;
         }
@@ -130,9 +109,29 @@ public class MatchPoolImpl implements MatchPool {
     }
 
     @Override
-    public void match() {
-        // 这里是否需要再开一个线程/ 周期性的 每隔 5秒请求一次
-//        schedule.schedule();
+    public Future<List<Player>> match() {
 
+        if(!isValid() || !isStart()) {
+            throw new DsBasicException("加入游戏匹配池失败！");
+        }
+        System.out.println("当前处理匹配线程---" + Thread.currentThread().getName() + "当前的线程池对象... " + this + playerCount);
+
+        Future<List<Player>> matchResult = schedule.submit(() -> {
+            System.out.println("开始匹配一次：" + Thread.currentThread().getName());
+            for (; ; ) {
+                if (deque.size() < playerCount) {
+                    Thread.sleep(1000);
+                } else {
+                    Thread.sleep(10000);
+                    List<Player> players = new ArrayList<>(4);
+                    while (!deque.isEmpty()) {
+                        players.add(deque.poll());
+                    }
+                   // Thread.sleep(10000);
+                    return players;
+                }
+            }
+        });
+        return matchResult;
     }
 }

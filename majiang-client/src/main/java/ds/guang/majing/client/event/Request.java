@@ -1,39 +1,76 @@
 package ds.guang.majing.client.event;
 
-import ds.guang.majing.client.context.Context;
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
-import ds.guang.majing.common.cache.DsGlobalCache;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.function.Supplier;
+import java.io.UnsupportedEncodingException;
 
 /**
  *
  * 封装的 http 请求
  *
+ * @author guangmingdexin
  */
-public abstract class Request implements AsycTask {
+public abstract class Request  {
 
     protected  CloseableHttpClient httpClient;
 
     protected  HttpPost httpPost;
 
-    protected DsMessage message;
+    protected Object message;
 
     protected StringEntity entity;
 
     protected String header;
 
+    /**
+     * 构建超时等配置信息
+     */
+    RequestConfig config;
+
+    /**
+     * 超时等待时间 5 分钟
+     */
+    protected int waitTime;
+
+    protected String url;
+
+
+    public Request(Object message) {
+        // 默认请求
+        // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
+        // 直接将 data 封装为 message，或者直接传一个
+        this.setWaitTime(5 * 60 * 1000)
+                        .setConfig(
+                                RequestConfig.custom()
+                                    .setSocketTimeout(waitTime)
+                                        .setConnectTimeout(waitTime)
+                                        .build());
+
+        this.setHttpClient(HttpClientBuilder.create().build())
+                // 创建Post请求
+                .setUrl("http://localhost:9001/")
+                .setMessage(message)
+                .setHttpPost(new HttpPost(url))
+                .setConfig(config);
+
+        try {
+            this.getHttpPost().setHeader("Content-Type", "application/json;charset=utf8");
+            this.getHttpPost().setEntity(new StringEntity(JsonUtil.objToJson(message)));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * 提交任务
@@ -47,7 +84,7 @@ public abstract class Request implements AsycTask {
      * @param future future
      * @return dsResult
      */
-    protected abstract DsResult after(DsResult future);
+    protected abstract DsResult after(DsResult result);
 
 
     /**
@@ -55,7 +92,6 @@ public abstract class Request implements AsycTask {
      */
     public final DsResult execute(Runnable task, Object data) {
         before(task);
-
         return after(asynHttpPost(data));
     }
 
@@ -112,12 +148,12 @@ public abstract class Request implements AsycTask {
         return this;
     }
 
-    public Request setHttpPost(HttpPost httpPost) {
+    public HttpPost setHttpPost(HttpPost httpPost) {
         this.httpPost = httpPost;
-        return this;
+        return this.httpPost;
     }
 
-    public Request setMessage(DsMessage message) {
+    public Request setMessage(Object message) {
         this.message = message;
         return this;
     }
@@ -140,7 +176,7 @@ public abstract class Request implements AsycTask {
         return httpPost;
     }
 
-    public DsMessage getMessage() {
+    public Object getMessage() {
         return message;
     }
 
@@ -151,4 +187,32 @@ public abstract class Request implements AsycTask {
     public String getHeader() {
         return header;
     }
+
+    public RequestConfig getConfig() {
+        return config;
+    }
+
+    public RequestConfig setConfig(RequestConfig config) {
+        this.config = config;
+        return this.config;
+    }
+
+    public long getWaitTime() {
+        return waitTime;
+    }
+
+    public Request setWaitTime(long waitTime) {
+        this.waitTime = (int) waitTime;
+        return this;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public Request setUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
 }

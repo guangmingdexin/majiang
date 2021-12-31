@@ -28,9 +28,11 @@ public class StateMachines  {
      */
     @SuppressWarnings("unchecked")
    public static StateMachine<String, String, DsResult> get(String key) {
+
         if(map.containsKey(key)) {
             return map.get(key);
         }
+
         StateMachine defaultValue = DefaultMachineFactory.FACTORY.create();
 
         if(put(key, defaultValue)) {
@@ -55,7 +57,6 @@ public class StateMachines  {
             // 这里应该抛出一个异常，表示无法再处理了
             throw new DsBasicException("the map size is max capacity!");
         }
-
         map.put(key, item);
         return true;
     }
