@@ -84,7 +84,6 @@ public class PrepareAction implements Action {
             copyCards.set(i, copyCards.get(randInd));
             copyCards.set(randInd, temp);
         }
-
         return Collections.unmodifiableList(copyCards);
 
     }

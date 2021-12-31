@@ -1,16 +1,28 @@
 package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
-import ds.guang.majing.common.player.Player;
+import ds.guang.majiang.server.room.FourRoom;
+import ds.guang.majiang.server.room.RoomManager;
+import ds.guang.majing.common.DsConstant;
+import ds.guang.majing.common.DsMessage;
+import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.exception.DsBasicException;
+import ds.guang.majing.common.player.Player;
+import ds.guang.majing.common.room.Room;
+import ds.guang.majing.common.timer.DsTimeout;
+import ds.guang.majing.common.timer.DsTimerTask;
+import ds.guang.majing.common.timer.DsWheelTimer;
+import io.netty.channel.Channel;
+import io.netty.util.internal.shaded.org.jctools.queues.MpscChunkedArrayQueue;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static ds.guang.majing.common.DsConstant.EVENT_PREPARE_ID;
+import static ds.guang.majing.common.DsConstant.preRoomInfoPrev;
 
 /**
  * @author guangmingdexin
@@ -33,38 +45,42 @@ public class MatchPoolImpl implements MatchPool {
      */
     private int playerCount;
 
-    private Deque<Player> deque = new LinkedBlockingDeque<>();
+    private MpscChunkedArrayQueue<Player> deque;
 
     private final int DEFAULT_LIMIT_CAPACITY = 10240;
-
-
-    public MatchPoolImpl() {
-        this.limit = DEFAULT_LIMIT_CAPACITY;
-        this.playerCount = 2;
-    }
 
 
     /**
      * 记录所有玩家开始匹配的时间
      */
-    private Map<String, Long> startMatchMap = new ConcurrentHashMap<>();
+    private Map<String, Long> startMatchMap;
 
-    /**
-     * 会不会无限创建线程
-     * 会不会出现 oom
-     */
-    private ExecutorService schedule = new ThreadPoolExecutor(1,
+
+    private ThreadFactory defaultThreadFactory =  new ThreadFactory() {
+        final AtomicInteger i = new AtomicInteger(1);
+        @Override
+        public Thread newThread(Runnable r) {
+            return new Thread(r, "match-pool-thread-" + i.get());
+        }
+    };
+
+    Executor schedule = new ThreadPoolExecutor(1,
             1,
             0L,
-            TimeUnit.SECONDS,
-            new ArrayBlockingQueue<>(1024),
-            new ThreadFactory() {
-               final AtomicInteger i = new AtomicInteger(1);
-                @Override
-                public Thread newThread(Runnable r) {
-                    return new Thread(r, "match-pool-thread-" + i.get());
-                }
-            });
+            TimeUnit.SECONDS, new LinkedBlockingDeque<>(1024),
+            defaultThreadFactory);
+
+    /**
+     * 时间轮定时器
+     */
+    private DsWheelTimer wheelTimer;
+
+    public MatchPoolImpl() {
+        this.limit = DEFAULT_LIMIT_CAPACITY;
+        this.playerCount = 2;
+        this.deque = new MpscChunkedArrayQueue<>(limit);
+        this.wheelTimer = new DsWheelTimer(defaultThreadFactory, 1, TimeUnit.SECONDS, 60);
+    }
 
 
     @Override
@@ -109,29 +125,53 @@ public class MatchPoolImpl implements MatchPool {
     }
 
     @Override
-    public Future<List<Player>> match() {
+    public void match() {
 
         if(!isValid() || !isStart()) {
             throw new DsBasicException("加入游戏匹配池失败！");
         }
-        System.out.println("当前处理匹配线程---" + Thread.currentThread().getName() + "当前的线程池对象... " + this + playerCount);
+      //  System.out.println("当前处理匹配线程---" + Thread.currentThread().getName() + "当前的线程池对象... " + this + playerCount);
 
-        Future<List<Player>> matchResult = schedule.submit(() -> {
-            System.out.println("开始匹配一次：" + Thread.currentThread().getName());
-            for (; ; ) {
-                if (deque.size() < playerCount) {
-                    Thread.sleep(1000);
-                } else {
-                    Thread.sleep(10000);
-                    List<Player> players = new ArrayList<>(4);
-                    while (!deque.isEmpty()) {
-                        players.add(deque.poll());
-                    }
-                   // Thread.sleep(10000);
-                    return players;
+
+        DsTimerTask timerTask = timeout -> {
+
+            if (deque.size() >= playerCount) {
+                int index = 0;
+                Player[] players = new Player[playerCount];
+                while (!deque.isEmpty() && index < playerCount) {
+                    players[index++] = deque.poll();
                 }
+                // 获取全局变量
+                Cache cache = Cache.getInstance();
+                RoomManager manager = RoomManager.getInstance();
+
+                Room room = new FourRoom(playerCount, players);
+                for (Player player : players) {
+                    // 获取 Channel 输出数据
+                    String id = player.getId();
+                    Object value = cache.getObject(DsConstant.preUserChanelPrev(id));
+                    System.out.println("value: " + value);
+                    if (value instanceof Channel) {
+                        Channel channel = (Channel) value;
+                        // 构造一个 Message 对象
+                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, id, DsResult.data(room));
+                        // 向客户端发送信息
+                        // 按理来说这里应该使用异步线程，但是 netty 的特性，会将这次发送
+                        // 消息封装为一个任务加入到任务队列中，等待 NioEventLoop 执行，所以
+                        // 这里并不会阻塞定时器
+                        System.out.println("开始发送消息！");
+                        channel.writeAndFlush(dsMessage);
+                    }else {
+                        throw new RejectedExecutionException("获取通道失败！");
+                    }
+                    // 将 玩家与房间联系在一起
+                    manager.put(preRoomInfoPrev(id), room);
+                }
+            } else {
+                System.out.println("条件不满足！..." + System.currentTimeMillis());
             }
-        });
-        return matchResult;
+        };
+        DsTimeout dsTimeout = wheelTimer.newTimeout(timerTask, 5, TimeUnit.SECONDS);
+        System.out.println("expired: " + dsTimeout.isExpired());
     }
 }

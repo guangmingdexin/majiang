@@ -50,5 +50,10 @@ public class ServerPlayer implements Player  {
         return gameUser;
     }
 
+    @Override
+    public String getId() {
+        return gameUser.getUserId();
+    }
+
 
 }

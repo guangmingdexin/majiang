@@ -3,20 +3,16 @@ package ds.guang.majiang.server.layer.basic;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majiang.server.player.ServerPlayer;
 import ds.guang.majiang.server.pool.MatchPool;
-import ds.guang.majiang.server.room.FourRoom;
-import ds.guang.majiang.server.room.RoomManager;
-import ds.guang.majing.common.*;
+import ds.guang.majing.common.ClassUtil;
+import ds.guang.majing.common.DsMessage;
+import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.dto.GameUser;
-import ds.guang.majing.common.dto.User;
 import ds.guang.majing.common.player.Player;
-import ds.guang.majing.common.room.Room;
-import ds.guang.majing.common.state.AbstractStateImpl;
 import ds.guang.majing.common.state.State;
 
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.concurrent.CompletableFuture;
 
 import static ds.guang.majing.common.DsConstant.*;
 
@@ -36,7 +32,7 @@ public class PlatFormAction implements Action {
     public void handler(State state) {
 
         state.onEntry(data -> {
-            System.out.println("进入平台！");
+           // System.out.println("进入平台！");
             return null;
         });
 
@@ -45,7 +41,6 @@ public class PlatFormAction implements Action {
             DsMessage message = ClassUtil.convert(data, DsMessage.class);
             // 这里还需要将 data 重新反序列化
             String userId = (String) JsonUtil.mapToObj(message.getData(), String.class);
-            System.out.println("userId: " + userId);
 
             MatchPool matchPool = MatchPool.getInstance();
             matchPool.start();
@@ -61,14 +56,13 @@ public class PlatFormAction implements Action {
                 // TODO 未处理
             }
 
-            Player player = new ServerPlayer((GameUser) gameUser);
-            matchPool.addPlayer(player);
-            // 问题在这里，而且也不应该彻底阻塞 EventLoop 线程，还需要处理其他任务和事件
-            Future<List<Player>> matchResult = matchPool.match();
+            CompletableFuture.runAsync(() -> {
+                Player player = new ServerPlayer((GameUser) gameUser);
+                matchPool.addPlayer(player);
+                matchPool.match();
+            });
 
-            List<Player> players = null;
 
-            try {
                 /**
                  *  EventLoop A,B
                  *
@@ -89,32 +83,8 @@ public class PlatFormAction implements Action {
                  *
                  *
                  */
-                // 这里阻塞的是哪个线程？
-
-                players = matchResult.get();
-                System.out.println("处理结束！" + Thread.currentThread().getName());
-
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
-
-            // 判断 players 是否匹配成功！
-            if(matchResult.isDone() && players != null && players.size() >= PLAYER_COUNT) {
-
-                // 这里直接将玩家id 与房间联系在一起，方便后期处理
-                // 如果在增强一个roomId，又要设置很多全局变量
-                // ...
-                Room room = new FourRoom(PLAYER_COUNT, players);
-                RoomManager manager = RoomManager.getInstance();
-                players.forEach(p -> {
-                    String id = p.getGameUserInfo().getUserId();
-                    manager.put(preRoomInfoPrev(id), room);
-                });
-                System.out.println("返回结果！");
-                return DsResult.data(room);
-            }
-            System.out.println("返回结果！" + players + matchResult.isDone());
-            return DsResult.error("游戏匹配失败！");
+            System.out.println("游戏匹配中！");
+            return DsResult.empty("游戏匹配中！");
         });
 
 

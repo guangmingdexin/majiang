@@ -111,4 +111,7 @@ public interface Cache {
      * @param timeout 过期时间
      */
     public void updateObjectTimeout(String key, long timeout);
+
+
+    boolean containsKey(String key);
 }

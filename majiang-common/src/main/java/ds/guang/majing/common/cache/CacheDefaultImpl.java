@@ -2,6 +2,7 @@ package ds.guang.majing.common.cache;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -106,6 +107,11 @@ public class CacheDefaultImpl implements Cache {
         expireMap.put(key, System.currentTimeMillis() + timeout * 1000);
     }
 
+    @Override
+    public boolean containsKey(String key) {
+        Objects.requireNonNull(key, "key don't empty");
+        return get(key) != null || getObject(key) != null;
+    }
 
 
     // ------------------------ 过期时间相关操作

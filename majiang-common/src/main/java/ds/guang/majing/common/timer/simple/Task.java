@@ -1,4 +1,4 @@
-package ds.guang.majing.common.timer;
+package ds.guang.majing.common.timer.simple;
 
 /**
  * @author guangyong.deng

@@ -68,14 +68,16 @@ public final class DsConstant {
     /**
      * 设置缓存前缀
      */
-    public static final String GameUser_INFO_PREV = "user-game-info-id:";
+    public static final String GAMEUSER_INFO_PREV = "user-game-info-id:";
 
     public static final String USER_MACHINE_PREV = "user-machine-id:";
 
     public static final String ROOM_INFO_PREV = "room-info-id:";
+    
+    public static final String USER_CHANEL_PREV = "user-channel_id:";
 
     public static String preGameUserInfoKey(String id) {
-        return GameUser_INFO_PREV + id;
+        return GAMEUSER_INFO_PREV + id;
     }
 
     public static String preUserMachinekey(String requestNo) {
@@ -85,6 +87,18 @@ public final class DsConstant {
     public static String preRoomInfoPrev(String requestNo) {
         return ROOM_INFO_PREV + requestNo;
     }
+
+    public static String preUserChanelPrev(String requestNo) {
+        return USER_CHANEL_PREV + requestNo;
+    }
+    /**
+     * 系统
+     */
+    public static final String OS_NAME_KEY = "os.name";
+
+    public static final String OS_LINUX_PREFIX = "linux";
+
+    public static final String OS_WIN_PREFIX = "win";
 
     /**
      *

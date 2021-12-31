@@ -18,6 +18,8 @@ import java.util.jar.JarFile;
  * @Version 1.0
  **/
 public final class ClassUtil {
+
+    private static final char PACKAGE_SEPARATOR_CHAR = '.';
     /**
      * 获取类上的泛型参数
      * 不支持嵌套类型参数 例如 List<List<String>>
@@ -332,5 +334,17 @@ public final class ClassUtil {
             System.out.println("类型转换错误！");
         }
         return null;
+    }
+
+    public static String simpleClassName(Class<?> clazz) {
+        if (clazz == null) {
+            throw new NullPointerException("clazz");
+        }
+        String className = clazz.getName();
+        final int lastDotIdx = className.lastIndexOf(PACKAGE_SEPARATOR_CHAR);
+        if (lastDotIdx > -1) {
+            return className.substring(lastDotIdx + 1);
+        }
+        return className;
     }
 }

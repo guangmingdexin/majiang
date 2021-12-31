@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class FourRoom extends Room {
 
-    public FourRoom(int playerCount, List<Player> players) {
+    public FourRoom(int playerCount, Player[] players) {
         super();
         super.id = UUID.randomUUID().toString().substring(0, 6);
         super.playerCount = playerCount;

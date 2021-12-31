@@ -4,12 +4,14 @@ import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majing.common.DsConstant;
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.cache.Cache;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObject;
 
+import static ds.guang.majing.common.DsConstant.preUserChanelPrev;
 import static ds.guang.majing.common.DsConstant.preUserMachinekey;
 
 
@@ -31,13 +33,20 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                 return;
             }
             DsMessage message = (DsMessage)HttpRequestParser.getClassContent(request, DsMessage.class);
-            System.out.println(message);
+          //  System.out.println(message);
             // 根据不同业务调用不同的处理逻辑
             DsResult reply = StateMachines
                                 .get(preUserMachinekey(message.getRequestNo()))
                                 .event(message.getServiceNo(), message);
 
-//            System.out.println("reply: " + reply);
+            // 绑定玩家 id 和 Channel
+            Cache cache = Cache.getInstance();
+            String key = preUserChanelPrev(message.getRequestNo());
+            System.out.println("");
+            if (!cache.containsKey(key)) {
+                cache.setObject(key, context.channel(), -1);
+            }
+
             reply = reply == null ?  DsResult.error("业务处理失败！") : reply;
             //  构造返回消息
             DsMessage copyMessage = DsMessage

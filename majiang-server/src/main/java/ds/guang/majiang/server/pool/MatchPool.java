@@ -1,9 +1,11 @@
 package ds.guang.majiang.server.pool;
 
 import ds.guang.majing.common.player.Player;
+import ds.guang.majing.common.timer.DsTimerTask;
 
 import java.util.List;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author guangmingdexin
@@ -56,7 +58,7 @@ public interface MatchPool {
      *
      * @return 匹配成功的玩家
      */
-   Future<List<Player>> match();
+   void match();
 
 
     /**

@@ -14,7 +14,7 @@ public abstract class Room implements Serializable {
 
     protected String id;
 
-    protected List<Player> players;
+    protected Player[] players;
 
     protected int markIndex;
 
@@ -24,11 +24,11 @@ public abstract class Room implements Serializable {
 
     private List<Integer> cards;
 
-    public List<Player> getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
-    public Room setPlayers(List<Player> players) {
+    public Room setPlayers(Player[] players) {
         this.players = players;
         return this;
     }
@@ -83,7 +83,7 @@ public abstract class Room implements Serializable {
         Objects.requireNonNull(userId, "userId must be not empty!");
 
         for (Player player : players) {
-            if(userId.equals(player.getGameUserInfo().getUserId())) {
+            if(userId.equals(player.getId())) {
                 return player;
             }
         }

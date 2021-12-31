@@ -43,12 +43,21 @@ public interface Player extends Cloneable, Serializable {
      *
      * 移除点数为 cardNum 的手牌
      *
-     * @param cardNum
+     * @param cardNum 手牌
      * @return
      */
     boolean remove(int cardNum);
 
-
+    /**
+     * 获取游戏玩家信息
+     * @return gameUser
+     */
     GameUser getGameUserInfo();
+
+    /**
+     * 玩家 id
+     * @return id
+     */
+    String getId();
 
 }
