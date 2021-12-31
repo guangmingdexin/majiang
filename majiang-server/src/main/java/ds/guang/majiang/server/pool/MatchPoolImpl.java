@@ -55,27 +55,19 @@ public class MatchPoolImpl implements MatchPool {
      * 会不会无限创建线程
      * 会不会出现 oom
      */
-//    private ExecutorService schedule = new ThreadPoolExecutor(1,
-//            1,
-//            0L,
-//            TimeUnit.SECONDS,
-//            new ArrayBlockingQueue<>(1024),
-//            new ThreadFactory() {
-//               final AtomicInteger i = new AtomicInteger(1);
-//                @Override
-//                public Thread newThread(Runnable r) {
-//                    return new Thread(r, "match-pool-thread-" + i.get());
-//                }
-//            });
+    private ExecutorService schedule = new ThreadPoolExecutor(1,
+            1,
+            0L,
+            TimeUnit.SECONDS,
+            new LinkedBlockingDeque<>(1024),
+            new ThreadFactory() {
+               final AtomicInteger i = new AtomicInteger(1);
+                @Override
+                public Thread newThread(Runnable r) {
+                    return new Thread(r, "match-pool-thread-" + i.get());
+                }
+            });
 
-
-    private ScheduledExecutorService schedule = new ScheduledThreadPoolExecutor(1, new ThreadFactory() {
-        final AtomicInteger i = new AtomicInteger(1);
-        @Override
-        public Thread newThread(Runnable r) {
-            return new Thread(r, "match-pool-thread-" + i.get());
-        }
-    });
 
 
     @Override
@@ -85,19 +77,26 @@ public class MatchPoolImpl implements MatchPool {
         }
         isStart.compareAndSet(false, true);
         // 这里是否需要再开一个线程/ 周期性的 每隔 5秒请求一次
-        schedule.schedule(() -> {
-            if(deque.size() < playerCount) {
-                // 不用处理
-            }else {
-                //
-                List<Player> players = new ArrayList<>(playerCount);
-                while (!deque.isEmpty()) {
-                    players.add(deque.poll());
-                }
-                // 获取 Channel 写入数据
+        // 我应该自定义一个时间周期任务，只有一个线程在执行否则一定出现问题
 
-            }
-        }, 10, TimeUnit.SECONDS);
+        schedule.submit(() -> {
+
+//            for (;;) {
+//                if (deque.size() < playerCount) {
+//                    // 不用处理
+//                    Thread.sleep(5000);
+//                } else {
+//                    //
+//                    List<Player> players = new ArrayList<>(playerCount);
+//                    while (!deque.isEmpty()) {
+//                        players.add(deque.poll());
+//                    }
+//                    // 获取 Channel 写入数据
+//
+//                }
+//            }
+        });
+
     }
 
     @Override
