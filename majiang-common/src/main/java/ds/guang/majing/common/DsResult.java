@@ -149,12 +149,24 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
         return new DsResult(-1, msg, null);
     }
 
+    public static DsResult wait(String msg) {
+        return new DsResult(DsConstant.CODE_WAIT, msg, null);
+    }
+
     public static DsResult empty() {
         return empty(null);
     }
 
     public boolean isOk() {
         return this.get("code").equals(DsConstant.CODE_SUCCESS);
+    }
+
+    /**
+     * 由于是异步编程所以很多时候，是先返回结果，所以需要等待
+     * @return
+     */
+    public boolean isWait() {
+        return this.get("code").equals(DsConstant.CODE_WAIT);
     }
 
 

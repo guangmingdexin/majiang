@@ -1,18 +1,19 @@
 package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.StateMatchAction;
+import ds.guang.majiang.server.network.ResponseUtil;
 import ds.guang.majiang.server.player.ServerPlayer;
 import ds.guang.majiang.server.pool.MatchPool;
-import ds.guang.majing.common.ClassUtil;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.*;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.dto.GameUser;
 import ds.guang.majing.common.player.Player;
 import ds.guang.majing.common.state.State;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static ds.guang.majing.common.DsConstant.*;
 
@@ -56,6 +57,7 @@ public class PlatFormAction implements Action {
                 // TODO 未处理
             }
 
+
             CompletableFuture.runAsync(() -> {
                 Player player = new ServerPlayer((GameUser) gameUser);
                 matchPool.addPlayer(player);
@@ -83,11 +85,8 @@ public class PlatFormAction implements Action {
                  *
                  *
                  */
-            System.out.println("游戏匹配中！");
-            return DsResult.empty("游戏匹配中！");
+            return DsResult.wait("游戏匹配中！");
         });
-
-
         state.onEvent(EVENT_MATCH_FRIEND_ID, STATE_MATCH_FRIEND_ID);
     }
 

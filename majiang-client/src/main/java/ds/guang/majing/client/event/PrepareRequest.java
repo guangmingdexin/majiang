@@ -4,6 +4,9 @@ import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.room.Room;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static ds.guang.majing.common.DsConstant.EVENT_POST_HANDCARD_ID;
 
 /**
@@ -24,14 +27,15 @@ public class PrepareRequest extends Request {
 
     @Override
     protected DsResult after(DsResult result) {
-        if(result != null && result.isOk()) {
+
+        if(result.isOk()) {
             System.out.println("准备进入游戏！");
             // 获取房间信息
             System.out.println("room-info:" + result);
             return result;
         }
-        System.out.println("room-info:" + result);
-        return DsResult.error();
+        System.out.println("result: " + result);
+        return result;
     }
 
 }

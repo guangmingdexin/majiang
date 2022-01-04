@@ -55,7 +55,7 @@ public class Demo extends Application {
 
         // 1.状态同步
         // 生成一个 requestNo 作为测试
-        String requestNo = UUID.randomUUID().toString().substring(5);
+        String requestNo = UUID.randomUUID().toString().substring(0, 8);
 
         button.setOnAction(event -> {
             // TODO 多次点击登录 会出现返回值不一致的情况
@@ -84,6 +84,9 @@ public class Demo extends Application {
             CompletableFuture.runAsync(() -> {
                 ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
                 ruleActor.event(DsConstant.EVENT_PREPARE_ID, data);
+            }).exceptionally(e -> {
+                System.out.println(e.getMessage());
+                return null;
             });
 
         });

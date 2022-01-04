@@ -11,8 +11,7 @@ import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObject;
 
-import static ds.guang.majing.common.DsConstant.preUserChanelPrev;
-import static ds.guang.majing.common.DsConstant.preUserMachinekey;
+import static ds.guang.majing.common.DsConstant.*;
 
 
 /**
@@ -33,28 +32,14 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                 return;
             }
             DsMessage message = (DsMessage)HttpRequestParser.getClassContent(request, DsMessage.class);
-          //  System.out.println(message);
             // 根据不同业务调用不同的处理逻辑
             DsResult reply = StateMachines
                                 .get(preUserMachinekey(message.getRequestNo()))
-                                .event(message.getServiceNo(), message);
+                                .event(message.getServiceNo(),
+                                        // 添加一些自定义的变量进去
+                                        message.setAttrMap(SYS_CONTEXT, context));
 
-            // 绑定玩家 id 和 Channel
-            Cache cache = Cache.getInstance();
-            String key = preUserChanelPrev(message.getRequestNo());
-            System.out.println("");
-            if (!cache.containsKey(key)) {
-                cache.setObject(key, context.channel(), -1);
-            }
 
-            reply = reply == null ?  DsResult.error("业务处理失败！") : reply;
-            //  构造返回消息
-            DsMessage copyMessage = DsMessage
-                                        .copy(message)
-                                        .setData(reply);
-
-            // 构造一个 http 的响应 即 httpResponse
-            context.writeAndFlush(ResponseUtil.response(copyMessage));
         }
 
     }

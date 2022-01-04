@@ -6,6 +6,8 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
+import java.util.Objects;
+
 /**
  *
  * 可以进行 http 配置设定
@@ -22,7 +24,7 @@ public final class ResponseUtil {
     public static FullHttpResponse response(Object data) {
 
         // 回复信息给浏览器 [http]
-        ByteBuf content = Unpooled.copiedBuffer(JsonUtil.objToJson(data), CharsetUtil.UTF_8);
+        ByteBuf content = Unpooled.copiedBuffer(Objects.requireNonNull(JsonUtil.objToJson(data)), CharsetUtil.UTF_8);
 
         // 构造一个 http 的响应 即 httpResponse
         DefaultFullHttpResponse response = new DefaultFullHttpResponse(HttpVersion.HTTP_1_1, HttpResponseStatus.OK, content);

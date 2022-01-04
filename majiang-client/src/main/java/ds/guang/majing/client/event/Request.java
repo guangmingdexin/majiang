@@ -4,6 +4,9 @@ import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -14,6 +17,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 
 /**
  *
@@ -23,6 +27,9 @@ import java.io.UnsupportedEncodingException;
  */
 public abstract class Request  {
 
+    /**
+     * 线程安全的
+     */
     protected  CloseableHttpClient httpClient;
 
     protected  HttpPost httpPost;
@@ -50,7 +57,7 @@ public abstract class Request  {
         // 默认请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
         // 直接将 data 封装为 message，或者直接传一个
-        this.setWaitTime(5 * 60 * 1000)
+        this.setWaitTime(30 * 60 * 1000)
                         .setConfig(
                                 RequestConfig.custom()
                                     .setSocketTimeout(waitTime)
@@ -59,7 +66,7 @@ public abstract class Request  {
 
         this.setHttpClient(HttpClientBuilder.create().build())
                 // 创建Post请求
-                .setUrl("http://localhost:9001/")
+                .setUrl("http://192.168.0.5:9001/")
                 .setMessage(message)
                 .setHttpPost(new HttpPost(url))
                 .setConfig(config);
@@ -81,7 +88,6 @@ public abstract class Request  {
      *
      * 异步执行任务的回调
      *
-     * @param future future
      * @return dsResult
      */
     protected abstract DsResult after(DsResult result);
@@ -108,32 +114,22 @@ public abstract class Request  {
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
         DsMessage reply = null;
         DsResult result = null;
-        CloseableHttpResponse response = null;
         // 由客户端执行(发送)Post请求
         try {
-            response = httpClient.execute(httpPost);
-            // 从响应模型中获取响应实体
-            HttpEntity responseEntity = response.getEntity();
-            if (responseEntity != null) {
-                reply = (DsMessage) JsonUtil.stringToObj(EntityUtils.toString(responseEntity), DsMessage.class);
-                result = (DsResult) JsonUtil.mapToObj(reply.getData(), DsResult.class);
-            }
+            reply =  httpClient.execute(httpPost, res -> {
+                // 从响应模型中获取响应实体
+                HttpEntity responseEntity = res.getEntity();
+                if (responseEntity != null) {
+                    return (DsMessage) JsonUtil.stringToObj(EntityUtils.toString(responseEntity), DsMessage.class);
+                }
+                return null;
+            });
+            Objects.requireNonNull(reply, "reply is null");
+            result = (DsResult) JsonUtil.mapToObj(reply.getData(), DsResult.class);
+
         } catch (IOException e) {
             e.printStackTrace();
             return DsResult.error(e.getMessage());
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            try {
-                if(response != null) {
-                    response.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return result;
     }

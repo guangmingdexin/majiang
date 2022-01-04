@@ -34,6 +34,8 @@ public final class DsConstant {
 
     public static final int CODE_ERROR = 500;
 
+    public static final int CODE_WAIT = -1;
+
 
     /**
      *  状态 id 常量
@@ -74,22 +76,22 @@ public final class DsConstant {
 
     public static final String ROOM_INFO_PREV = "room-info-id:";
     
-    public static final String USER_CHANEL_PREV = "user-channel_id:";
+    public static final String USER_CHANEL_PREV = "user-channel-id:";
 
     public static String preGameUserInfoKey(String id) {
         return GAMEUSER_INFO_PREV + id;
     }
 
-    public static String preUserMachinekey(String requestNo) {
-        return USER_MACHINE_PREV + requestNo;
+    public static String preUserMachinekey(String id) {
+        return USER_MACHINE_PREV + id;
     }
 
-    public static String preRoomInfoPrev(String requestNo) {
-        return ROOM_INFO_PREV + requestNo;
+    public static String preRoomInfoPrev(String id) {
+        return ROOM_INFO_PREV + id;
     }
 
-    public static String preUserChanelPrev(String requestNo) {
-        return USER_CHANEL_PREV + requestNo;
+    public static String preUserChanelPrev(String id) {
+        return USER_CHANEL_PREV + id;
     }
     /**
      * 系统
@@ -99,6 +101,12 @@ public final class DsConstant {
     public static final String OS_LINUX_PREFIX = "linux";
 
     public static final String OS_WIN_PREFIX = "win";
+
+    /**
+     * 一些游戏系统的常见统一变量
+     * SYS_CONTEXT : netty ChannelHandlerContext 上下文缓存 key
+     */
+    public static final String SYS_CONTEXT = "sys-context";
 
     /**
      *

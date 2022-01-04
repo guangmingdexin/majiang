@@ -1,4 +1,4 @@
-package com.guang.majiangserver.util;
+package ds.guang.majing.client;
 
 import java.util.concurrent.*;
 

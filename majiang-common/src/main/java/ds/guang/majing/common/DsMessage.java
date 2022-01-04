@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,6 +19,9 @@ public class DsMessage implements Serializable {
 
     private String serviceNo;
 
+    /**
+     * 此次活动生成的连接序号/ 后续所有的活动都会依赖这个请求号/类似于通话 token
+     */
     private String requestNo;
 
     private Object data;
@@ -25,6 +30,7 @@ public class DsMessage implements Serializable {
 
     private LocalDateTime date;
 
+    private Map<String, Object> attrMap;
 
     public DsMessage() {
     }
@@ -138,7 +144,22 @@ public class DsMessage implements Serializable {
         return this;
     }
 
+    public Map<String, Object> getAttrMap() {
+        return attrMap;
+    }
 
+    public DsMessage setAttrMap(String key, Object value) {
+        if(this.attrMap == null) {
+            this.attrMap = new HashMap<>();
+        }
+        this.attrMap.put(key, value);
+        return this;
+    }
+
+    public DsMessage setAttrMap(Map<String, Object> attrMap) {
+        this.attrMap = null;
+        return this;
+    }
 
     @Override
     public String toString() {

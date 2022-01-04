@@ -1,6 +1,7 @@
 package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
+import ds.guang.majiang.server.network.ResponseUtil;
 import ds.guang.majiang.server.room.FourRoom;
 import ds.guang.majiang.server.room.RoomManager;
 import ds.guang.majing.common.DsConstant;
@@ -13,9 +14,13 @@ import ds.guang.majing.common.room.Room;
 import ds.guang.majing.common.timer.DsTimeout;
 import ds.guang.majing.common.timer.DsTimerTask;
 import ds.guang.majing.common.timer.DsWheelTimer;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscChunkedArrayQueue;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -149,18 +154,20 @@ public class MatchPoolImpl implements MatchPool {
                 for (Player player : players) {
                     // 获取 Channel 输出数据
                     String id = player.getId();
-                    Object value = cache.getObject(DsConstant.preUserChanelPrev(id));
-                    System.out.println("value: " + value);
-                    if (value instanceof Channel) {
-                        Channel channel = (Channel) value;
-                        // 构造一个 Message 对象
-                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, id, DsResult.data(room));
+                    String key = DsConstant.preUserChanelPrev(id);
+                    Object value = cache.getObject(key);
+                    if (value instanceof ChannelHandlerContext) {
+                        ChannelHandlerContext context = (ChannelHandlerContext) value;
+
                         // 向客户端发送信息
                         // 按理来说这里应该使用异步线程，但是 netty 的特性，会将这次发送
                         // 消息封装为一个任务加入到任务队列中，等待 NioEventLoop 执行，所以
                         // 这里并不会阻塞定时器
+                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, id, DsResult.data(room));
                         System.out.println("开始发送消息！");
-                        channel.writeAndFlush(dsMessage);
+                        System.out.println("当前处理匹配线程---" + Thread.currentThread().getName());
+                        context.writeAndFlush(ResponseUtil.response(dsMessage));
+
                     }else {
                         throw new RejectedExecutionException("获取通道失败！");
                     }
@@ -172,6 +179,6 @@ public class MatchPoolImpl implements MatchPool {
             }
         };
         DsTimeout dsTimeout = wheelTimer.newTimeout(timerTask, 5, TimeUnit.SECONDS);
-        System.out.println("expired: " + dsTimeout.isExpired());
+       // System.out.println("expired: " + dsTimeout.isExpired());
     }
 }
