@@ -552,7 +552,6 @@ public class DsWheelTimer implements DsTimer{
                 if (deadline > 0) {
                     // 计算槽的位置
                     int idx = (int) (tick & mask);
-                    System.out.println("处理下一个槽的位置： " + idx + "---" + wheel[idx].toString());
                     processCancelledTasks();
                     DsWheelBucket bucket = wheel[idx];
                     transferTimeoutsToBuckets();

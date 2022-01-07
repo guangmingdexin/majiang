@@ -1,14 +1,10 @@
-package ds.guang.majing.client.event;
+package ds.guang.majing.client.network;
 
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -52,6 +48,10 @@ public abstract class Request  {
 
     protected String url;
 
+    static {
+
+    }
+
 
     public Request(Object message) {
         // 默认请求
@@ -66,7 +66,7 @@ public abstract class Request  {
 
         this.setHttpClient(HttpClientBuilder.create().build())
                 // 创建Post请求
-                .setUrl("http://192.168.0.5:9001/")
+                .setUrl("http://10.206.64.69:9001/")
                 .setMessage(message)
                 .setHttpPost(new HttpPost(url))
                 .setConfig(config);
@@ -96,9 +96,9 @@ public abstract class Request  {
     /**
      * 按照流程执行
      */
-    public final DsResult execute(Runnable task, Object data) {
+    public final DsResult execute(Runnable task) {
         before(task);
-        return after(asynHttpPost(data));
+        return after(asynHttpPost());
     }
 
     /**
@@ -122,7 +122,7 @@ public abstract class Request  {
                 if (responseEntity != null) {
                     return (DsMessage) JsonUtil.stringToObj(EntityUtils.toString(responseEntity), DsMessage.class);
                 }
-                return null;
+                return DsMessage.build("-1", "-1", DsResult.error("响应失败！"));
             });
             Objects.requireNonNull(reply, "reply is null");
             result = (DsResult) JsonUtil.mapToObj(reply.getData(), DsResult.class);
@@ -130,11 +130,17 @@ public abstract class Request  {
         } catch (IOException e) {
             e.printStackTrace();
             return DsResult.error(e.getMessage());
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return result;
     }
 
-    public DsResult asynHttpPost(Object data) {
+    public DsResult asynHttpPost() {
         return call();
     }
 

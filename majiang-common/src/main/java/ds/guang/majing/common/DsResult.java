@@ -13,7 +13,15 @@ import java.util.Map;
  * @author guangyong.deng
  * @date 2021-11-17 14:37
  */
-public class DsResult extends LinkedHashMap<String, Object> implements Result, Serializable {
+public class DsResult<T>  implements Result, Serializable {
+
+    int code;
+
+    T data;
+
+    String msg;
+
+    Map<String, Object> att;
 
     /**
      * 序列化版本号
@@ -21,12 +29,13 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
     private static final long serialVersionUID = 1L;
 
     public DsResult() {
+
     }
 
-    public DsResult(int code, String msg, Object data) {
-        this.setCode(code);
-        this.setMsg(msg);
-        this.setData(data);
+    public DsResult(int code, String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
 
     /**
@@ -34,8 +43,8 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      *
      * @return code
      */
-    public Integer getCode() {
-        return (Integer) this.get("code");
+    public int getCode() {
+        return code;
     }
 
     /**
@@ -44,7 +53,7 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @return msg
      */
     public String getMsg() {
-        return (String) this.get("msg");
+        return msg;
     }
 
     /**
@@ -52,8 +61,8 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      *
      * @return data
      */
-    public Object getData() {
-        return (Object) this.get("data");
+    public T getData() {
+        return data;
     }
 
     /**
@@ -63,7 +72,7 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @return 对象自身
      */
     public DsResult setCode(int code) {
-        this.put("code", code);
+        this.code = code;
         return this;
     }
 
@@ -74,7 +83,7 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @return 对象自身
      */
     public DsResult setMsg(String msg) {
-        this.put("msg", msg);
+        this.msg = msg;
         return this;
     }
 
@@ -84,8 +93,8 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @param data data
      * @return 对象自身
      */
-    public DsResult setData(Object data) {
-        this.put("data", data);
+    public DsResult setData(T data) {
+        this.data = data;
         return this;
     }
 
@@ -97,7 +106,10 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @return 对象自身
      */
     public DsResult set(String key, Object data) {
-        this.put(key, data);
+        if(att == null) {
+            att = new LinkedHashMap<>(16, 0.75f, true);
+        }
+        att.put(key, data);
         return this;
     }
 
@@ -108,49 +120,50 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @return 对象自身
      */
     public DsResult setMap(Map<String, ?> map) {
-        for (String key : map.keySet()) {
-            this.put(key, map.get(key));
+        if(att == null) {
+            att = new LinkedHashMap<>(16, 0.75f, true);
         }
+        att.putAll(map);
         return this;
     }
 
     // 构建成功
     public static DsResult ok() {
-        return new DsResult(DsConstant.CODE_SUCCESS, "ok", null);
+        return new DsResult<>(DsConstant.CODE_SUCCESS, "ok", null);
     }
 
     public static DsResult ok(String msg) {
-        return new DsResult(DsConstant.CODE_SUCCESS, msg, null);
+        return new DsResult<>(DsConstant.CODE_SUCCESS, msg, null);
     }
 
     public static DsResult code(int code) {
-        return new DsResult(code, null, null);
+        return new DsResult<>(code, null, null);
     }
 
     public static DsResult data(Object data) {
-        return new DsResult(DsConstant.CODE_SUCCESS, "ok", data);
+        return new DsResult<>(DsConstant.CODE_SUCCESS, "ok", data);
     }
 
     // 构建失败
     public static DsResult error() {
-        return new DsResult(DsConstant.CODE_ERROR, "error", null);
+        return new DsResult<>(DsConstant.CODE_ERROR, "error", null);
     }
 
     public static DsResult error(String msg) {
-        return new DsResult(DsConstant.CODE_ERROR, msg, null);
+        return new DsResult<>(DsConstant.CODE_ERROR, msg, null);
     }
 
     // 构建指定状态码 
     public static DsResult get(int code, String msg, Object data) {
-        return new DsResult(code, msg, data);
+        return new DsResult<>(code, msg, data);
     }
 
     public static DsResult empty(String msg) {
-        return new DsResult(-1, msg, null);
+        return new DsResult<>(-1, msg, null);
     }
 
     public static DsResult wait(String msg) {
-        return new DsResult(DsConstant.CODE_WAIT, msg, null);
+        return new DsResult<>(DsConstant.CODE_WAIT, msg, null);
     }
 
     public static DsResult empty() {
@@ -158,7 +171,7 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
     }
 
     public boolean isOk() {
-        return this.get("code").equals(DsConstant.CODE_SUCCESS);
+        return this.code == DsConstant.CODE_SUCCESS;
     }
 
     /**
@@ -166,7 +179,7 @@ public class DsResult extends LinkedHashMap<String, Object> implements Result, S
      * @return
      */
     public boolean isWait() {
-        return this.get("code").equals(DsConstant.CODE_WAIT);
+        return this.code == DsConstant.CODE_WAIT;
     }
 
 

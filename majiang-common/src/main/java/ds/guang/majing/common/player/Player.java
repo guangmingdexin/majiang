@@ -1,6 +1,7 @@
 package ds.guang.majing.common.player;
 
 import ds.guang.majing.common.dto.GameUser;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.io.Serializable;
 import java.util.List;
@@ -59,5 +60,12 @@ public interface Player extends Cloneable, Serializable {
      * @return id
      */
     String getId();
+
+
+    /**
+     *
+     * @return 通道
+     */
+    Object getContent();
 
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author guangyong.deng
  * @date 2021-12-10 17:24
  */
-public class DsMessage implements Serializable {
+public class DsMessage<T> implements Serializable {
 
     private String id;
 
@@ -24,7 +24,7 @@ public class DsMessage implements Serializable {
      */
     private String requestNo;
 
-    private Object data;
+    private T data;
 
     private String version;
 
@@ -36,7 +36,7 @@ public class DsMessage implements Serializable {
     }
 
     public DsMessage(String id, String serviceNo, String requestNo,
-                     Object data, String version, LocalDateTime date) {
+                     T data, String version, LocalDateTime date) {
         this.id = id;
         this.serviceNo = serviceNo;
         this.requestNo = requestNo;
@@ -47,7 +47,7 @@ public class DsMessage implements Serializable {
 
     public static DsMessage build(String serviceNo, String requestNo, Object data) {
         // id 都为随机8位字符串（默认状态）
-        return new DsMessage(UUID.randomUUID().toString().substring(0, 8),
+        return new DsMessage<>(UUID.randomUUID().toString().substring(0, 8),
                             serviceNo,
                             requestNo,
                             data,
@@ -121,7 +121,7 @@ public class DsMessage implements Serializable {
         return data;
     }
 
-    public DsMessage setData(Object data) {
+    public DsMessage setData(T data) {
         this.data = data;
         return this;
     }
@@ -150,14 +150,14 @@ public class DsMessage implements Serializable {
 
     public DsMessage setAttrMap(String key, Object value) {
         if(this.attrMap == null) {
-            this.attrMap = new HashMap<>();
+            this.attrMap = new HashMap<>(8);
         }
         this.attrMap.put(key, value);
         return this;
     }
 
     public DsMessage setAttrMap(Map<String, Object> attrMap) {
-        this.attrMap = null;
+        this.attrMap = attrMap;
         return this;
     }
 

@@ -31,7 +31,6 @@ public final class ResponseUtil {
 
         response.headers().add(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=utf-8");
         response.headers().add(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
-
         return response;
     }
 }

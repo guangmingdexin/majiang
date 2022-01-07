@@ -14,6 +14,14 @@ public class ExtendedExecutor extends ThreadPoolExecutor {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
     }
 
+    public ExtendedExecutor(int corePoolSize,
+                            int maximumPoolSize,
+                            long keepAliveTime, TimeUnit unit,
+                            BlockingQueue<Runnable> workQueue,
+                            ThreadFactory threadFactory,
+                            RejectedExecutionHandler reject) {
+        super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, reject);
+    }
     /**
      * 线程池处理异常的任务逻辑
      *

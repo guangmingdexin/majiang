@@ -1,15 +1,9 @@
-package ds.guang.majing.client.event;
+package ds.guang.majing.client.network;
 
-import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.room.Room;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-
-import static ds.guang.majing.common.DsConstant.EVENT_POST_HANDCARD_ID;
 
 /**
+ * 匹配玩家
  * @author guangmingdexin
  */
 public class PrepareRequest extends Request {

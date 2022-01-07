@@ -153,17 +153,16 @@ public class MatchPoolImpl implements MatchPool {
                 Room room = new FourRoom(playerCount, players);
                 for (Player player : players) {
                     // 获取 Channel 输出数据
-                    String id = player.getId();
-                    String key = DsConstant.preUserChanelPrev(id);
-                    Object value = cache.getObject(key);
-                    if (value instanceof ChannelHandlerContext) {
-                        ChannelHandlerContext context = (ChannelHandlerContext) value;
+
+                    Object content = player.getContent();
+                    if (content instanceof ChannelHandlerContext) {
+                        ChannelHandlerContext context = (ChannelHandlerContext) content ;
 
                         // 向客户端发送信息
                         // 按理来说这里应该使用异步线程，但是 netty 的特性，会将这次发送
                         // 消息封装为一个任务加入到任务队列中，等待 NioEventLoop 执行，所以
                         // 这里并不会阻塞定时器
-                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, id, DsResult.data(room));
+                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, player.getId(), DsResult.data(room));
                         System.out.println("开始发送消息！");
                         System.out.println("当前处理匹配线程---" + Thread.currentThread().getName());
                         context.writeAndFlush(ResponseUtil.response(dsMessage));
@@ -172,7 +171,7 @@ public class MatchPoolImpl implements MatchPool {
                         throw new RejectedExecutionException("获取通道失败！");
                     }
                     // 将 玩家与房间联系在一起
-                    manager.put(preRoomInfoPrev(id), room);
+                    manager.put(preRoomInfoPrev(player.getId()), room);
                 }
             } else {
                 System.out.println("条件不满足！..." + System.currentTimeMillis());

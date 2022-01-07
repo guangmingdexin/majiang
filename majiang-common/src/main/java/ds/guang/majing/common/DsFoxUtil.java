@@ -32,7 +32,7 @@ public class DsFoxUtil {
 	public static String getRandomString(int length) {
 		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		Random random = new Random();
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < length; i++) {
 			int number = random.nextInt(62);
 			sb.append(str.charAt(number));
@@ -55,7 +55,7 @@ public class DsFoxUtil {
 	 * @return 是否为null或者空字符串
 	 */
 	public static boolean isNotEmpty(Object str) {
-		return isEmpty(str) == false;
+		return !isEmpty(str);
 	}
 	
 	/**
@@ -96,10 +96,8 @@ public class DsFoxUtil {
 		}
 		// 挑选出所有符合条件的
 		List<String> list = new ArrayList<String>();
-		Iterator<String> keys = dataList.iterator();
-		while (keys.hasNext()) {
-			String key = keys.next();
-			if (key.startsWith(prefix) && key.indexOf(keyword) > -1) {
+		for (String key : dataList) {
+			if (key.startsWith(prefix) && key.contains(keyword)) {
 				list.add(key);
 			}
 		}
@@ -121,7 +119,7 @@ public class DsFoxUtil {
 			return list;
 		}
 		int end = start + size;
-		List<String> list2 = new ArrayList<String>();
+		List<String> list2 = new ArrayList<>();
 		for (int i = start; i < end; i++) {
 			if (i >= list.size()) {
 				return list2;
@@ -142,7 +140,7 @@ public class DsFoxUtil {
 	 */
 	public static boolean vagueMatch(String patt, String str) {
 		// 如果表达式不带有*号，则只需简单equals即可 (速度提升200倍) 
-		if(patt.indexOf("*") == -1) {
+		if(!patt.contains("*")) {
 			return patt.equals(str);
 		}
 		return Pattern.matches(patt.replaceAll("\\*", ".*"), str);
@@ -299,14 +297,14 @@ public class DsFoxUtil {
 		if(arr == null) {
 			return "";
 		}
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < arr.length; i++) {
-			str += arr[i];
+			str.append(arr[i]);
 			if(i != arr.length - 1) {
-				str += ",";
+				str.append(",");
 			}
 		}
-		return str;
+		return str.toString();
 	}
 	
 	/**
@@ -367,7 +365,7 @@ public class DsFoxUtil {
 		String[] arr = str.split(",");
 		for (String s : arr) {
 			s = s.trim();
-			if(isEmpty(s) == false) {
+			if(!isEmpty(s)) {
 				list.add(s);
 			}
 		}
@@ -383,14 +381,14 @@ public class DsFoxUtil {
 		if(list == null || list.size() == 0) {
 			return "";
 		}
-		String str = "";
+		StringBuilder str = new StringBuilder();
 		for (int i = 0; i < list.size(); i++) {
-			str += list.get(i);
+			str.append(list.get(i));
 			if(i != list.size() - 1) {
-				str += ",";
+				str.append(",");
 			}
 		}
-		return str;
+		return str.toString();
 	}
 	
     /**
@@ -400,7 +398,7 @@ public class DsFoxUtil {
      */
     public static String[] convertStringToArray(String str) {
     	List<String> list = convertStringToList(str);
-    	return list.toArray(new String[list.size()]);
+    	return list.toArray(new String[0]);
     }
 
     /**
@@ -430,11 +428,7 @@ public class DsFoxUtil {
      * @return 集合 
      */
     public static List<String> toList(String... strs) {
-    	List<String> list = new ArrayList<>();
-    	for (String str : strs) {
-    		list.add(str);
-		}
-    	return list;
+		return new ArrayList<>(Arrays.asList(strs));
     }
     
     

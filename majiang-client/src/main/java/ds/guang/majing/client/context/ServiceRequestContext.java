@@ -1,6 +1,6 @@
 package ds.guang.majing.client.context;
 
-import ds.guang.majing.client.event.Request;
+import ds.guang.majing.client.network.Request;
 
 /**
  * @author guangyong.deng

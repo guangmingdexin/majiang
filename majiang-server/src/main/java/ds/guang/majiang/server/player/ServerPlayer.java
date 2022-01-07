@@ -5,6 +5,7 @@ import ds.guang.majing.common.Converter;
 import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.dto.GameUser;
 import ds.guang.majing.common.player.Player;
+import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
 
@@ -21,8 +22,15 @@ public class ServerPlayer implements Player  {
     private List<Integer> cards;
 
 
+    private transient ChannelHandlerContext context;
+
     public ServerPlayer(GameUser gameUser) {
         this.gameUser = gameUser;
+    }
+
+    public ServerPlayer setContext(ChannelHandlerContext context) {
+        this.context = context;
+        return this;
     }
 
     @Override
@@ -53,6 +61,11 @@ public class ServerPlayer implements Player  {
     @Override
     public String getId() {
         return gameUser.getUserId();
+    }
+
+    @Override
+    public Object getContent() {
+        return context;
     }
 
 

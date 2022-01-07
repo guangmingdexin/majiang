@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 
 import java.util.UUID;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author guangyong.deng
@@ -37,7 +38,24 @@ public class Demo extends Application {
         GridPane grid = new GridPane();
         Button button = new Button("demo");
 
-        Cache cache = new CacheDefaultImpl();
+        Executor executor = new ExtendedExecutor(
+                10,
+                10,
+                60L,
+                TimeUnit.SECONDS,
+                new LinkedBlockingDeque<>(1024),
+                new ThreadFactory() {
+
+                    AtomicInteger index = new AtomicInteger(0);
+
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        return new Thread(r, "test-thread-" + index.incrementAndGet());
+                    }
+                }, (r, ex) -> {
+                    System.out.println("抛出异常！");
+                });
+
         /**
          * 1.点击按钮
          * 2.发送请求
@@ -73,13 +91,13 @@ public class Demo extends Application {
             CompletableFuture.runAsync(() -> {
                 ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, data);
                 ruleActor.event(DsConstant.EVENT_LOGIN_ID, data);
-
             });
         });
 
         game.setOnAction(event -> {
             GameUser  gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
-            DsMessage data = DsMessage.build(DsConstant.EVENT_PREPARE_ID, requestNo, gameUser.getUserId());
+            String userId = gameUser == null ? "123456" : gameUser.getUserId();
+            DsMessage data = DsMessage.build(DsConstant.EVENT_PREPARE_ID, requestNo, userId);
             System.out.println("准备匹配玩家，构造房间！" + gameUser);
             CompletableFuture.runAsync(() -> {
                 ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
@@ -88,7 +106,6 @@ public class Demo extends Application {
                 System.out.println(e.getMessage());
                 return null;
             });
-
         });
 
 

@@ -57,12 +57,16 @@ public class PlatFormAction implements Action {
                 // TODO 未处理
             }
 
-
-            CompletableFuture.runAsync(() -> {
-                Player player = new ServerPlayer((GameUser) gameUser);
-                matchPool.addPlayer(player);
-                matchPool.match();
-            });
+            if(message.getAttrMap() != null && message.getAttrMap().containsKey(SYS_CONTEXT)) {
+                ChannelHandlerContext context = (ChannelHandlerContext) message.getAttrMap().get(SYS_CONTEXT);
+                CompletableFuture.runAsync(() -> {
+                    Player player = new ServerPlayer((GameUser) gameUser).setContext(context);
+                    matchPool.addPlayer(player);
+                    matchPool.match();
+                });
+            }else {
+                throw new NullPointerException("context is null!");
+            }
 
 
                 /**
@@ -87,6 +91,7 @@ public class PlatFormAction implements Action {
                  */
             return DsResult.wait("游戏匹配中！");
         });
+
         state.onEvent(EVENT_MATCH_FRIEND_ID, STATE_MATCH_FRIEND_ID);
     }
 

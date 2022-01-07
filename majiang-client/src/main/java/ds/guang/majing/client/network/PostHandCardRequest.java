@@ -1,8 +1,7 @@
-package ds.guang.majing.client.event;
+package ds.guang.majing.client.network;
 
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.room.Room;
 
 import static ds.guang.majing.common.DsConstant.EVENT_POST_HANDCARD_ID;
 
@@ -32,7 +31,7 @@ public class PostHandCardRequest extends Request {
     }
 
     @Override
-    public DsResult asynHttpPost(Object data) {
+    public DsResult asynHttpPost() {
 
         String[] filedNames = new String[] {"serviceNo"};
         Object[] values = new Object[] {EVENT_POST_HANDCARD_ID};
@@ -41,6 +40,6 @@ public class PostHandCardRequest extends Request {
         // 重新设置发送消息
         setMessage(dsMessage);
 
-        return super.asynHttpPost(data);
+        return super.asynHttpPost();
     }
 }

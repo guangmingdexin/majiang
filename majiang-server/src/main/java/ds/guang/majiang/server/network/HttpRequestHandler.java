@@ -39,7 +39,6 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                                         // 添加一些自定义的变量进去
                                         message.setAttrMap(SYS_CONTEXT, context));
 
-
         }
 
     }
