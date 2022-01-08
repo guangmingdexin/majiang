@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.StdConverter;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,6 +15,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import ds.guang.majing.common.player.Player;
+import ds.guang.majing.common.player.ServerPlayer;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -58,6 +60,9 @@ public final class JsonUtil {
 //                new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 //        javaTimeModule.addDeserializer(LocalTime.class,
 //                new LocalTimeDeserializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
+       module.addSerializer(Player.class, PlayerSerializer.INSTANCE);
+      module.addDeserializer(Player.class, PlayerDeserializer.INSTANCE);
+
         mapper.registerModule(module);
 
     }
@@ -77,7 +82,6 @@ public final class JsonUtil {
     public static Object stringToObj(String s, Class<?> clazz) {
 
         try {
-
             return mapper.readValue(s.getBytes(), clazz);
         } catch (IOException e) {
             System.out.println("json 字符串转换对象失败！");
@@ -85,6 +89,8 @@ public final class JsonUtil {
         }
         return null;
     }
+
+
 
     public static Map stringToMap(String s) {
         try {
@@ -110,6 +116,9 @@ public final class JsonUtil {
         return mapper.convertValue(data, clazz);
     }
 
+    public static ObjectMapper getMapper() {
+        return mapper;
+    }
 
     public static Class<? extends StdConverter> getConverter() {
         Converter converter = new Converter();
@@ -140,6 +149,32 @@ public final class JsonUtil {
         }
     }
 
+    static final class PlayerSerializer extends JsonSerializer<Player> {
 
+        final static PlayerSerializer INSTANCE = new PlayerSerializer();
+
+        PlayerSerializer() {
+        }
+
+        @Override
+        public void serialize(Player player, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+            // 序列化，将 player 转换为 ClientPlayer
+            jsonGenerator.writeString(player.toString());
+        }
+    }
+
+    static final class PlayerDeserializer extends JsonDeserializer<Player> {
+
+        final static PlayerDeserializer INSTANCE = new PlayerDeserializer();
+
+        PlayerDeserializer() {}
+
+        @Override
+        public Player deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+            String content = jsonParser.getText();
+            System.out.println("content: " + content);
+            return (Player) JsonUtil.stringToObj(content, ServerPlayer.class);
+        }
+    }
 
 }

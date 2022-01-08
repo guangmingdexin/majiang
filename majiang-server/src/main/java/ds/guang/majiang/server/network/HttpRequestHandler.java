@@ -4,6 +4,7 @@ import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majing.common.DsConstant;
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -31,7 +32,10 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                 ResponseUtil.response(DsMessage.build("-1", "-1", DsResult.error("无法解码！")));
                 return;
             }
-            DsMessage message = (DsMessage)HttpRequestParser.getClassContent(request, DsMessage.class);
+            String content = HttpRequestParser.getContent(request);
+            System.out.println("content: " + content);
+            DsMessage message = (DsMessage) JsonUtil.stringToObj(content, DsMessage.class);
+
             // 根据不同业务调用不同的处理逻辑
             DsResult reply = StateMachines
                                 .get(preUserMachinekey(message.getRequestNo()))

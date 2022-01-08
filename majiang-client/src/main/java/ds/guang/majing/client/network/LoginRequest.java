@@ -1,10 +1,14 @@
 package ds.guang.majing.client.network;
 
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.dto.GameUser;
+
+import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author guangyong.deng
@@ -23,9 +27,23 @@ public class LoginRequest extends Request {
     }
 
     @Override
-    protected DsResult after(DsResult result) {
+    protected DsResult after(String content) {
 
-        if( result != null && result.isOk()) {
+        DsMessage<DsResult<GameUser>> message = null;
+
+        try {
+           message = JsonUtil.getMapper().readValue(
+                    content,
+                    new TypeReference<DsMessage<DsResult<GameUser>>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Objects.requireNonNull(message, "message is null");
+
+        DsResult<GameUser> result = message.getData();
+
+        if( result != null && result.success()) {
             // 这里应该还需要一个上下文解析器，用来保存用户基本信息和游戏信息
             GameUser data = (GameUser)JsonUtil.mapToObj(result.getData(), GameUser.class);
             Cache.getInstance().setObject(data.getUsername(), data, -1);

@@ -1,10 +1,9 @@
 package ds.guang.majing.client.rule.platform;
 
-import ds.guang.majing.client.network.LoginRequest;
-import ds.guang.majing.client.network.PostHandCardRequest;
-import ds.guang.majing.client.network.PrepareRequest;
-import ds.guang.majing.client.network.Request;
+import ds.guang.majing.client.entity.ClientFourRoom;
+import ds.guang.majing.client.network.*;
 import ds.guang.majing.common.DsMessage;
+import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.factory.DefaultStateStrategyFactory;
 import ds.guang.majing.common.factory.StateStrategy;
 import ds.guang.majing.common.factory.StateStrategyFactory;
@@ -68,17 +67,29 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             Request request = new PrepareRequest(data);
             return request.execute(null);
         });
-
         platformState.onEvent(EVENT_MATCH_FRIEND_ID, STATE_MATCH_FRIEND_ID);
 
 
         State<String, String, DsResult> prepareState = prepareSupplier.get();
+        prepareState.onEntry(data -> {
+            System.out.println("进入游戏准备阶段：" );
+            // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
+            // 直接进行游戏初始化操作
+            Request request = new InitRequest(data);
+            request.execute(() -> {
+                // 先将 数据取出来
+                DsResult dsResult = (DsResult) data;
+                Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
 
+                System.out.println("requestNo: " + dsResult.getRequestNo());
+            });
+            return data;
+        });
 
         State<String, String, DsResult> initState = initSupplier.get();
         initState.onEntry(data -> {
             // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
-           // Room room = ((DsResult) data).getData();
+            Room room = (Room) ((DsResult) data).getData();
             return null;
         });
 //        prepareState.onEvent(EVENT_POST_HANDCARD_ID, data -> {

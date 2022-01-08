@@ -1,8 +1,8 @@
 package ds.guang.majing.common.dto;
 
-import java.util.StringJoiner;
+import java.io.Serializable;
 
-public class GameUser {
+public class GameUser implements Serializable {
 
     private String userId;
 
@@ -11,6 +11,9 @@ public class GameUser {
     private int vip;
 
     private int score;
+
+    public GameUser() {
+    }
 
     public String getUserId() {
         return userId;
@@ -50,11 +53,13 @@ public class GameUser {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", GameUser.class.getSimpleName() + "={", "}")
-                .add("\"userId\":\"" + userId + "\"")
-                .add("\"username\":\"" + username + "\"")
-                .add("\"vip\":" + vip)
-                .add("\"score\":" + score)
-                .toString();
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"userId\":").append(userId)
+                .append(", \"username\":").append(username)
+                .append(", \"vip\":").append(vip)
+                .append(", \"score\":").append(score)
+                .append('}');
+        return sb.toString();
     }
 }

@@ -1,10 +1,8 @@
-package ds.guang.majiang.server.player;
+package ds.guang.majing.common.player;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ds.guang.majing.common.Converter;
-import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.dto.GameUser;
-import ds.guang.majing.common.player.Player;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;
@@ -23,6 +21,8 @@ public class ServerPlayer implements Player  {
 
 
     private transient ChannelHandlerContext context;
+
+    public ServerPlayer() { }
 
     public ServerPlayer(GameUser gameUser) {
         this.gameUser = gameUser;
@@ -58,6 +58,15 @@ public class ServerPlayer implements Player  {
         return gameUser;
     }
 
+    public GameUser getGameUser() {
+        return gameUser;
+    }
+
+    public ServerPlayer setGameUser(GameUser gameUser) {
+        this.gameUser = gameUser;
+        return this;
+    }
+
     @Override
     public String getId() {
         return gameUser.getUserId();
@@ -68,5 +77,12 @@ public class ServerPlayer implements Player  {
         return context;
     }
 
-
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"gameUser\":").append(gameUser.toString())
+                .append('}');
+        return sb.toString();
+    }
 }

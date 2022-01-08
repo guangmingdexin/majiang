@@ -10,17 +10,22 @@ import ds.guang.majing.common.DsResult;
  */
 public class InitRequest extends Request {
 
+    public InitRequest() {
+    }
+
     public InitRequest(Object message) {
         super(message);
     }
 
     @Override
     protected void before(Runnable task) {
-        // 1.
+        // 1.获取玩家的 id
+
+        task.run();
     }
 
     @Override
-    protected DsResult after(DsResult result) {
+    protected DsResult after(String content) {
         return null;
     }
 }

@@ -109,7 +109,7 @@ public abstract class AbstractStateImpl<T, E, R extends Result> implements State
            // 需要通过结果来判断处理事件成功，如果成功，则可以进入下一个状态，否则
            if(r != null && r.success() && nextState != null) {
                System.out.println("进入下一个状态......！");
-               notify.nextState(nextState, data);
+               notify.nextState(nextState, r);
            }
            return r;
        });

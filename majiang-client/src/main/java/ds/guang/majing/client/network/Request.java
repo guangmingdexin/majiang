@@ -52,6 +52,8 @@ public abstract class Request  {
 
     }
 
+    public Request() {
+    }
 
     public Request(Object message) {
         // 默认请求
@@ -90,7 +92,7 @@ public abstract class Request  {
      *
      * @return dsResult
      */
-    protected abstract DsResult after(DsResult result);
+    protected abstract DsResult after(String content);
 
 
     /**
@@ -98,7 +100,8 @@ public abstract class Request  {
      */
     public final DsResult execute(Runnable task) {
         before(task);
-        return after(asynHttpPost());
+        String result = call();
+        return after(result);
     }
 
     /**
@@ -107,29 +110,27 @@ public abstract class Request  {
      *
      * @return
      */
-    public DsResult call() {
+    public String call() {
 
         System.out.println("发起请求的线程-" + Thread.currentThread().getName());
         // 1.向远程服务器发送准备游戏的请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
-        DsMessage reply = null;
-        DsResult result = null;
+        String reply = null;
+
         // 由客户端执行(发送)Post请求
         try {
             reply =  httpClient.execute(httpPost, res -> {
                 // 从响应模型中获取响应实体
                 HttpEntity responseEntity = res.getEntity();
                 if (responseEntity != null) {
-                    return (DsMessage) JsonUtil.stringToObj(EntityUtils.toString(responseEntity), DsMessage.class);
+                    return EntityUtils.toString(responseEntity);
                 }
-                return DsMessage.build("-1", "-1", DsResult.error("响应失败！"));
+                return null;
             });
             Objects.requireNonNull(reply, "reply is null");
-            result = (DsResult) JsonUtil.mapToObj(reply.getData(), DsResult.class);
 
         } catch (IOException e) {
             e.printStackTrace();
-            return DsResult.error(e.getMessage());
         } finally {
             try {
                 httpClient.close();
@@ -137,12 +138,9 @@ public abstract class Request  {
                 e.printStackTrace();
             }
         }
-        return result;
+        return reply;
     }
 
-    public DsResult asynHttpPost() {
-        return call();
-    }
 
 
     public Request setHttpClient(CloseableHttpClient httpClient) {

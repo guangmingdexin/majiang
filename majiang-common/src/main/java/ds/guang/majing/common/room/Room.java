@@ -1,8 +1,11 @@
 package ds.guang.majing.common.room;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ds.guang.majing.common.player.Player;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +29,9 @@ public abstract class Room implements Serializable {
 
     public Player[] getPlayers() {
         return players;
+    }
+
+    public Room() {
     }
 
     public Room setPlayers(Player[] players) {
@@ -89,5 +95,19 @@ public abstract class Room implements Serializable {
         }
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\":").append(id)
+                .append(", \"players\":").append(Arrays.toString(players))
+                .append(", \"markIndex\":").append(markIndex)
+                .append(", \"curRoundIndex\":").append(curRoundIndex)
+                .append(", \"playerCount\":").append(playerCount)
+                .append(", \"cards\":").append(cards)
+                .append('}');
+        return sb.toString();
     }
 }

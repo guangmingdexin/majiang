@@ -21,7 +21,10 @@ public class DsResult<T>  implements Result, Serializable {
 
     String msg;
 
-    Map<String, Object> att;
+    /**
+     * 方便后续调用
+     */
+    String requestNo;
 
     /**
      * 序列化版本号
@@ -98,33 +101,18 @@ public class DsResult<T>  implements Result, Serializable {
         return this;
     }
 
-    /**
-     * 写入一个值 自定义key, 连缀风格
-     *
-     * @param key  key
-     * @param data data
-     * @return 对象自身
-     */
-    public DsResult set(String key, Object data) {
-        if(att == null) {
-            att = new LinkedHashMap<>(16, 0.75f, true);
-        }
-        att.put(key, data);
+
+    public String getRequestNo() {
+        return requestNo;
+    }
+
+    public DsResult setRequestNo(String requestNo) {
+        this.requestNo = requestNo;
         return this;
     }
 
-    /**
-     * 写入一个Map, 连缀风格
-     *
-     * @param map map
-     * @return 对象自身
-     */
-    public DsResult setMap(Map<String, ?> map) {
-        if(att == null) {
-            att = new LinkedHashMap<>(16, 0.75f, true);
-        }
-        att.putAll(map);
-        return this;
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     // 构建成功
@@ -170,31 +158,29 @@ public class DsResult<T>  implements Result, Serializable {
         return empty(null);
     }
 
-    public boolean isOk() {
-        return this.code == DsConstant.CODE_SUCCESS;
-    }
-
     /**
      * 由于是异步编程所以很多时候，是先返回结果，所以需要等待
      * @return
      */
-    public boolean isWait() {
+    public boolean waitState() {
         return this.code == DsConstant.CODE_WAIT;
     }
 
 
     @Override
     public boolean success() {
-        return isOk();
+        return this.code == DsConstant.CODE_SUCCESS;
     }
 
     @Override
     public String toString() {
-        return "{"
-                + "\"code\": " + this.getCode()
-                + ", \"msg\": \"" + this.getMsg() + "\""
-                + ", \"data\": \"" + this.getData() + "\""
-                + "}";
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"code\":").append(code)
+                .append(", \"data\":").append(data)
+                .append(", \"msg\":").append(msg)
+                .append(", \"requestNo\":").append(requestNo)
+                .append('}');
+        return sb.toString();
     }
-
 }

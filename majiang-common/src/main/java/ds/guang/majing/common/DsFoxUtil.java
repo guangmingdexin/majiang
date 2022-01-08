@@ -2,6 +2,7 @@ package ds.guang.majing.common;
 
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
@@ -432,6 +433,21 @@ public class DsFoxUtil {
     }
     
     
-    
-    
+    public static String fromJsonToGetValue(String json, String key) {
+
+        int keyStartIndex = json.indexOf(key);
+
+        int valueStartIndex = keyStartIndex + key.length() + 1;
+        int valueEndIndex = json.indexOf(",", valueStartIndex);
+
+        if (keyStartIndex == -1 || valueEndIndex == -1) {
+            return null;
+        }
+
+        return json.substring(valueStartIndex, valueEndIndex);
+
+
+	}
+
+
 }

@@ -242,7 +242,8 @@ public final class ClassUtil {
                     int startIndex = absolutePath.indexOf(packageName);
                     // 是 class 文件
                     String className = absolutePath.substring(startIndex, absolutePath.length() - 6);
-                    // TODO 可以再加一个参数校验
+                    // 可以再加一个参数校验, 防止一些第三方框架影响使用，
+                    // 比如：jackson 框架在进行泛型对象转换时，会动态的生成一些增强类，影响创建实例
                     classFiles.add(Class.forName(className));
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();

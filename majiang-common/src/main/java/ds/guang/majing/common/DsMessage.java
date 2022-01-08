@@ -1,5 +1,7 @@
 package ds.guang.majing.common;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -55,6 +57,7 @@ public class DsMessage<T> implements Serializable {
                             LocalDateTime.now()
                 );
     }
+
 
     public static DsMessage copy(DsMessage dsMessage) {
 
@@ -117,7 +120,7 @@ public class DsMessage<T> implements Serializable {
         return this;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
@@ -160,6 +163,7 @@ public class DsMessage<T> implements Serializable {
         this.attrMap = attrMap;
         return this;
     }
+
 
     @Override
     public String toString() {

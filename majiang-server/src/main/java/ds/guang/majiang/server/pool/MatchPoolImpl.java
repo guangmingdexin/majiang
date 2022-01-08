@@ -2,9 +2,9 @@ package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
 import ds.guang.majiang.server.network.ResponseUtil;
-import ds.guang.majiang.server.room.FourRoom;
+import ds.guang.majing.common.player.ServerPlayer;
+import ds.guang.majiang.server.room.ServerFourRoom;
 import ds.guang.majiang.server.room.RoomManager;
-import ds.guang.majing.common.DsConstant;
 import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.cache.Cache;
@@ -14,13 +14,9 @@ import ds.guang.majing.common.room.Room;
 import ds.guang.majing.common.timer.DsTimeout;
 import ds.guang.majing.common.timer.DsTimerTask;
 import ds.guang.majing.common.timer.DsWheelTimer;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscChunkedArrayQueue;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -142,7 +138,7 @@ public class MatchPoolImpl implements MatchPool {
 
             if (deque.size() >= playerCount) {
                 int index = 0;
-                Player[] players = new Player[playerCount];
+                Player[] players = new ServerPlayer[playerCount];
                 while (!deque.isEmpty() && index < playerCount) {
                     players[index++] = deque.poll();
                 }
@@ -150,7 +146,7 @@ public class MatchPoolImpl implements MatchPool {
                 Cache cache = Cache.getInstance();
                 RoomManager manager = RoomManager.getInstance();
 
-                Room room = new FourRoom(playerCount, players);
+                Room room = new ServerFourRoom(playerCount, players);
                 for (Player player : players) {
                     // 获取 Channel 输出数据
 
@@ -162,9 +158,7 @@ public class MatchPoolImpl implements MatchPool {
                         // 按理来说这里应该使用异步线程，但是 netty 的特性，会将这次发送
                         // 消息封装为一个任务加入到任务队列中，等待 NioEventLoop 执行，所以
                         // 这里并不会阻塞定时器
-                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, player.getId(), DsResult.data(room));
-                        System.out.println("开始发送消息！");
-                        System.out.println("当前处理匹配线程---" + Thread.currentThread().getName());
+                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, player.getId(), DsResult.data(room).setRequestNo(player.getId()));
                         context.writeAndFlush(ResponseUtil.response(dsMessage));
 
                     }else {

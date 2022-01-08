@@ -1,5 +1,6 @@
 package ds.guang.majiang.server.layer.basic;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majiang.server.network.ResponseUtil;
 import ds.guang.majing.common.*;
@@ -12,6 +13,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.nio.NioEventLoop;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static ds.guang.majing.common.DsConstant.*;
@@ -32,7 +34,8 @@ public class LoginAction implements Action {
         // 注册事件就行了
         state.onEvent(EVENT_LOGIN_ID, STATE_PLATFORM_ID, data -> {
             // 查询远程数据数据库，比对数据
-            DsMessage message = ClassUtil.convert(data, DsMessage.class);
+            DsMessage message = (DsMessage) data;
+
             // 这里还需要将 data 重新反序列化
             User user = (User) JsonUtil.mapToObj(message.getData(), User.class);
 

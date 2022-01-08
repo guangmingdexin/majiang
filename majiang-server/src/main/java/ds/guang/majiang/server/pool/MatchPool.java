@@ -1,12 +1,6 @@
 package ds.guang.majiang.server.pool;
 
-import ds.guang.majiang.server.player.ServerPlayer;
 import ds.guang.majing.common.player.Player;
-import ds.guang.majing.common.timer.DsTimerTask;
-
-import java.util.List;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author guangmingdexin
