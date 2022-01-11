@@ -65,7 +65,7 @@ public final class DsConstant {
 
     public static final String EVENT_MATCH_FRIEND_ID = "EVENT_MATCH_FRIEND_ID";
 
-    public static final String EVENT_POST_HANDCARD_ID = "EVENT_POST_HANDCARD_ID";
+    public static final String EVENT_GET_HANDCARD_ID = "EVENT_GET_HANDCARD_ID";
 
     /**
      * 设置缓存前缀
@@ -108,25 +108,4 @@ public final class DsConstant {
      */
     public static final String SYS_CONTEXT = "sys-context";
 
-    /**
-     *
-     * 设置初始麻将
-     */
-    public static final List<Integer> CARDS = initialCards();
-
-    private static List<Integer> initialCards() {
-
-        // 1.服务器生成 108 张棋牌（只可读）
-        List<Integer> cards = new ArrayList<>();
-
-        for (int i = 1; i <= 3; i++) {
-            for (int j = 1; j <= 9; j++) {
-                for (int k = 1; k <= 4; k++) {
-                    cards.add((int) (j + Math.pow(10, i)));
-                }
-            }
-        }
-
-        return cards;
-    }
 }

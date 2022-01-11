@@ -25,8 +25,10 @@ public interface StateStrategy<T, E, R extends Result> {
 
 
     /**
-     * @param stateId
+     * 创建一个默认的状态
+     *
+     * @param stateIdSupplier
      * @return
      */
-    State<T, E, R> newState(Supplier<T> stateId);
+    State<T, E, R> newState(Supplier<T> stateIdSupplier);
 }

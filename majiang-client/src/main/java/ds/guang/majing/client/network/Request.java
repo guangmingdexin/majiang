@@ -1,6 +1,5 @@
 package ds.guang.majing.client.network;
 
-import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
 import org.apache.http.HttpEntity;
@@ -26,9 +25,9 @@ public abstract class Request  {
     /**
      * 线程安全的
      */
-    protected  CloseableHttpClient httpClient;
+    protected static CloseableHttpClient httpClient;
 
-    protected  HttpPost httpPost;
+    protected HttpPost httpPost;
 
     protected Object message;
 
@@ -39,16 +38,23 @@ public abstract class Request  {
     /**
      * 构建超时等配置信息
      */
-    RequestConfig config;
+    protected static  RequestConfig config;
 
     /**
      * 超时等待时间 5 分钟
      */
-    protected int waitTime;
+    protected static int waitTime;
 
     protected String url;
 
     static {
+
+        httpClient = HttpClientBuilder.create().build();
+        waitTime = 30 * 60 * 1000;
+        config = RequestConfig.custom()
+                .setSocketTimeout(waitTime)
+                .setConnectTimeout(waitTime)
+                .build();
 
     }
 
@@ -59,16 +65,9 @@ public abstract class Request  {
         // 默认请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
         // 直接将 data 封装为 message，或者直接传一个
-        this.setWaitTime(30 * 60 * 1000)
-                        .setConfig(
-                                RequestConfig.custom()
-                                    .setSocketTimeout(waitTime)
-                                        .setConnectTimeout(waitTime)
-                                        .build());
 
-        this.setHttpClient(HttpClientBuilder.create().build())
-                // 创建Post请求
-                .setUrl("http://10.206.64.69:9001/")
+        // 创建Post请求
+        this.setUrl("http://localhost:9001/")
                 .setMessage(message)
                 .setHttpPost(new HttpPost(url))
                 .setConfig(config);
@@ -131,12 +130,6 @@ public abstract class Request  {
 
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         return reply;
     }
@@ -144,7 +137,7 @@ public abstract class Request  {
 
 
     public Request setHttpClient(CloseableHttpClient httpClient) {
-        this.httpClient = httpClient;
+        Request.httpClient = httpClient;
         return this;
     }
 
@@ -193,8 +186,8 @@ public abstract class Request  {
     }
 
     public RequestConfig setConfig(RequestConfig config) {
-        this.config = config;
-        return this.config;
+        Request.config = config;
+        return Request.config;
     }
 
     public long getWaitTime() {
@@ -202,7 +195,7 @@ public abstract class Request  {
     }
 
     public Request setWaitTime(long waitTime) {
-        this.waitTime = (int) waitTime;
+        Request.waitTime = (int) waitTime;
         return this;
     }
 

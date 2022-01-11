@@ -21,7 +21,7 @@ import static ds.guang.majing.common.DsConstant.*;
 @SuppressWarnings("unchecked")
 public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, String, DsResult>> {
 
-    private StateStrategyFactory stateStrategyFactory;
+    private final StateStrategyFactory stateStrategyFactory;
 
     private StateStrategy stateStrategy;
 

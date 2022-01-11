@@ -108,7 +108,6 @@ public abstract class AbstractStateImpl<T, E, R extends Result> implements State
            }
            // 需要通过结果来判断处理事件成功，如果成功，则可以进入下一个状态，否则
            if(r != null && r.success() && nextState != null) {
-               System.out.println("进入下一个状态......！");
                notify.nextState(nextState, r);
            }
            return r;
@@ -182,5 +181,14 @@ public abstract class AbstractStateImpl<T, E, R extends Result> implements State
      *
      * @return
      */
-    State next() { return null;};
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"id\":").append(id)
+                .append(", \"handlerMap\":").append(handlerMap)
+                .append('}');
+        return sb.toString();
+    }
 }

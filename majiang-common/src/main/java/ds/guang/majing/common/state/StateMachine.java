@@ -145,5 +145,10 @@ public class StateMachine<T,E,R extends Result> implements State.Notify<T> {
         }
 
     }
+
+
+    public State<T, E, R> getCurState() {
+        return currentState;
+    }
 }
 

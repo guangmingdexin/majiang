@@ -10,14 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class RoomManager {
 
-    private volatile static  RoomManager INSTANCE = null;
+    private volatile static RoomManager INSTANCE;
 
     /**
      * key
      */
-    private final Map<String, Room> roomManager;
+    private Map<String, Room> roomManager;
 
-    public RoomManager() {
+    private RoomManager() {
         this.roomManager = new ConcurrentHashMap<>();
     }
 
@@ -30,16 +30,23 @@ public class RoomManager {
     }
 
     public static RoomManager getInstance() {
-
         if(INSTANCE == null) {
-
             synchronized(RoomManager.class) {
                 if(INSTANCE == null) {
-                    return new RoomManager();
+                    INSTANCE = new RoomManager();
                 }
             }
         }
-
         return INSTANCE;
+    }
+
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"roomManager\":").append(roomManager)
+                .append('}');
+        return sb.toString();
     }
 }

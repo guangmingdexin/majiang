@@ -1,7 +1,10 @@
 package ds.guang.majing.common.player;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ds.guang.majing.common.Converter;
 import ds.guang.majing.common.dto.GameUser;
-import io.netty.channel.ChannelHandlerContext;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,15 +15,42 @@ import java.util.List;
  * @author guangyong.deng
  * @date 2021-12-17 14:05
  */
-public interface Player extends Cloneable, Serializable {
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ServerPlayer.class, name = "serverPlayer"),
+        @JsonSubTypes.Type(value = ClientPlayer.class, name = "clientPlayer")
+})
+public abstract class Player implements Cloneable, Serializable {
+
+    private GameUser gameUser;
+
+    @JsonSerialize(converter = Converter.class)
+    private List<Integer> cards;
+
+    public Player() {
+    }
+
+    public Player(GameUser gameUser) {
+        this.gameUser = gameUser;
+    }
 
     /**
      * 获取玩家手牌
      *
      * @return
      */
-    List<Integer> getCards();
+    public List<Integer> getCards() {
+        return cards;
+    };
 
+    public Player setCards(List<Integer> cards) {
+        this.cards = cards;
+        return this;
+    }
 
     /**
      *
@@ -29,7 +59,10 @@ public interface Player extends Cloneable, Serializable {
      * @param cardNum
      * @return
      */
-    boolean addCard(int cardNum);
+    boolean addCard(int cardNum) {
+
+        return false;
+    }
 
     /**
      *
@@ -38,7 +71,9 @@ public interface Player extends Cloneable, Serializable {
      * @param cardIndex
      * @return
      */
-    boolean removeCard(int cardIndex);
+    boolean removeCard(int cardIndex) {
+        return false;
+    }
 
     /**
      *
@@ -47,26 +82,51 @@ public interface Player extends Cloneable, Serializable {
      * @param cardNum 手牌
      * @return
      */
-    boolean remove(int cardNum);
+    boolean remove(int cardNum) {
+        return false;
+    }
 
-    /**
-     * 获取游戏玩家信息
-     * @return gameUser
-     */
-    GameUser getGameUserInfo();
+
 
     /**
      * 玩家 id
      * @return id
      */
-    String getId();
+    public String id() {
+        return gameUser.getUserId();
+    }
+
+
+    public GameUser getGameUser() {
+        return gameUser;
+    }
+
+    public Player setGameUser(GameUser gameUser) {
+        this.gameUser = gameUser;
+        return this;
+    }
+
+    /**
+     * 返回 网络通道
+     * @return 通道
+     */
+    public abstract Object getContext();
 
 
     /**
-     *
-     * @return 通道
+     * 不同类型的 Player 之间的转换
+     * @return
      */
-    Object getContent();
+    public abstract Player convertTo();
 
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"gameUser\":").append(gameUser)
+                .append(", \"cards\":").append(cards)
+                .append('}');
+        return sb.toString();
+    }
 }

@@ -1,6 +1,7 @@
 package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
+import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majiang.server.network.ResponseUtil;
 import ds.guang.majing.common.player.ServerPlayer;
 import ds.guang.majiang.server.room.ServerFourRoom;
@@ -11,6 +12,7 @@ import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.exception.DsBasicException;
 import ds.guang.majing.common.player.Player;
 import ds.guang.majing.common.room.Room;
+import ds.guang.majing.common.state.StateMachine;
 import ds.guang.majing.common.timer.DsTimeout;
 import ds.guang.majing.common.timer.DsTimerTask;
 import ds.guang.majing.common.timer.DsWheelTimer;
@@ -22,8 +24,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ds.guang.majing.common.DsConstant.EVENT_PREPARE_ID;
-import static ds.guang.majing.common.DsConstant.preRoomInfoPrev;
+import static ds.guang.majing.common.DsConstant.*;
 
 /**
  * @author guangmingdexin
@@ -143,14 +144,12 @@ public class MatchPoolImpl implements MatchPool {
                     players[index++] = deque.poll();
                 }
                 // 获取全局变量
-                Cache cache = Cache.getInstance();
                 RoomManager manager = RoomManager.getInstance();
-
-                Room room = new ServerFourRoom(playerCount, players);
+                Room room = new ServerFourRoom(playerCount, 13, players);
                 for (Player player : players) {
                     // 获取 Channel 输出数据
 
-                    Object content = player.getContent();
+                    Object content = player.getContext();
                     if (content instanceof ChannelHandlerContext) {
                         ChannelHandlerContext context = (ChannelHandlerContext) content ;
 
@@ -158,20 +157,26 @@ public class MatchPoolImpl implements MatchPool {
                         // 按理来说这里应该使用异步线程，但是 netty 的特性，会将这次发送
                         // 消息封装为一个任务加入到任务队列中，等待 NioEventLoop 执行，所以
                         // 这里并不会阻塞定时器
-                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID, player.getId(), DsResult.data(room).setRequestNo(player.getId()));
+                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID,
+                                player.id(),
+                                DsResult.data(room).setAttrMap("requestNo", player.id()));
                         context.writeAndFlush(ResponseUtil.response(dsMessage));
 
+                        StateMachine<String, String, DsResult> machine = StateMachines
+                                .get(preUserMachinekey(player.id()));
+                        // 手动切换状态
+                        machine.nextState(STATE_PREPARE_ID, dsMessage);
                     }else {
                         throw new RejectedExecutionException("获取通道失败！");
                     }
                     // 将 玩家与房间联系在一起
-                    manager.put(preRoomInfoPrev(player.getId()), room);
+                    manager.put(preRoomInfoPrev(player.id()), room);
                 }
             } else {
                 System.out.println("条件不满足！..." + System.currentTimeMillis());
             }
         };
         DsTimeout dsTimeout = wheelTimer.newTimeout(timerTask, 5, TimeUnit.SECONDS);
-       // System.out.println("expired: " + dsTimeout.isExpired());
+
     }
 }

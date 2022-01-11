@@ -4,8 +4,10 @@ package ds.guang.majing.common;
 import ds.guang.majing.common.state.Result;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.StringJoiner;
 
 /**
  * 返回的数据体
@@ -20,11 +22,9 @@ public class DsResult<T>  implements Result, Serializable {
     T data;
 
     String msg;
+    
+    Map<String, Object> attrMap;
 
-    /**
-     * 方便后续调用
-     */
-    String requestNo;
 
     /**
      * 序列化版本号
@@ -102,14 +102,28 @@ public class DsResult<T>  implements Result, Serializable {
     }
 
 
-    public String getRequestNo() {
-        return requestNo;
+
+    public Map<String, Object> getAttrMap() {
+        return attrMap;
     }
 
-    public DsResult setRequestNo(String requestNo) {
-        this.requestNo = requestNo;
+    public DsResult setAttrMap(String key, Object value) {
+        if(this.attrMap == null) {
+            this.attrMap = new HashMap<>(8);
+        }
+        this.attrMap.put(key, value);
         return this;
     }
+
+    public DsResult setAttrMap(Map<String, Object> attrMap) {
+        if(this.attrMap == null) {
+            this.attrMap = attrMap;
+        }else {
+            this.attrMap.putAll(attrMap);
+        }
+        return this;
+    }
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -179,7 +193,7 @@ public class DsResult<T>  implements Result, Serializable {
                 .append("\"code\":").append(code)
                 .append(", \"data\":").append(data)
                 .append(", \"msg\":").append(msg)
-                .append(", \"requestNo\":").append(requestNo)
+                .append(", \"attrMap\":").append(attrMap)
                 .append('}');
         return sb.toString();
     }

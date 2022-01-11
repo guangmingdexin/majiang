@@ -26,16 +26,9 @@ import static ds.guang.majing.common.DsConstant.*;
 @StateMatchAction(value = STATE_PLATFORM_ID)
 public class PlatFormAction implements Action {
 
-    private static final int PLAYER_COUNT = 2;
-
     @SuppressWarnings("unchecked")
     @Override
     public void handler(State state) {
-
-        state.onEntry(data -> {
-           // System.out.println("进入平台！");
-            return null;
-        });
 
         state.onEvent(EVENT_PREPARE_ID, STATE_PREPARE_ID, data -> {
 

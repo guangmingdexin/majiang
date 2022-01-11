@@ -15,22 +15,22 @@ public class DefaultStateStrategy implements StateStrategy<String, String, DsRes
     static final DefaultStateStrategy INSTANCE = new DefaultStateStrategy();
 
     @Override
-    public State<String, String, DsResult> newState(Supplier<String> stateId, Supplier<String> eventId, Supplier<State.Handler<DsResult>> handler) {
+    public State<String, String, DsResult> newState(Supplier<String> stateIdSupplier,
+                                                    Supplier<String> eventIdSupplier,
+                                                    Supplier<State.Handler<DsResult>> handlerSupplier) {
 
-        String e = eventId.get();
+        String e = eventIdSupplier.get();
+        State.Handler<DsResult> r = handlerSupplier.get();
 
-        State.Handler<DsResult> r = handler.get();
+        State<String, String, DsResult> state = new AbstractStateImpl<String, String, DsResult>(stateIdSupplier.get()) {};
 
-        return new AbstractStateImpl<String, String, DsResult>(stateId.get()) {
-            @Override
-            public State<String, String, DsResult> onEvent(String eventId1, Handler<DsResult> handler1) {
-                return super.onEvent(e, r);
-            }
-        };
+        state.onEvent(e, r);
+
+        return state;
     }
 
     @Override
-    public State<String, String, DsResult> newState(Supplier<String> stateId) {
-        return newState(stateId, () ->  "EVENT_EMPTY_ID",  () -> data -> DsResult.empty());
+    public State<String, String, DsResult> newState(Supplier<String> stateIdSupply) {
+        return newState(stateIdSupply, () ->  "EVENT_EMPTY_ID",  () -> data -> DsResult.empty());
     }
 }

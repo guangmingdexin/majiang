@@ -98,7 +98,6 @@ public class Demo extends Application {
             GameUser  gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
             String userId = gameUser == null ? "123456" : gameUser.getUserId();
             DsMessage data = DsMessage.build(DsConstant.EVENT_PREPARE_ID, requestNo, userId);
-            System.out.println("准备匹配玩家，构造房间！" + gameUser);
             CompletableFuture.runAsync(() -> {
                 ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
                 ruleActor.event(DsConstant.EVENT_PREPARE_ID, data);

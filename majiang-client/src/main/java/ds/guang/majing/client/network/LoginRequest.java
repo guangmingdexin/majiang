@@ -47,8 +47,6 @@ public class LoginRequest extends Request {
             // 这里应该还需要一个上下文解析器，用来保存用户基本信息和游戏信息
             GameUser data = (GameUser)JsonUtil.mapToObj(result.getData(), GameUser.class);
             Cache.getInstance().setObject(data.getUsername(), data, -1);
-            System.out.println("登陆成功！");
-            System.out.println("登录成功！缓存用户信息！" + data);
             return DsResult.data("token-123344");
         }
 

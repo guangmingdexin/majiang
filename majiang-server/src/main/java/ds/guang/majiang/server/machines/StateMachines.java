@@ -35,11 +35,9 @@ public class StateMachines  {
 
         StateMachine defaultValue = DefaultMachineFactory.FACTORY.create();
 
-        if(put(key, defaultValue)) {
-            return defaultValue;
-        }
+        put(key, defaultValue);
 
-        return null;
+        return defaultValue;
     }
 
 

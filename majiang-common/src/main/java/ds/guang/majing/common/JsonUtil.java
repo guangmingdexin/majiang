@@ -60,8 +60,7 @@ public final class JsonUtil {
 //                new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 //        javaTimeModule.addDeserializer(LocalTime.class,
 //                new LocalTimeDeserializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
-       module.addSerializer(Player.class, PlayerSerializer.INSTANCE);
-      module.addDeserializer(Player.class, PlayerDeserializer.INSTANCE);
+
 
         mapper.registerModule(module);
 
@@ -172,7 +171,6 @@ public final class JsonUtil {
         @Override
         public Player deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
             String content = jsonParser.getText();
-            System.out.println("content: " + content);
             return (Player) JsonUtil.stringToObj(content, ServerPlayer.class);
         }
     }

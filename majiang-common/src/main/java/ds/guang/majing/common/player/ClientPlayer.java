@@ -9,42 +9,25 @@ import java.util.List;
  * @author guangyong.deng
  * @date 2022-01-07 16:26
  */
-public class ClientPlayer implements Player {
+public class ClientPlayer extends Player {
 
-    private GameUser gameUser;
+
+    public ClientPlayer() {
+    }
+
+    public ClientPlayer(GameUser gameUser) {
+        super(gameUser);
+    }
 
     @Override
-    public List<Integer> getCards() {
+    public Object getContext() {
         return null;
     }
 
     @Override
-    public boolean addCard(int cardNum) {
-        return false;
-    }
-
-    @Override
-    public boolean removeCard(int cardIndex) {
-        return false;
-    }
-
-    @Override
-    public boolean remove(int cardNum) {
-        return false;
-    }
-
-    @Override
-    public GameUser getGameUserInfo() {
-        return null;
-    }
-
-    @Override
-    public String getId() {
-        return null;
-    }
-
-    @Override
-    public Object getContent() {
-        return null;
+    public Player convertTo() {
+        return new ServerPlayer()
+                .setGameUser(getGameUser())
+                .setCards(getCards());
     }
 }

@@ -1,31 +1,23 @@
 package ds.guang.majing.common.player;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ds.guang.majing.common.Converter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ds.guang.majing.common.dto.GameUser;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.util.List;
 
 /**
  *
  * @author asus
  */
-public class ServerPlayer implements Player  {
+public class ServerPlayer extends Player  {
 
-    private GameUser gameUser;
-
-
-    @JsonSerialize(converter = Converter.class)
-    private List<Integer> cards;
-
-
+    @JsonIgnore
     private transient ChannelHandlerContext context;
 
-    public ServerPlayer() { }
+    public ServerPlayer() {
+    }
 
     public ServerPlayer(GameUser gameUser) {
-        this.gameUser = gameUser;
+        super(gameUser);
     }
 
     public ServerPlayer setContext(ChannelHandlerContext context) {
@@ -33,56 +25,17 @@ public class ServerPlayer implements Player  {
         return this;
     }
 
-    @Override
-    public List<Integer> getCards() {
-        return null;
-    }
 
     @Override
-    public boolean addCard(int cardNum) {
-        return false;
-    }
-
-    @Override
-    public boolean removeCard(int cardIndex) {
-        return false;
-    }
-
-    @Override
-    public boolean remove(int cardNum) {
-        return false;
-    }
-
-    @Override
-    public GameUser getGameUserInfo() {
-        return gameUser;
-    }
-
-    public GameUser getGameUser() {
-        return gameUser;
-    }
-
-    public ServerPlayer setGameUser(GameUser gameUser) {
-        this.gameUser = gameUser;
-        return this;
-    }
-
-    @Override
-    public String getId() {
-        return gameUser.getUserId();
-    }
-
-    @Override
-    public Object getContent() {
+    public Object getContext() {
         return context;
     }
 
     @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("{")
-                .append("\"gameUser\":").append(gameUser.toString())
-                .append('}');
-        return sb.toString();
+    public Player convertTo() {
+        // 对象复制
+        return new ClientPlayer()
+                .setGameUser(getGameUser())
+                .setCards(getCards());
     }
 }

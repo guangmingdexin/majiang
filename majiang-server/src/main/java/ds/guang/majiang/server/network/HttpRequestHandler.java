@@ -6,11 +6,14 @@ import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
+import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObject;
+
+import java.util.Objects;
 
 import static ds.guang.majing.common.DsConstant.*;
 
@@ -36,10 +39,16 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
             System.out.println("content: " + content);
             DsMessage message = (DsMessage) JsonUtil.stringToObj(content, DsMessage.class);
 
+            Objects.requireNonNull(message, "message is null");
+            Objects.requireNonNull(message.getRequestNo(), "requestNo is null");
+
+
             // 根据不同业务调用不同的处理逻辑
-            DsResult reply = StateMachines
-                                .get(preUserMachinekey(message.getRequestNo()))
-                                .event(message.getServiceNo(),
+            StateMachine<String, String, DsResult> machine = StateMachines
+                    .get(preUserMachinekey(message.getRequestNo()));
+
+            // 执行事件
+            machine.event(message.getServiceNo(),
                                         // 添加一些自定义的变量进去
                                         message.setAttrMap(SYS_CONTEXT, context));
 
@@ -59,6 +68,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+        cause.printStackTrace();
         ctx.writeAndFlush(DsMessage.build("-1", "-1", DsResult.error(cause.getMessage())));
     }
 }

@@ -160,7 +160,11 @@ public class DsMessage<T> implements Serializable {
     }
 
     public DsMessage setAttrMap(Map<String, Object> attrMap) {
-        this.attrMap = attrMap;
+        if(this.attrMap == null) {
+            this.attrMap = attrMap;
+        }else {
+            this.attrMap.putAll(attrMap);
+        }
         return this;
     }
 

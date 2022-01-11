@@ -8,12 +8,16 @@ import ds.guang.majing.common.factory.DefaultStateStrategyFactory;
 import ds.guang.majing.common.factory.StateStrategy;
 import ds.guang.majing.common.factory.StateStrategyFactory;
 import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.player.ClientPlayer;
+import ds.guang.majing.common.player.Player;
 import ds.guang.majing.common.room.Room;
 import ds.guang.majing.common.rule.AbstractRule;
 import ds.guang.majing.common.rule.Rule;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
 
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 import static ds.guang.majing.common.DsConstant.*;
@@ -75,27 +79,30 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             System.out.println("进入游戏准备阶段：" );
             // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
             // 直接进行游戏初始化操作
-            Request request = new InitRequest(data);
+            Request request = new InitRequest(DsMessage.build("-1", "-1", null));
             request.execute(() -> {
                 // 先将 数据取出来
                 DsResult dsResult = (DsResult) data;
                 Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
+                Map<String, Object> attr = dsResult.getAttrMap();
+                String requestNo = attr.get("requestNo").toString();
+                DsMessage<String> message = DsMessage.build(EVENT_GET_HANDCARD_ID, requestNo, requestNo);
 
-                System.out.println("requestNo: " + dsResult.getRequestNo());
+                // 请求手牌
+                Request r = new GetHandCardRequest(message);
+                DsResult<List<Integer>> rs = r.execute(null);
+                System.out.println("rs: " + rs);
+                List<Integer> cards = rs.getData();
+                Player p = room.findPlayerById(requestNo);
+                p.setCards(cards);
+                System.out.println("room: " + room);
             });
             return data;
         });
 
         State<String, String, DsResult> initState = initSupplier.get();
-        initState.onEntry(data -> {
-            // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
-            Room room = (Room) ((DsResult) data).getData();
-            return null;
-        });
-//        prepareState.onEvent(EVENT_POST_HANDCARD_ID, data -> {
-//            // 固定处理：绑定事件默认传入数据为 DsMessage
-//                        // 传参只要不是对象，默认使用 Map
-//            Request request = new PostHandCardRequest(data);
+
+
 //
 //            /**
 //             * TODO 接口的数据权限如何控制，会存在这样一种情况，该玩家利用自身 token 和 其他玩家 id
