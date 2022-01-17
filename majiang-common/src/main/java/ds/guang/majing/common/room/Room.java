@@ -1,27 +1,60 @@
 package ds.guang.majing.common.room;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ds.guang.majing.common.Algorithm;
+import ds.guang.majing.common.card.Card;
 import ds.guang.majing.common.player.Player;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static ds.guang.majing.common.DsConstant.preRoomInfoPrev;
 
 /**
  * @author asus
  */
 public abstract class Room implements Serializable {
 
+    /**
+     * room Id
+     */
     protected String id;
 
+    /**
+     * 玩家集合
+     */
     protected Player[] players;
 
+    /**
+     * 当前使用的手牌下标
+     */
     protected int markIndex;
 
+    /**
+     * 当前玩家回合下标
+     */
     protected int curRoundIndex;
 
+    /**
+     * 玩家人数
+     */
     protected int playerCount;
 
+    /**
+     * 初始手牌数量
+     */
     protected int initialCardNum;
+
+    /**
+     * 棋牌游戏中进行状态判断-最大手牌数量
+     */
+    protected int maxCardNum;
+
+    /**
+     * 最小手牌数量
+     */
+    protected int minCardNum;
 
     @JsonIgnore
     private transient List<Integer> initialCards;
@@ -31,6 +64,34 @@ public abstract class Room implements Serializable {
     }
 
     public Room() {}
+
+    /**
+     *
+     * 判断当前是否为当前玩家回合
+     *
+     * @param userId 用户 id
+     * @return
+     */
+    public abstract boolean isCurAround(String userId);
+
+    /**
+     *
+     * 对玩家手牌状态进行检查
+     *
+     * @param userId 用户 id
+     * @return
+     */
+    public abstract boolean check(String userId);
+
+
+    /**
+     *
+     * 返回事件类型
+     *
+     * @param cards 玩家手牌
+     * @return
+     */
+    public abstract int checkEvent(List<Integer> cards);
 
     public Room setPlayers(Player[] players) {
         this.players = players;
@@ -91,6 +152,13 @@ public abstract class Room implements Serializable {
         return this;
     }
 
+    /**
+     *
+     * 根据用户 id 获取玩家信息
+     *
+     * @param userId
+     * @return
+     */
     public Player findPlayerById(String userId) {
 
         Objects.requireNonNull(userId, "userId must be not empty!");
@@ -118,6 +186,7 @@ public abstract class Room implements Serializable {
         for (int i = 1; i <= 3; i++) {
             for (int j = 1; j <= 9; j++) {
                 for (int k = 1; k <= 4; k++) {
+                    // 11 -- 万, 111 -- 条, 1111 -- 筒
                     cards.add((int) (j + Math.pow(10, i)));
                 }
             }
@@ -156,7 +225,7 @@ public abstract class Room implements Serializable {
             for (int j = 0; j < playerCount; j++) {
                 List<Integer> cards = players[j].getCards();
                 cards.add(initialCards.get(i));
-                System.out.print("cards: " + cards);
+                markIndex ++;
             }
         }
 
@@ -198,6 +267,65 @@ public abstract class Room implements Serializable {
         copyCards.set(i, copyCards.get(randInd));
         copyCards.set(randInd, temp);
     }
+
+
+    /**
+     * @param id 玩家 id
+     * @return
+     */
+    public static Room getRoomById(String id) {
+
+        // 获取房间管理器
+        RoomManager roomManager = RoomManager.getInstance();
+        return roomManager.get(preRoomInfoPrev(id));
+    }
+
+    /**
+     *
+     * 在麻将这里设计中，必须时刻保持手牌是有序的，所以
+     *
+     * @param cards
+     * @return
+     */
+    public static boolean isPongEvent(List<Integer> cards, int takeout) {
+
+        return false;
+    }
+
+
+    public static boolean isGangEvent(List<Integer> cards, int take) {
+
+        // 1.摸牌阶段判断，是否可以杠
+        // 2.其他玩家出牌阶段，需要再次判断是否可以杠
+        if(take == -1) {
+            // 第一种情况
+            for (Integer card : cards) {
+                // TODO: 这里还有可以优化的地方
+                int count = Algorithm.sortCountArr(cards, card);
+
+                if(count == 4) {
+                    return true;
+                }
+            }
+        }else {
+
+            int count = Algorithm.sortCountArr(cards, take);
+
+            if(count == 3) {
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+
+    public static boolean isHuEvent(List<Integer> cards) {
+
+        return Algorithm.isHu(cards);
+    }
+
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-package ds.guang.majiang.server.layer.basic;
+package ds.guang.majiang.server.layer;
 
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.ClassUtil;

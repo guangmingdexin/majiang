@@ -8,8 +8,6 @@ import com.guang.majiangclient.client.entity.*;
 import com.guang.majiangclient.client.message.AuthResponseMessage;
 import com.guang.majiangclient.client.util.ClassUtil;
 import com.guang.majiangclient.client.util.JedisUtil;
-import com.guang.majiangserver.config.ConfigOperation;
-import com.guang.majiangserver.mapper.InfoMapper;
 import com.guang.majiangserver.util.ExtendedExecutor;
 import com.guang.majiangserver.util.ResponseUtil;
 import com.guang.majiangserver.util.ServerCache;

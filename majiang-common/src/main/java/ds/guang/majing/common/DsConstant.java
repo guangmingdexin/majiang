@@ -51,6 +51,7 @@ public final class DsConstant {
 
     public static final String STATE_INITIAL_ID = "STATE_INITIAL_ID";
 
+    public static final String STATE_TAKE_CARD_ID = "STATE_TAKE_CARD_ID";
 
     /**
      * 事件 id 常量
@@ -66,6 +67,8 @@ public final class DsConstant {
     public static final String EVENT_MATCH_FRIEND_ID = "EVENT_MATCH_FRIEND_ID";
 
     public static final String EVENT_GET_HANDCARD_ID = "EVENT_GET_HANDCARD_ID";
+
+    public static final String EVENT_POST_TAKE_CARD_ID = "EVENT_POST_TAKE_CARD_ID";
 
     /**
      * 设置缓存前缀

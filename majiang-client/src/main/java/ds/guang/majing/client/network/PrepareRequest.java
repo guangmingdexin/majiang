@@ -48,7 +48,7 @@ public class PrepareRequest extends Request {
             System.out.println("room-info:" + result);
             return result;
         }
-        System.out.println("result: " + result);
+
         return result;
     }
 

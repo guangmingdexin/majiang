@@ -1,4 +1,4 @@
-package com.guang.majiangclient.client.algorithm;
+package ds.guang.majing.common;
 
 import java.util.*;
 
@@ -117,8 +117,6 @@ public class Algorithm {
         }
 
         List<Integer> duiZi = getDuiZi(cards);
-//        System.out.println("cards: " + cards);
-//        System.out.println("duizi : " + duiZi);
         for (Integer e : duiZi) {
             // 保护性拷贝（所有修改不会改变原数组）
             List<Integer> copyCards = new ArrayList<>(cards);
@@ -218,6 +216,14 @@ public class Algorithm {
         return cards;
     }
 
+    /**
+     *
+     * 二分查找
+     *
+     * @param cards
+     * @param card
+     * @return 插入的下标
+     */
     public static int binarySearch(List<Integer> cards, Integer card) {
 
         int low = 0;
@@ -240,35 +246,6 @@ public class Algorithm {
     }
 
 
-    /**
-     * @param arr
-     * @param item
-     * @return
-     */
-    public static int  sortInsert(List<Integer> arr, Integer item) {
-        //
-        if(arr == null) {
-            return -1;
-        }
-
-        if(arr.size() == 0) {
-            arr.add(item);
-        }
-
-        int index = arr.size();
-
-        for (int i = 0; i < arr.size(); i++) {
-            if(arr.get(i) > item) {
-                index = i;
-                break;
-            }
-        }
-
-        arr.add(index , item);
-
-        return index;
-    }
-
     public static void main(String[] args) {
 //        List<Integer> list = Arrays.asList(11, 11, 17, 103, 105, 106, 107, 109, 109, 1004, 1005, 1006, 1009);
 //        List<Integer> copyList = new ArrayList<>(list);
@@ -279,9 +256,7 @@ public class Algorithm {
         list.add(7);
         list.add(9);
 
-        int index = sortInsert(list, 7);
         System.out.println("list：" + list);
-        System.out.println("index: " + index);
 
 
         //

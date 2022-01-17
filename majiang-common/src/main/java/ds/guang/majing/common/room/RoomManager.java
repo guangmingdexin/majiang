@@ -1,6 +1,4 @@
-package ds.guang.majiang.server.room;
-
-import ds.guang.majing.common.room.Room;
+package ds.guang.majing.common.room;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

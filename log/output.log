@@ -225,7 +225,7 @@ java.lang.NullPointerException: null
 java.lang.IllegalArgumentException: bound must be positive
 	at java.util.Random.nextInt(Random.java:388)
 	at ds.guang.majing.common.room.Room.shuffle(Room.java:184)
-	at ds.guang.majiang.server.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
+	at ds.guang.majing.common.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:148)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -235,7 +235,7 @@ java.lang.IllegalArgumentException: bound must be positive
 java.lang.IllegalArgumentException: bound must be positive
 	at java.util.Random.nextInt(Random.java:388)
 	at ds.guang.majing.common.room.Room.shuffle(Room.java:187)
-	at ds.guang.majiang.server.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
+	at ds.guang.majing.common.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:148)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -245,7 +245,7 @@ java.lang.IllegalArgumentException: bound must be positive
 java.lang.IllegalArgumentException: bound must be positive
 	at java.util.Random.nextInt(Random.java:388)
 	at ds.guang.majing.common.room.Room.shuffle(Room.java:188)
-	at ds.guang.majiang.server.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
+	at ds.guang.majing.common.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:148)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)

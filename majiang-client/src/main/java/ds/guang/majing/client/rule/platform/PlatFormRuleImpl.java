@@ -79,13 +79,15 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             System.out.println("进入游戏准备阶段：" );
             // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
             // 直接进行游戏初始化操作
+            // 先将 数据取出来
+            DsResult dsResult = (DsResult) data;
+            Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
+            Map<String, Object> attr = dsResult.getAttrMap();
+            String requestNo = attr.get("requestNo").toString();
+
             Request request = new InitRequest(DsMessage.build("-1", "-1", null));
             request.execute(() -> {
-                // 先将 数据取出来
-                DsResult dsResult = (DsResult) data;
-                Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
-                Map<String, Object> attr = dsResult.getAttrMap();
-                String requestNo = attr.get("requestNo").toString();
+
                 DsMessage<String> message = DsMessage.build(EVENT_GET_HANDCARD_ID, requestNo, requestNo);
 
                 // 请求手牌
@@ -97,6 +99,13 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
                 p.setCards(cards);
                 System.out.println("room: " + room);
             });
+
+            // 判断状态，是否为自己的回合
+            if(room.isCurAround(requestNo)) {
+                // 触发摸牌事件
+
+            }
+
             return data;
         });
 

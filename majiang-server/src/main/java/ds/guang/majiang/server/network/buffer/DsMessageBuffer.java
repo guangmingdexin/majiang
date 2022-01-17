@@ -16,13 +16,11 @@ public class DsMessageBuffer implements MessageBuffer<DsMessage<DsResult>> {
 
     private volatile int offset;
 
-
     public DsMessageBuffer() {
         this.maxCapacity = 16;
         this.buffer = new MpscArrayQueue<>(maxCapacity);
 
     }
-
 
 
     @Override

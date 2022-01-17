@@ -1,20 +1,14 @@
 package ds.guang.majiang.server.layer.basic;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majiang.server.network.ResponseUtil;
 import ds.guang.majing.common.*;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.dto.GameUser;
 import ds.guang.majing.common.dto.User;
-import ds.guang.majing.common.state.AbstractStateImpl;
 import ds.guang.majing.common.state.State;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.nio.NioEventLoop;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 import static ds.guang.majing.common.DsConstant.*;
 

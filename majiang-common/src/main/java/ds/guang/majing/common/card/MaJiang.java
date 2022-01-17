@@ -12,7 +12,32 @@ public class MaJiang implements Card {
      */
     private int value;
 
-    private String name;
-
     private CardType cardType;
+
+    public MaJiang() {
+    }
+
+    public MaJiang(int value, CardType cardType) {
+        this.value = value;
+        this.cardType = cardType;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public MaJiang setValue(int value) {
+        this.value = value;
+        return this;
+    }
+
+
+    public CardType getCardType() {
+        return cardType;
+    }
+
+    public MaJiang setCardType(CardType cardType) {
+        this.cardType = cardType;
+        return this;
+    }
 }

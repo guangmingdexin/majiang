@@ -1,5 +1,7 @@
 package ds.guang.majing.common.card;
 
+import java.io.Serializable;
+
 /**
  *
  * 棋牌类对象顶级接口
@@ -7,6 +9,6 @@ package ds.guang.majing.common.card;
  * @author guangyong.deng
  * @date 2021-12-22 14:09
  */
-public interface Card {
+public interface Card extends Serializable {
 
 }
