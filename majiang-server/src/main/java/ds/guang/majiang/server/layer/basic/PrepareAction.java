@@ -28,7 +28,6 @@ public class PrepareAction implements Action {
     public void handler(State state) {
 
         state.onEntry(data -> {
-            // TODO 好像出了线程问题！
             // System.out.println("进入游戏准备 state!" + state);
             return null;
         });
@@ -45,9 +44,6 @@ public class PrepareAction implements Action {
             // 获取通道
             ChannelHandlerContext context = (ChannelHandlerContext) player.getContext();
 
-//            System.out.println("eventLoop: " + context.channel().eventLoop().toString());
-//            System.out.println("thread-name: " + Thread.currentThread().getName());
-
             context.channel().eventLoop().execute(() -> {
                 List<Integer> cards = player.getCards();
                 if(cards == null) {
@@ -55,7 +51,6 @@ public class PrepareAction implements Action {
                     room.assignCardToPlayer();
                     cards = player.getCards();
                 }
-                System.out.println("send cards: " + cards);
                 message.setData(DsResult.data(cards));
                 context.writeAndFlush(ResponseUtil.response(message));
             });

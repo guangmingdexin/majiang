@@ -4,13 +4,19 @@ import ds.guang.majing.common.DsMessage;
 import ds.guang.majing.common.DsResult;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueue;
 
+import java.util.function.BiConsumer;
+
 /**
+ * 
+ * 当缓冲区满了之后，进行一次连接判断，如果连接成功，则将缓冲区消息全部发送出去
+ * 否则保存一个玩家状态机副本
+ * 
  * @author guangyong.deng
  * @date 2022-01-10 9:58
  */
-public class DsMessageBuffer implements MessageBuffer<DsMessage<DsResult>> {
+public class DsMessageBuffer<E> implements MessageBuffer<E> {
 
-    private MpscArrayQueue<DsMessage<DsResult>> buffer;
+    private MpscArrayQueue<E> buffer;
 
     private int maxCapacity;
 
@@ -20,14 +26,17 @@ public class DsMessageBuffer implements MessageBuffer<DsMessage<DsResult>> {
     public DsMessageBuffer() {
         this.maxCapacity = 16;
         this.buffer = new MpscArrayQueue<>(maxCapacity);
-
     }
 
 
-
     @Override
-    public void addMessage(DsMessage<DsResult> message) {
-        buffer.add(message);
+    public void addMessage(E message,
+                           OverflowHandler overflowHandler) {
+        // 获取 buffer 的 pIndex
+
+        if(!buffer.offer(message)) {
+            overflowHandler.handler(this);
+        }
     }
 
     @Override
@@ -41,14 +50,15 @@ public class DsMessageBuffer implements MessageBuffer<DsMessage<DsResult>> {
     }
 
     @Override
-    public DsMessage<DsResult> getMessage() {
-        // TODO: buffer的数据结构不满足需求，应该是根据 offset 获取对应的 message
+    public E getMessage() {
         return buffer.poll();
     }
+    
 
     @Override
     public void setOffset(int offset) {
         this.offset = offset;
-
     }
+
+
 }

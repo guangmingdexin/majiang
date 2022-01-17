@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/majiang.iml" filepath="$PROJECT_DIR$/.idea/majiang.iml" />
+      <module fileurl="file://$PROJECT_DIR$/majiang-client/majiangclient.iml" filepath="$PROJECT_DIR$/majiang-client/majiangclient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/majiang-common/majiangcommon.iml" filepath="$PROJECT_DIR$/majiang-common/majiangcommon.iml" />
+      <module fileurl="file://$PROJECT_DIR$/majiang-server/majiangserver.iml" filepath="$PROJECT_DIR$/majiang-server/majiangserver.iml" />
+    </modules>
+  </component>
+</project>
