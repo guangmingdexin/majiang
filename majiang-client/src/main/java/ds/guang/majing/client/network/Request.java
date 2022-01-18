@@ -1,7 +1,7 @@
 package ds.guang.majing.client.network;
 
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.JsonUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;

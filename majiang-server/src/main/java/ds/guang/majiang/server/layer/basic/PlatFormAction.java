@@ -1,21 +1,22 @@
 package ds.guang.majiang.server.layer.basic;
 
+import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majing.common.player.ServerPlayer;
+import ds.guang.majing.common.game.player.ServerPlayer;
 import ds.guang.majiang.server.pool.MatchPool;
-import ds.guang.majing.common.ClassUtil;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.util.ClassUtil;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
-import ds.guang.majing.common.dto.GameUser;
-import ds.guang.majing.common.player.Player;
+import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.state.State;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.concurrent.CompletableFuture;
 
-import static ds.guang.majing.common.DsConstant.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  *

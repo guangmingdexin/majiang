@@ -3,15 +3,14 @@ package ds.guang.majiang.server.pool;
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
 import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majiang.server.network.ResponseUtil;
-import ds.guang.majing.common.player.ServerPlayer;
-import ds.guang.majiang.server.room.ServerFourRoom;
-import ds.guang.majiang.server.room.RoomManager;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.cache.Cache;
+import ds.guang.majing.common.game.player.ServerPlayer;
+import ds.guang.majing.common.game.room.ServerFourRoom;
+import ds.guang.majing.common.game.room.RoomManager;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.exception.DsBasicException;
-import ds.guang.majing.common.player.Player;
-import ds.guang.majing.common.room.Room;
+import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.StateMachine;
 import ds.guang.majing.common.timer.DsTimeout;
 import ds.guang.majing.common.timer.DsTimerTask;
@@ -24,7 +23,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ds.guang.majing.common.DsConstant.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  * @author guangmingdexin
@@ -145,7 +144,7 @@ public class MatchPoolImpl implements MatchPool {
                 }
                 // 获取全局变量
                 RoomManager manager = RoomManager.getInstance();
-                Room room = new ServerFourRoom(playerCount, 13, players);
+                Room room = new ServerFourRoom(playerCount, 13, 14, 1, players);
                 for (Player player : players) {
                     // 获取 Channel 输出数据
 

@@ -1,8 +1,7 @@
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import ds.guang.majing.common.JsonUtil;
-import ds.guang.majing.common.dto.GameUser;
-import ds.guang.majing.common.player.Player;
-import ds.guang.majing.common.player.ServerPlayer;
+import ds.guang.majing.common.util.JsonUtil;
+import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.player.ServerPlayer;
 
 import java.util.UUID;
 

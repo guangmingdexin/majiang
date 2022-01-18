@@ -1,4 +1,4 @@
-import ds.guang.majiang.server.room.RoomManager;
+import ds.guang.majing.common.game.room.RoomManager;
 
 public class RoomManagerSingleTest {
 

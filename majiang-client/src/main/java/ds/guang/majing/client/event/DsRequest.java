@@ -1,6 +1,6 @@
 package ds.guang.majing.client.event;
 
-import ds.guang.majing.common.DsFoxUtil;
+import ds.guang.majing.common.util.DsFoxUtil;
 import ds.guang.majing.common.exception.DsBasicException;
 
 /**

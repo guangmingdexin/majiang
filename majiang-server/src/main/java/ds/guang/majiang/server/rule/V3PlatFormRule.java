@@ -1,18 +1,18 @@
 package ds.guang.majiang.server.rule;
 
 import ds.guang.majiang.server.layer.basic.ActionManager;
-import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.factory.DefaultStateStrategyFactory;
 import ds.guang.majing.common.factory.StateStrategy;
 import ds.guang.majing.common.factory.StateStrategyFactory;
-import ds.guang.majing.common.rule.AbstractRule;
-import ds.guang.majing.common.rule.Rule;
+import ds.guang.majing.common.game.rule.AbstractRule;
+import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
 
 import java.util.function.Supplier;
 
-import static ds.guang.majing.common.DsConstant.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  * @author guangyong.deng

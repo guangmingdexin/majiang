@@ -2,9 +2,7 @@ package com.guang.majiangclient.client.handle.event;
 
 import com.guang.majiangclient.client.algorithm.Algorithm;
 import com.guang.majiangclient.client.cache.CacheUtil;
-import com.guang.majiangclient.client.common.annotation.Action;
 import com.guang.majiangclient.client.common.annotation.RunnableEvent;
-import com.guang.majiangclient.client.common.enums.Direction;
 import com.guang.majiangclient.client.common.enums.Event;
 import com.guang.majiangclient.client.common.enums.GameEvent;
 import com.guang.majiangclient.client.entity.*;
@@ -18,7 +16,6 @@ import com.guang.majiangclient.client.util.*;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import lombok.AllArgsConstructor;
 

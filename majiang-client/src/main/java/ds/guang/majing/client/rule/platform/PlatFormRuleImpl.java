@@ -2,17 +2,16 @@ package ds.guang.majing.client.rule.platform;
 
 import ds.guang.majing.client.entity.ClientFourRoom;
 import ds.guang.majing.client.network.*;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.factory.DefaultStateStrategyFactory;
 import ds.guang.majing.common.factory.StateStrategy;
 import ds.guang.majing.common.factory.StateStrategyFactory;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.player.ClientPlayer;
-import ds.guang.majing.common.player.Player;
-import ds.guang.majing.common.room.Room;
-import ds.guang.majing.common.rule.AbstractRule;
-import ds.guang.majing.common.rule.Rule;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.game.rule.AbstractRule;
+import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
 
@@ -20,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import static ds.guang.majing.common.DsConstant.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  * 规定平台规则
@@ -79,13 +78,15 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             System.out.println("进入游戏准备阶段：" );
             // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
             // 直接进行游戏初始化操作
+            // 先将 数据取出来
+            DsResult dsResult = (DsResult) data;
+            Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
+            Map<String, Object> attr = dsResult.getAttrMap();
+            String requestNo = attr.get("requestNo").toString();
+
             Request request = new InitRequest(DsMessage.build("-1", "-1", null));
             request.execute(() -> {
-                // 先将 数据取出来
-                DsResult dsResult = (DsResult) data;
-                Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
-                Map<String, Object> attr = dsResult.getAttrMap();
-                String requestNo = attr.get("requestNo").toString();
+
                 DsMessage<String> message = DsMessage.build(EVENT_GET_HANDCARD_ID, requestNo, requestNo);
 
                 // 请求手牌
@@ -97,6 +98,18 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
                 p.setCards(cards);
                 System.out.println("room: " + room);
             });
+
+            // 判断状态，是否为自己的回合
+            if(room.isCurAround(requestNo)) {
+                // 触发摸牌事件
+                DsMessage<String> message = DsMessage.build(EVENT_POST_TAKE_CARD_ID, requestNo, requestNo);
+                Request takeCardRequest = new PostTakeCardRequest(message);
+                takeCardRequest.execute(null);
+
+            }else {
+                throw new IllegalArgumentException("非本回合不能摸牌！");
+            }
+
             return data;
         });
 
@@ -113,9 +126,6 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 //
 //            return handCardResult;
 //        });
-
-
-
 
         StateMachine<String, String, DsResult> ruleActor = getRuleActor();
 

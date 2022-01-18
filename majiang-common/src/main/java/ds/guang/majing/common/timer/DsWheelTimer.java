@@ -1,6 +1,6 @@
 package ds.guang.majing.common.timer;
 
-import ds.guang.majing.common.ClassUtil;
+import ds.guang.majing.common.util.ClassUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,8 +14,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.concurrent.atomic.AtomicLong;
 
-import static ds.guang.majing.common.DsConstant.OS_NAME_KEY;
-import static ds.guang.majing.common.DsConstant.OS_WIN_PREFIX;
+import static ds.guang.majing.common.util.DsConstant.OS_NAME_KEY;
+import static ds.guang.majing.common.util.DsConstant.OS_WIN_PREFIX;
 
 /**
  * @author guangmingdexin

@@ -1,6 +1,6 @@
 package ds.guang.majiang.server.machines;
 
-import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.exception.DsBasicException;
 import ds.guang.majing.common.state.StateMachine;
 

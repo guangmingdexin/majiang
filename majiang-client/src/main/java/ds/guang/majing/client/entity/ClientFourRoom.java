@@ -1,6 +1,8 @@
 package ds.guang.majing.client.entity;
 
-import ds.guang.majing.common.room.Room;
+import ds.guang.majing.common.game.room.Room;
+
+import java.util.List;
 
 /**
  * @author guangyong.deng
@@ -9,5 +11,18 @@ import ds.guang.majing.common.room.Room;
 public class ClientFourRoom extends Room {
 
 
+    @Override
+    public boolean isCurAround(String userId) {
+        return false;
+    }
 
+    @Override
+    public boolean check(String userId) {
+        return false;
+    }
+
+    @Override
+    public int checkEvent(List<Integer> cards) {
+        return 0;
+    }
 }

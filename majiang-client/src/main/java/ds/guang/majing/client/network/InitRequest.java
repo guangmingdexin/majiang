@@ -1,6 +1,6 @@
 package ds.guang.majing.client.network;
 
-import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.game.message.DsResult;
 
 /**
  *

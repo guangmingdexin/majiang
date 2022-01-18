@@ -2,10 +2,10 @@ package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.client.entity.ClientFourRoom;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.JsonUtil;
-import ds.guang.majing.common.room.Room;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.JsonUtil;
+import ds.guang.majing.common.game.room.Room;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -31,7 +31,6 @@ public class PrepareRequest extends Request {
     protected DsResult after(String content) {
 
         DsMessage<DsResult<Room>> message = null;
-        System.out.println("content: " + content);
         try {
             message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<DsResult<ClientFourRoom>>>() {});
         } catch (IOException e) {
@@ -43,12 +42,11 @@ public class PrepareRequest extends Request {
         DsResult<Room> result = message.getData();
 
         if(result.success()) {
-            System.out.println("准备进入游戏！");
             // 获取房间信息
             System.out.println("room-info:" + result);
             return result;
         }
-        System.out.println("result: " + result);
+
         return result;
     }
 

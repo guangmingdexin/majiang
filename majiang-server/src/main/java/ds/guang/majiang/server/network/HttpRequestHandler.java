@@ -1,11 +1,9 @@
 package ds.guang.majiang.server.network;
 
 import ds.guang.majiang.server.machines.StateMachines;
-import ds.guang.majing.common.DsConstant;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.JsonUtil;
-import ds.guang.majing.common.cache.Cache;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -15,7 +13,7 @@ import io.netty.handler.codec.http.HttpObject;
 
 import java.util.Objects;
 
-import static ds.guang.majing.common.DsConstant.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 
 /**

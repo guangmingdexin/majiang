@@ -1,170 +1,155 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3263db53-5187-4519-a0f2-599a0d5a12a7" name="Default Changelist" comment="v3-2 引入缓冲区队列">
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_all_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_buffer_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_dns_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_haproxy_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_http2_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_http_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_memcache_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_mqtt_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_redis_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_smtp_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_socks_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_stomp_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_codec_xml_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_common_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_handler_proxy_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_dns_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_dns_classes_macos_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_dns_native_macos_osx_aarch_64_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_resolver_dns_native_macos_osx_x86_64_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_classes_epoll_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_classes_kqueue_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_native_epoll_linux_aarch_64_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_native_epoll_linux_x86_64_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_native_kqueue_osx_aarch_64_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_native_kqueue_osx_x86_64_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_native_unix_common_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_rxtx_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_sctp_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__io_netty_netty_transport_udt_4_1_70_Final.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/majiang.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/majiangclient.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/Demo$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/Demo.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/ExtendedExecutor.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/annotation/Handler.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/context/Context.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/context/DefaultContext.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/context/DefaultServiceRequestContext.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/context/RequestId.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/context/ServiceRequestContext.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/entity/ClientFourRoom.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/event/AsycTask.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/event/DsRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/event/DsResponse.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/javafx/component/DsButton.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/InitRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/LoginRequest$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/LoginRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PostHandCardRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PrepareRequest$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PrepareRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/Request.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/ClassUtil$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/ClassUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/Converter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsConstant.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsFoxUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsMessage.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$LocalDateTimeDeserializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$LocalDateTimeSerializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$PlayerDeserializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$PlayerSerializer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/ServiceName.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/StringUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/cache/Cache.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/cache/CacheDefaultImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/cache/CaffeineCache.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/cache/CaffeineDemo.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/card/Card.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/card/CardType.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/card/MaJiang.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/dto/GameUser.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/dto/User.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/event/Event.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/exception/DsBasicException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategy$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategy.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategyFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/StateStrategy.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/StateStrategyFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/log/LogDemo.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/player/ClientPlayer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/player/Player.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/player/ServerPlayer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/room/Room.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/rule/AbstractRule.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/rule/Rule.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/AbstractStateImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/Context.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/Result.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/State$Handler.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/State$Notify.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/State.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/state/StateMachine.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsTimeout.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsTimer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsTimerTask.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer$DsWheelBucket.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer$DsWheelTimeout.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer$Worker.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/SimpleTimerWheel$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/SimpleTimerWheel$Entry.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/SimpleTimerWheel.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/Task.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/classes/logback.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest$Test.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/PlayerJsonTest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/majiangserver.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/BufferTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/OverflowHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/GameServer$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/GameServer.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/exception/MaxCapacityPoolException.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/StateMatchAction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/Action.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/ActionManager.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/InitialAction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/LoginAction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/PlatFormAction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/PrepareAction.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/ThreadDemo.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/DefaultMachineFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/StateMachineFactory.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/StateMachines.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/HttpRequestHandler.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/HttpRequestParser.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/ResponseUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/ServiceMap.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/SimpleSyncState.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/SyncState.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPool.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPoolImpl$1.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPoolImpl.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/room/RoomManager.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/room/ServerFourRoom.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/rule/V3PlatFormRule.class" afterDir="false" />
+    <list default="true" id="3263db53-5187-4519-a0f2-599a0d5a12a7" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-client/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PostTakeCardRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/GameEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/MaJiang.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/MaJiangEvent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/GameInfoRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/GameInfoResponse.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/room/ServerFourRoom.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-server/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/game/GameTakeAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/output.log" beforeDir="false" afterPath="$PROJECT_DIR$/log/output.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/Demo.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/Demo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientFourRoom.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientFourRoom.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/event/DsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/event/DsRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/javafx/component/DsButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/javafx/component/DsButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/GetHandCardRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/GetHandCardRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/InitRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/InitRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/LoginRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/LoginRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PrepareRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PrepareRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/Request.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/Request.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/Demo$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/Demo$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/Demo.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/Demo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/entity/ClientFourRoom.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/entity/ClientFourRoom.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/event/DsRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/event/DsRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/javafx/component/DsButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/javafx/component/DsButton.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/InitRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/InitRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/LoginRequest$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/LoginRequest$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/LoginRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/LoginRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PostHandCardRequest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PrepareRequest$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PrepareRequest$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PrepareRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/PrepareRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/Request.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/network/Request.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-client/target/classes/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/ClassUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/ClassUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/Converter.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/Converter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/DsConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/DsConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/DsFoxUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/DsFoxUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/DsMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/DsMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/DsResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/DsResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/JsonUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/JsonUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/ServiceName.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/StringUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/StringUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/card/Card.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/Card.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/card/CardType.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/CardType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/card/MaJiang.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/dto/GameUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/dto/GameUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/dto/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/dto/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/exception/DsBasicException.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/exception/DsBasicException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/factory/DefaultStateStrategy.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/factory/DefaultStateStrategy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/ClientPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/player/ClientPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/player/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/ServerPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/player/ServerPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/room/Room.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/room/Room.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/rule/AbstractRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/rule/AbstractRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/rule/Rule.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/rule/Rule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/DsWheelTimer.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/DsWheelTimer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/simple/SimpleTimerWheel.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/simple/Task.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/test/java/JsonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/test/java/JsonTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/src/test/java/PlayerJsonTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/test/java/PlayerJsonTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/ClassUtil$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/ClassUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/Converter.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsConstant.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsFoxUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/DsResult.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$LocalDateTimeDeserializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$LocalDateTimeSerializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$PlayerDeserializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil$PlayerSerializer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/JsonUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/ServiceName.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/StringUtil.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/card/Card.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/card/CardType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/card/MaJiang.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/dto/GameUser.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/dto/User.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/exception/DsBasicException.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/exception/DsBasicException.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategy$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategy$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategy.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/factory/DefaultStateStrategy.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/player/ClientPlayer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/player/Player.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/player/ServerPlayer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/room/Room.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/rule/AbstractRule.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/rule/Rule.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/DsWheelTimer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/SimpleTimerWheel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/SimpleTimerWheel$Entry.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/SimpleTimerWheel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/classes/ds/guang/majing/common/timer/simple/Task.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/JsonTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-common/target/test-classes/PlayerJsonTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/target/test-classes/PlayerJsonTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/ActionManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/ActionManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/InitialAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/InitialAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/LoginAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/LoginAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PlatFormAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PlatFormAction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PrepareAction.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PrepareAction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/DefaultMachineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/DefaultMachineFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/StateMachineFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/StateMachineFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/StateMachines.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/StateMachines.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/HttpRequestHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/HttpRequestHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/HttpRequestParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/HttpRequestParser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/ResponseUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/ResponseUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/DsMessageBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/DsMessageBuffer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/MessageBuffer.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/MessageBuffer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/rule/RuleDemoTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPool.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPoolImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPoolImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/room/RoomManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/room/RoomManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/room/ServerFourRoom.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/rule/V3PlatFormRule.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/rule/V3PlatFormRule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/src/test/java/RoomManagerSingleTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/src/test/java/RoomManagerSingleTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/Action.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/ActionManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/ActionManager.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/InitialAction.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/InitialAction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/LoginAction.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/LoginAction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/PlatFormAction.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/PlatFormAction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/PrepareAction.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/layer/basic/PrepareAction.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/DefaultMachineFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/DefaultMachineFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/StateMachines.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/machines/StateMachines.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/HttpRequestHandler.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/HttpRequestHandler.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/HttpRequestParser.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/HttpRequestParser.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/ResponseUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/ResponseUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/buffer/DsMessageBuffer.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/network/buffer/DsMessageBuffer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPool.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPool.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPoolImpl$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPoolImpl$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPoolImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/pool/MatchPoolImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/room/RoomManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/room/ServerFourRoom.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/rule/V3PlatFormRule.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/classes/ds/guang/majiang/server/rule/V3PlatFormRule.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/majiang-server/target/test-classes/RoomManagerSingleTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-server/target/test-classes/RoomManagerSingleTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guang/majiangclient/client/algorithm/Algorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/Algorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guang/majiangclient/client/handle/event/SpecialBuildEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guang/majiangclient/client/handle/event/SpecialBuildEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/guang/majiangserver/game/PlayGameTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/guang/majiangserver/game/PlayGameTask.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/majiang-server/target/" />
     <ignored path="$PROJECT_DIR$/majiang-client/target/" />
     <ignored path="$PROJECT_DIR$/majiang-common/target/" />
+    <ignored mask="*.idea" />
+    <ignored mask="*.iml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -175,8 +160,8 @@
     <session id="419547256">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="32" />
-          <entry key="project.open.time.0" value="13" />
+          <entry key="project.closed" value="33" />
+          <entry key="project.open.time.0" value="14" />
           <entry key="project.open.time.1" value="11" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.25" value="1" />
@@ -185,7 +170,7 @@
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="35" />
+          <entry key="project.opened" value="36" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -193,7 +178,9 @@
           <entry key="ByteBuf" value="1" />
           <entry key="class" value="21" />
           <entry key="fxml" value="1" />
-          <entry key="java" value="912" />
+          <entry key="gitgnore" value="1" />
+          <entry key="gitignore" value="5" />
+          <entry key="java" value="947" />
           <entry key="md" value="9" />
           <entry key="server-config" value="1" />
           <entry key="xml" value="18" />
@@ -202,25 +189,27 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="CLASS" value="21" />
-          <entry key="JAVA" value="912" />
+          <entry key="JAVA" value="947" />
           <entry key="Markdown" value="9" />
-          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="PLAIN_TEXT" value="7" />
           <entry key="UML" value="1" />
           <entry key="XML" value="19" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="dummy" value="80" />
-          <entry key="java" value="32086" />
+          <entry key="dummy" value="88" />
+          <entry key="gitgnore" value="8" />
+          <entry key="gitignore" value="12" />
+          <entry key="java" value="32340" />
           <entry key="txt" value="106" />
           <entry key="xml" value="38" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="32086" />
-          <entry key="PLAIN_TEXT" value="186" />
+          <entry key="JAVA" value="32340" />
+          <entry key="PLAIN_TEXT" value="214" />
           <entry key="XML" value="38" />
         </counts>
       </usages-collector>
@@ -229,75 +218,13 @@
           <entry key="git.branch.checkout.local" value="5" />
           <entry key="git.branch.checkout.remote" value="1" />
           <entry key="git.branch.checkout.revision" value="4" />
-          <entry key="git.branch.create.new" value="3" />
+          <entry key="git.branch.create.new" value="4" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/session/Session.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-270">
-              <caret line="14" column="11" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/DsMessageBuffer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-534">
-              <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#998#999#0" expanded="true" />
-                <element signature="e#1027#1028#0" expanded="true" />
-                <element signature="e#1142#1143#0" expanded="true" />
-                <element signature="e#1182#1183#0" expanded="true" />
-                <element signature="e#1331#1332#0" expanded="true" />
-                <element signature="e#1367#1368#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/MessageBuffer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="54">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/BufferTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="118">
-              <caret line="103" column="35" selection-start-line="103" selection-start-column="35" selection-end-line="103" selection-end-column="35" />
-              <folding>
-                <element signature="e#349#350#0" expanded="true" />
-                <element signature="e#393#394#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/OverflowHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -346,7 +273,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="v3-1" />
+        <entry key="$PROJECT_DIR$" value="v3-2" />
       </map>
     </option>
     <option name="PUSH_TAGS">
@@ -399,19 +326,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/Task.java" />
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/simple/SimpleTimerWheel.java" />
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/DsConstant.java" />
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/cache/Cache.java" />
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/cache/CacheDefaultImpl.java" />
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/DsTimer.java" />
-        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/DsWheelTimer.java" />
-        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/ExtendedExecutor.java" />
-        <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/ResponseUtil.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/player/ServerPlayer.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPool.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PlatFormAction.java" />
-        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/Demo.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/test/java/JsonTest.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/ClassUtil.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/HttpRequestParser.java" />
@@ -424,10 +341,8 @@
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/LoginAction.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/DsResult.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/room/FourRoom.java" />
-        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPoolImpl.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/room/ServerFourRoom.java" />
-        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientFourRoom.java" />
         <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientPlayer.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/Player.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/room/Room.java" />
@@ -435,7 +350,6 @@
         <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/LoginRequest.java" />
         <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/InitRequest.java" />
         <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PostHandCardRequest.java" />
-        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PrepareRequest.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/JsonUtil.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/ServerPlayer.java" />
         <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/dto/GameUser.java" />
@@ -450,6 +364,19 @@
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/MessageBuffer.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/DsMessageBuffer.java" />
         <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/BufferTest.java" />
+        <option value="$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/game/GameTakeAction.java" />
+        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/Demo.java" />
+        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/GameInfoRequest.java" />
+        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/GameInfoResponse.java" />
+        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/DsResult.java" />
+        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PrepareRequest.java" />
+        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/GameInfoResponse.java" />
+        <option value="$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/MaJiang.java" />
+        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PostTakeCardRequest.java" />
+        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.java" />
+        <option value="$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientFourRoom.java" />
+        <option value="$PROJECT_DIR$/majiang-server/.gitgnore" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -493,6 +420,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -505,131 +434,25 @@
               <item name="majiang" type="462c0819:PsiDirectoryNode" />
               <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-              <item name="guang" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-              <item name="guang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-              <item name="guang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-              <item name="guang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="network" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-              <item name="guang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="network" type="462c0819:PsiDirectoryNode" />
-              <item name="buffer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="majiang" type="b2602c69:ProjectViewProjectNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang-server" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="ds" type="462c0819:PsiDirectoryNode" />
-              <item name="guang" type="462c0819:PsiDirectoryNode" />
-              <item name="majiang" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="network" type="462c0819:PsiDirectoryNode" />
-              <item name="session" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SearchEverywhereHistoryKey" value="BlockQ&#9;PSI&#9;JAVA://java.util.concurrent.BlockingQueue&#10;ArrayD&#9;PSI&#9;JAVA://java.util.ArrayDeque&#10;HashM&#9;PSI&#9;JAVA://java.util.HashMap&#10;MpscA&#9;PSI&#9;JAVA://io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueue&#10;MPSCArrayQueue&#9;PSI&#9;JAVA://io.netty.util.internal.PlatformDependent.Mpsc#USE_MPSC_CHUNKED_ARRAY_QUEUE&#10;MPSC&#9;PSI&#9;JAVA://io.netty.util.internal.PlatformDependent#MPSC_CHUNK_SIZE&#10;DsTim&#9;PSI&#9;JAVA://ds.guang.majing.common.timer.DsWheelTimer&#10;Match&#9;FILE&#9;file://C:/Users/guangyong.deng/Desktop/project/majiang/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPoolImpl.java&#10;Js&#9;FILE&#9;file://C:/Users/guangyong.deng/Desktop/project/majiang/majiang-common/src/main/java/ds/guang/majing/common/JsonUtil.java&#10;Room&#9;PSI&#9;JAVA://com.guang.majiangclient.client.entity.Room&#10;D&#9;FILE&#9;file://C:/Users/guangyong.deng/Desktop/project/majiang/majiang-common/src/main/java/ds/guang/majing/common/DsResult.java&#10;Ds&#9;FILE&#9;file://C:/Users/guangyong.deng/Desktop/project/majiang/majiang-common/src/main/java/ds/guang/majing/common/DsMessage.java&#10;DsR&#9;FILE&#9;file://C:/Users/guangyong.deng/Desktop/project/majiang/majiang-common/src/main/java/ds/guang/majing/common/DsResult.java&#10;ClassUti&#9;FILE&#9;file://C:/Users/guangyong.deng/Desktop/project/majiang/majiang-common/src/main/java/ds/guang/majing/common/ClassUtil.java&#10;AbstractChann&#9;PSI&#9;JAVA://io.netty.channel.AbstractChannel&#10;ByteBuf&#9;PSI&#9;JAVA://io.netty.buffer.ByteBuf&#10;TimeW&#9;PSI&#9;JAVA://com.github.benmanes.caffeine.cache.TimerWheel&#10;MpscUnboundedArrayQueue&#9;PSI&#9;JAVA://io.netty.util.internal.shaded.org.jctools.queues.MpscUnboundedArrayQueue&#10;FRE&#9;FILE&#9;jar://C:/Users/guangyong.deng/.m2/repository/com/github/ben-manes/caffeine/caffeine/3.0.5/caffeine-3.0.5-sources.jar!/com/github/benmanes/caffeine/cache/FrequencySketch.java&#10;Frequency&#9;PSI&#9;JAVA://com.github.benmanes.caffeine.cache.FrequencySketch&#10;DefaultSelectStrategyFactory&#9;FILE&#9;jar://C:/Users/guangyong.deng/.m2/repository/io/netty/netty-transport/4.1.70.Final/netty-transport-4.1.70.Final-sources.jar!/io/netty/channel/DefaultSelectStrategyFactory.java" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1642413049296" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1642485425517" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../CQ-train-lism-Serve" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.idea" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="settings.editor.selected.configurable" value="preferences.externalTools" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Ignored.Files" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -639,9 +462,11 @@
       <recent name="ds.guang.majing.client.common" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\guangyong.deng\Desktop\project\majiang\majiang-client" />
+      <recent name="C:\Users\guangyong.deng\Desktop\project\majiang\majiang-common" />
+      <recent name="C:\Users\guangyong.deng\Desktop\project\majiang\majiang-server" />
       <recent name="C:\Users\guangyong.deng\Desktop\project\majiang\record-png" />
       <recent name="C:\Users\guangyong.deng\Desktop\project\majiang" />
-      <recent name="C:\Users\guangyong.deng\Desktop\project\majiang\majiang-common\src\main\java\ds\guang\majing\common\event" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -656,26 +481,13 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.BufferTest">
+  <component name="RunManager" selected="Application.Demo">
     <configuration name="BufferTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ds.guang.majiang.server.network.buffer.BufferTest" />
       <module name="majiangserver" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="ds.guang.majiang.server.network.buffer.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CaffeineDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="ds.guang.majing.common.cache.CaffeineDemo" />
-      <module name="majiangcommon" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ds.guang.majing.common.cache.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -711,19 +523,19 @@
       </method>
     </configuration>
     <list>
+      <item itemvalue="Application.Demo" />
       <item itemvalue="Application.GameServer" />
-      <item itemvalue="Application.CaffeineDemo" />
       <item itemvalue="Application.JsonTest" />
       <item itemvalue="Application.PlayerJsonTest" />
       <item itemvalue="Application.BufferTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Demo" />
+        <item itemvalue="Application.GameServer" />
         <item itemvalue="Application.BufferTest" />
         <item itemvalue="Application.PlayerJsonTest" />
         <item itemvalue="Application.JsonTest" />
-        <item itemvalue="Application.CaffeineDemo" />
-        <item itemvalue="Application.GameServer" />
       </list>
     </recent_temporary>
   </component>
@@ -771,7 +583,8 @@
       <workItem from="1641779689099" duration="8836000" />
       <workItem from="1642036047136" duration="2992000" />
       <workItem from="1642068619863" duration="3349000" />
-      <workItem from="1642404326044" duration="8600000" />
+      <workItem from="1642404326044" duration="8744000" />
+      <workItem from="1642476719868" duration="2287000" />
     </task>
     <task id="LOCAL-00001" summary="v3">
       <created>1639187812106</created>
@@ -857,11 +670,25 @@
       <option name="project" value="LOCAL" />
       <updated>1641792854102</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="v3-2 引入缓冲区队列">
+      <created>1642412996332</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1642412996332</updated>
+    </task>
+    <task id="LOCAL-00014" summary="v3-2 引入缓冲区队列">
+      <created>1642413074748</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1642413074748</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="224345000" />
+    <option name="totallyTimeSpent" value="226776000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -874,9 +701,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48688525" visible="true" weight="0.3464448" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.48688525" visible="true" weight="0.3517398" />
       <window_info id="Structure" order="1" sideWeight="0.51311475" side_tool="true" weight="0.3464448" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -885,7 +711,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3295082" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3295082" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.3295082" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -1044,200 +870,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/guang/majiangclient/client/entity/Room.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="34" column="21" selection-start-line="34" selection-start-column="21" selection-end-line="34" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/ClientPlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-280">
-          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="80" column="24" selection-start-line="80" selection-start-column="24" selection-end-line="80" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/LoginRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="37" column="33" lean-forward="true" selection-start-line="37" selection-start-column="33" selection-end-line="37" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PostHandCardRequest.java" />
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/InitRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/Request.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PrepareRequest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="191">
-          <caret line="33" column="48" selection-start-line="33" selection-start-column="48" selection-end-line="33" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/Converter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="16" column="1" lean-forward="true" selection-start-line="16" selection-start-column="1" selection-end-line="16" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/room/ServerFourRoom.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
-          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/room/Room.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-287">
-          <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientFourRoom.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="8" column="37" selection-start-line="8" selection-start-column="37" selection-end-line="8" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/test/java/JsonTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="567">
-          <caret line="26" column="49" selection-start-line="26" selection-start-column="49" selection-end-line="26" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/JsonUtil.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1620">
-          <caret line="84" column="40" selection-start-line="84" selection-start-column="40" selection-end-line="84" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/LoginAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="756">
-          <caret line="44" column="26" selection-start-line="44" selection-start-column="26" selection-end-line="44" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/ServerPlayer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1566">
-          <caret line="81" column="29" selection-start-line="81" selection-start-column="29" selection-end-line="81" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/dto/GameUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="4" column="45" selection-start-line="4" selection-start-column="45" selection-end-line="4" selection-end-column="45" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/dto/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/test/java/PlayerJsonTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="274">
-          <caret line="24" column="40" selection-start-line="24" selection-start-column="40" selection-end-line="24" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/ServiceMap.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="18" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer.fxml" />
-    <entry file="jar://C:/Program Files/Java/jdk1.8.0_202/src.zip!/java/util/concurrent/ThreadFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="55" column="19" lean-forward="true" selection-start-line="55" selection-start-column="19" selection-end-line="55" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/pool/MatchPoolImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="185">
-          <caret line="59" column="64" lean-forward="true" selection-start-line="59" selection-start-column="64" selection-end-line="59" selection-end-column="64" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/room/RoomManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/player/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-847">
-          <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/state/StateMachine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1367">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/HttpRequestHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="459">
-          <caret line="35" column="52" selection-start-line="35" selection-start-column="52" selection-end-line="35" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/machines/StateMachines.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="31">
-          <caret line="8" column="49" lean-forward="true" selection-start-line="8" selection-start-column="49" selection-end-line="8" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/timer/DsWheelTimer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="27">
-          <caret line="124" lean-forward="true" selection-start-line="124" selection-end-line="124" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/SimpleSyncState.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
@@ -1273,15 +905,8 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor" />
       <provider editor-type-id="MavenHelperPluginDependencyAnalyzer" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PrepareAction.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-783">
-          <caret line="33" selection-start-line="33" selection-end-line="33" />
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PlatFormAction.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -1311,22 +936,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="644">
           <caret line="309" column="13" selection-start-line="309" selection-start-column="13" selection-end-line="309" selection-end-column="13" />
-          <folding>
-            <element signature="e#4131#4132#0" expanded="true" />
-            <element signature="e#4167#4168#0" expanded="true" />
-            <element signature="e#7917#7918#0" expanded="true" />
-            <element signature="e#7948#7949#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/session/Session.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-270">
-          <caret line="14" column="11" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1368,21 +977,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/MpscBuffer.java">
+    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/MpscBuffer.java" />
+    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/session/Session.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1752">
-          <caret line="43" column="37" lean-forward="true" selection-start-line="43" selection-start-column="37" selection-end-line="43" selection-end-column="37" />
+        <state relative-caret-position="351">
+          <caret line="14" column="11" selection-start-line="14" selection-start-column="11" selection-end-line="14" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#855#885#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/OverflowHandler.java">
+    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/DsMessageBuffer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
+        <state relative-caret-position="270">
+          <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1393,30 +1005,229 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/DsMessageBuffer.java">
+    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/OverflowHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-534">
-          <caret line="14" column="24" selection-start-line="14" selection-start-column="24" selection-end-line="14" selection-end-column="24" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#998#999#0" expanded="true" />
-            <element signature="e#1027#1028#0" expanded="true" />
-            <element signature="e#1142#1143#0" expanded="true" />
-            <element signature="e#1182#1183#0" expanded="true" />
-            <element signature="e#1331#1332#0" expanded="true" />
-            <element signature="e#1367#1368#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="297">
+          <caret line="11" column="21" selection-start-line="11" selection-start-column="21" selection-end-line="11" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/network/buffer/BufferTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="118">
-          <caret line="103" column="35" selection-start-line="103" selection-start-column="35" selection-end-line="103" selection-end-column="35" />
+        <state relative-caret-position="1188">
+          <caret line="110" lean-forward="true" selection-start-line="110" selection-end-line="110" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/basic/PrepareAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/room/Room.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="72" column="28" selection-start-line="72" selection-start-column="28" selection-end-line="72" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/room/ServerFourRoom.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
           <folding>
-            <element signature="e#349#350#0" expanded="true" />
-            <element signature="e#393#394#0" expanded="true" />
+            <element signature="e#396#397#0" expanded="true" />
+            <element signature="e#481#482#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/DsMessage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/GameInfoRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/DsResult.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/Algorithm.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="12" column="13" selection-start-line="12" selection-start-column="13" selection-end-line="12" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/ClassUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="19" column="19" selection-start-line="19" selection-start-column="19" selection-end-line="19" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/Converter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="189">
+          <caret line="7" column="19" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/DsConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="10" column="19" selection-start-line="10" selection-start-column="19" selection-end-line="10" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/DsFoxUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/JsonUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="193">
+          <caret line="25" column="19" selection-start-line="25" selection-start-column="19" selection-end-line="25" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/ServiceName.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="671">
+          <caret line="28" column="8" selection-start-line="28" selection-start-column="8" selection-end-line="28" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/util/StringUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/Request.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-378">
+          <caret line="22" column="22" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/InitRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-64">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-server/src/main/java/ds/guang/majiang/server/layer/game/GameTakeAction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="62" column="53" lean-forward="true" selection-start-line="62" selection-start-column="53" selection-end-line="62" selection-end-column="53" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PrepareRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="37" column="9" lean-forward="true" selection-start-line="33" selection-start-column="8" selection-end-line="37" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/Card.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/card/MaJiang.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1080">
+          <caret line="44" column="18" selection-start-line="44" selection-start-column="18" selection-end-line="44" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/src/main/java/ds/guang/majing/common/game/message/GameInfoResponse.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="320">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/network/PostTakeCardRequest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/rule/platform/PlatFormRuleImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="652">
+          <caret line="73" selection-start-line="73" selection-end-line="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/entity/ClientFourRoom.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="621">
+          <caret line="27" column="1" selection-start-line="27" selection-start-column="1" selection-end-line="27" selection-end-column="1" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#453#454#0" expanded="true" />
+            <element signature="e#477#478#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-server/.gitgnore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/src/main/java/ds/guang/majing/client/Demo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2513">
+          <caret line="116" column="63" selection-start-line="116" selection-start-column="63" selection-end-line="116" selection-end-column="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-server/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-common/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/majiang-client/.gitignore">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
         </state>
       </provider>
     </entry>

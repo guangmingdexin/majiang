@@ -1,6 +1,6 @@
 package ds.guang.majiang.server.pool;
 
-import ds.guang.majing.common.player.Player;
+import ds.guang.majing.common.game.player.Player;
 
 /**
  * @author guangmingdexin

@@ -1,10 +1,6 @@
 package ds.guang.majiang.server.network.buffer;
 
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
 import io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueue;
-
-import java.util.function.BiConsumer;
 
 /**
  * 
@@ -21,7 +17,6 @@ public class DsMessageBuffer<E> implements MessageBuffer<E> {
     private int maxCapacity;
 
     private volatile int offset;
-
 
     public DsMessageBuffer() {
         this.maxCapacity = 16;

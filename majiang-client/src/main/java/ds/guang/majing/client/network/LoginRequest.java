@@ -1,11 +1,11 @@
 package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
-import ds.guang.majing.common.dto.GameUser;
+import ds.guang.majing.common.game.dto.GameUser;
 
 import java.io.IOException;
 import java.util.Objects;

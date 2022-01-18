@@ -2,14 +2,13 @@ package ds.guang.majing.client;
 
 
 import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
-import ds.guang.majing.common.DsConstant;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.util.DsConstant;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.cache.Cache;
-import ds.guang.majing.common.cache.CacheDefaultImpl;
-import ds.guang.majing.common.dto.GameUser;
-import ds.guang.majing.common.dto.User;
-import ds.guang.majing.common.rule.Rule;
+import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.dto.User;
+import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -20,6 +19,9 @@ import javafx.stage.Stage;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static ds.guang.majing.common.util.DsConstant.EVENT_POST_TAKE_CARD_ID;
+import static ds.guang.majing.common.util.DsConstant.STATE_TAKE_CARD_ID;
 
 /**
  * @author guangyong.deng
@@ -36,7 +38,8 @@ public class Demo extends Application {
     public void start(Stage primaryStage) throws Exception  {
         // 1.创建一个按钮
         GridPane grid = new GridPane();
-        Button button = new Button("demo");
+        Button button = new Button("登录");
+        Button take = new Button("发牌");
 
         Executor executor = new ExtendedExecutor(
                 10,
@@ -69,8 +72,6 @@ public class Demo extends Application {
 
         StateMachine<String, String, DsResult> ruleActor = rule.getRuleActor();
 
-        System.out.println("ruleActor: " + ruleActor);
-
         // 1.状态同步
         // 生成一个 requestNo 作为测试
         String requestNo = UUID.randomUUID().toString().substring(0, 8);
@@ -95,7 +96,7 @@ public class Demo extends Application {
         });
 
         game.setOnAction(event -> {
-            GameUser  gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
+            GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
             String userId = gameUser == null ? "123456" : gameUser.getUserId();
             DsMessage data = DsMessage.build(DsConstant.EVENT_PREPARE_ID, requestNo, userId);
             CompletableFuture.runAsync(() -> {
@@ -106,6 +107,22 @@ public class Demo extends Application {
                 return null;
             });
         });
+
+        take.setOnAction(event -> {
+
+            GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
+            String userId = gameUser == null ? "123456" : gameUser.getUserId();
+            DsMessage data = DsMessage.build(EVENT_POST_TAKE_CARD_ID, requestNo, userId);
+            CompletableFuture.runAsync(() -> {
+                ruleActor.setCurrentState(STATE_TAKE_CARD_ID, data);
+                ruleActor.event(EVENT_POST_TAKE_CARD_ID, data);
+            }).exceptionally(e -> {
+                System.out.println(e.getMessage());
+                return null;
+            });
+
+        });
+
 
 
         grid.add(button, 0, 0, 2, 1);

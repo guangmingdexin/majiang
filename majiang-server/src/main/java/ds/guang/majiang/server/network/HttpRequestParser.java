@@ -1,6 +1,6 @@
 package ds.guang.majiang.server.network;
 
-import ds.guang.majing.common.JsonUtil;
+import ds.guang.majing.common.util.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpMethod;

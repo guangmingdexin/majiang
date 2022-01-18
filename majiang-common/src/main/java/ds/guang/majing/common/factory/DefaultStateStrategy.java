@@ -1,6 +1,6 @@
 package ds.guang.majing.common.factory;
 
-import ds.guang.majing.common.DsResult;
+import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.state.AbstractStateImpl;
 import ds.guang.majing.common.state.State;
 

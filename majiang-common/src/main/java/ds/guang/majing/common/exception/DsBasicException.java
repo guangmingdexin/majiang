@@ -1,6 +1,6 @@
 package ds.guang.majing.common.exception;
 
-import ds.guang.majing.common.DsFoxUtil;
+import ds.guang.majing.common.util.DsFoxUtil;
 
 /**
  * Sa-Token框架内部逻辑发生错误抛出的异常 

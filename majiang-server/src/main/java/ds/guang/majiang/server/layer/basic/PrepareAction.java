@@ -1,20 +1,18 @@
 package ds.guang.majiang.server.layer.basic;
 
+import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majiang.server.network.ResponseUtil;
-import ds.guang.majiang.server.room.RoomManager;
-import ds.guang.majing.common.ClassUtil;
-import ds.guang.majing.common.DsConstant;
-import ds.guang.majing.common.DsMessage;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.player.Player;
-import ds.guang.majing.common.room.Room;
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.State;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.*;
 
-import static ds.guang.majing.common.DsConstant.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  * @author guangmingdexin
@@ -28,7 +26,6 @@ public class PrepareAction implements Action {
     public void handler(State state) {
 
         state.onEntry(data -> {
-            // System.out.println("进入游戏准备 state!" + state);
             return null;
         });
 
@@ -38,7 +35,7 @@ public class PrepareAction implements Action {
             DsMessage message = (DsMessage) data;
 
             String id = message.getData().toString();
-            Room room = getRoomById(id);
+            Room room = Room.getRoomById(id);
             Player player = room.findPlayerById(id);
 
             // 获取通道
@@ -51,6 +48,7 @@ public class PrepareAction implements Action {
                     room.assignCardToPlayer();
                     cards = player.getCards();
                 }
+                System.out.println("send cards: " + cards);
                 message.setData(DsResult.data(cards));
                 context.writeAndFlush(ResponseUtil.response(message));
             });
@@ -59,19 +57,4 @@ public class PrepareAction implements Action {
         });
 
     }
-
-
-    /**
-     * @param id 玩家 id
-     * @return
-     */
-    private Room getRoomById(String id) {
-
-        // 获取房间管理器
-        RoomManager roomManager = RoomManager.getInstance();
-        return roomManager.get(preRoomInfoPrev(id));
-    }
-
-
-
 }

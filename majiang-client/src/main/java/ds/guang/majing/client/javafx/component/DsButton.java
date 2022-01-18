@@ -1,6 +1,5 @@
 package ds.guang.majing.client.javafx.component;
 
-import ds.guang.majing.common.DsResult;
 import ds.guang.majing.common.event.Event;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

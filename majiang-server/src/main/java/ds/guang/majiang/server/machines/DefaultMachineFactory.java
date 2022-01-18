@@ -1,8 +1,8 @@
 package ds.guang.majiang.server.machines;
 
 import ds.guang.majiang.server.rule.V3PlatFormRule;
-import ds.guang.majing.common.DsResult;
-import ds.guang.majing.common.rule.Rule;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
 
 /**

@@ -224,8 +224,8 @@ java.lang.NullPointerException: null
 21:17:00.681 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.IllegalArgumentException: bound must be positive
 	at java.util.Random.nextInt(Random.java:388)
-	at ds.guang.majing.common.room.Room.shuffle(Room.java:184)
-	at ds.guang.majiang.server.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
+	at ds.guang.majing.common.game.room.Room.shuffle(Room.java:184)
+	at ds.guang.majing.common.game.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:148)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -234,8 +234,8 @@ java.lang.IllegalArgumentException: bound must be positive
 21:20:06.084 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.IllegalArgumentException: bound must be positive
 	at java.util.Random.nextInt(Random.java:388)
-	at ds.guang.majing.common.room.Room.shuffle(Room.java:187)
-	at ds.guang.majiang.server.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
+	at ds.guang.majing.common.game.room.Room.shuffle(Room.java:187)
+	at ds.guang.majing.common.game.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:148)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -244,8 +244,8 @@ java.lang.IllegalArgumentException: bound must be positive
 21:21:55.675 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.IllegalArgumentException: bound must be positive
 	at java.util.Random.nextInt(Random.java:388)
-	at ds.guang.majing.common.room.Room.shuffle(Room.java:188)
-	at ds.guang.majiang.server.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
+	at ds.guang.majing.common.game.room.Room.shuffle(Room.java:188)
+	at ds.guang.majing.common.game.room.ServerFourRoom.<init>(ServerFourRoom.java:26)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:148)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -255,7 +255,7 @@ java.lang.IllegalArgumentException: bound must be positive
 java.util.ConcurrentModificationException: null
 	at java.util.ArrayList.sort(ArrayList.java:1464)
 	at java.util.Collections.sort(Collections.java:141)
-	at ds.guang.majing.common.room.Room.assignCardToPlayer(Room.java:166)
+	at ds.guang.majing.common.game.room.Room.assignCardToPlayer(Room.java:166)
 	at ds.guang.majiang.server.layer.basic.PrepareAction.lambda$null$1(PrepareAction.java:55)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
