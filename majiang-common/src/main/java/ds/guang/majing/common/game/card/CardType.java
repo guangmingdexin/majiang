@@ -36,14 +36,15 @@ public enum CardType {
             return CardType.CHARACTER;
         }
 
-        if(num >= 111 && num <= 119) {
+        if(num >= 101 && num <= 109) {
             return CardType.BAMBOO;
         }
 
-        if(num >= 1111 && num <= 1119) {
+        if(num >= 1001 && num <= 1009) {
             return CardType.DOT;
         }
 
         throw new IllegalArgumentException("参数错误");
     }
+
 }

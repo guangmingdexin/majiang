@@ -220,28 +220,38 @@ public class Algorithm {
      *
      * 二分查找
      *
-     * @param cards
-     * @param card
+     * @param nums 手牌集合
+     * @param num 手牌
      * @return 插入的下标
      */
-    public static int binarySearch(List<Integer> cards, Integer card) {
+    public static int binarySearch(List<Integer> nums, Integer num) {
+
+        // 1.确定范围 [0, nums.len - 1] 闭区间
+        // 2. [left, mid - 1], [mid + 1, right]
+        // 3. 循环条件：left <= right
+        // 4. 存在元素，不存在元素 在 nums 中
 
         int low = 0;
-        int high = cards.size() - 1;
+        int high = nums.size() - 1;
 
         while (low <= high) {
-            int mid = (low + high) / 2;
-            Integer e = cards.get(mid);
-            if(e.equals(card)) {
+            int mid = (low + high) >>> 1;
+            Integer e = nums.get(mid);
+            if(e.equals(num)) {
                 return mid;
-            }else if(e.compareTo(card) > 0){
+            }else if(e.compareTo(num) > 0){
                 high = mid - 1;
             }else {
                 low = mid + 1;
             }
         }
-
-        return -(low + 1);
+        // 没有找到元素
+        // 分别处理如下四种情况
+        // 目标值在数组所有元素之前  [0, -1]
+        // 目标值等于数组中某一个元素  return middle;
+        // 目标值插入数组中的位置 [left, right]，return  right + 1
+        // 目标值在数组所有元素之后的情况 [left, right]， return right + 1
+        return high + 1;
 
     }
 
@@ -287,5 +297,7 @@ public class Algorithm {
 ////       sortInsert(list, 9);
 //       sortInsert(list, 11);
 //        System.out.println(list);
+
+
     }
 }

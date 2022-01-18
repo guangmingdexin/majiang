@@ -22,8 +22,30 @@ public class MaJiangEvent implements GameEvent {
 
     private static final int MASK = 111;
 
+    public MaJiangEvent() {
+    }
+
     @Override
     public void setEvent(int event) {
         this.event = event & MASK;
+    }
+
+    @Override
+    public boolean isEvent() {
+        return event != 0;
+    }
+
+    @Override
+    public int getEvent() {
+        return event;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"event\":").append(event)
+                .append('}');
+        return sb.toString();
     }
 }

@@ -22,6 +22,7 @@ public class MaJiang implements Card {
         this.cardType = cardType;
     }
 
+
     public int getValue() {
         return value;
     }
@@ -49,5 +50,10 @@ public class MaJiang implements Card {
                 .append(", \"cardType\":").append(cardType)
                 .append('}');
         return sb.toString();
+    }
+
+    @Override
+    public Object value() {
+        return getValue();
     }
 }

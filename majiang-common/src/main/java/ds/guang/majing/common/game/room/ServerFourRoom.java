@@ -16,7 +16,8 @@ public class ServerFourRoom extends Room implements Serializable {
 
     @Override
     public boolean isCurAround(String userId) {
-        return super.players[curRoundIndex % playerCount].id().equals(userId);
+        Player player = super.players[curRoundIndex % playerCount];
+        return player != null && player.id().equals(userId);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class ServerFourRoom extends Room implements Serializable {
         List<Integer> cards = p.getCards();
 
         if(cards == null) {
-            throw new NullPointerException("");
+            throw new NullPointerException("手牌为空");
         }
 
         int size = cards.size();

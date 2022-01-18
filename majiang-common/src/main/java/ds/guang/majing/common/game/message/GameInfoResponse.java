@@ -23,6 +23,9 @@ public class GameInfoResponse implements Serializable {
      */
     private GameEvent event;
 
+    public GameInfoResponse() {
+    }
+
     public GameInfoResponse(Card card, GameEvent event) {
         this.card = card;
         this.event = event;

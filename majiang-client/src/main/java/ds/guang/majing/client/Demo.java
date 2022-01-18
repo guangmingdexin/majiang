@@ -20,7 +20,7 @@ import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ds.guang.majing.common.util.DsConstant.EVENT_POST_TAKE_CARD_ID;
+import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
 import static ds.guang.majing.common.util.DsConstant.STATE_TAKE_CARD_ID;
 
 /**
@@ -112,10 +112,10 @@ public class Demo extends Application {
 
             GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
             String userId = gameUser == null ? "123456" : gameUser.getUserId();
-            DsMessage data = DsMessage.build(EVENT_POST_TAKE_CARD_ID, requestNo, userId);
+            DsMessage data = DsMessage.build(EVENT_TAKE_CARD_ID, requestNo, userId);
             CompletableFuture.runAsync(() -> {
                 ruleActor.setCurrentState(STATE_TAKE_CARD_ID, data);
-                ruleActor.event(EVENT_POST_TAKE_CARD_ID, data);
+                ruleActor.event(EVENT_TAKE_CARD_ID, data);
             }).exceptionally(e -> {
                 System.out.println(e.getMessage());
                 return null;

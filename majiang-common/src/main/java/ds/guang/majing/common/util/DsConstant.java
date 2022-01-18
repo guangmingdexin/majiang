@@ -53,12 +53,14 @@ public final class DsConstant {
 
     public static final String STATE_TAKE_CARD_ID = "STATE_TAKE_CARD_ID";
 
+    public static final String STATE_TAKE_OUT_CARD_ID = "STATE_TAKE_OUT_CARD_ID";
+
+    public static final String STATE_WAIT_ID = "STATE_WAIT_ID";
+
     /**
      * 事件 id 常量
      */
     public static final String EVENT_LOGIN_ID = "EVENT_LOGIN_ID";
-
-    public static final String EVENT_INITIAL_ID = "EVENT_INITIAL_ID";
 
     public static final String EVENT_PLATFORM_ID = "EVENT_PLATFORM_ID";
 
@@ -66,10 +68,11 @@ public final class DsConstant {
 
     public static final String EVENT_MATCH_FRIEND_ID = "EVENT_MATCH_FRIEND_ID";
 
-    public static final String EVENT_GET_HANDCARD_ID = "EVENT_GET_HANDCARD_ID";
+    public static final String EVENT_HANDCARD_ID = "EVENT_HANDCARD_ID";
 
-    public static final String EVENT_POST_TAKE_CARD_ID = "EVENT_POST_TAKE_CARD_ID";
+    public static final String EVENT_TAKE_CARD_ID = "EVENT_TAKE_CARD_ID";
 
+    public static final String EVENT_TAKE_OUT_CARD_ID = "EVENT_TAKE_OUT_CARD_ID";
     /**
      * 设置缓存前缀
      */

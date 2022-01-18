@@ -1,7 +1,6 @@
 package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import ds.guang.majing.client.entity.ClientFourRoom;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoResponse;
@@ -39,12 +38,9 @@ public class PostTakeCardRequest extends Request {
         }
 
         if(message == null) {
+            // TODO : 这里应该抛异常
             return DsResult.error("摸牌失败！");
         }
-
-        DsResult<GameInfoResponse> data = message.getData();
-
-        System.out.println("take card: " + data.getData());
-        return data;
+        return message.getData();
     }
 }

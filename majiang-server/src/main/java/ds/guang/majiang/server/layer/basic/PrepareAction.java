@@ -29,7 +29,7 @@ public class PrepareAction implements Action {
             return null;
         });
 
-        state.onEvent(EVENT_GET_HANDCARD_ID, data -> {
+        state.onEvent(EVENT_HANDCARD_ID, STATE_TAKE_CARD_ID, data -> {
 
             Objects.requireNonNull(data, "data must be not empty!");
             DsMessage message = (DsMessage) data;
@@ -48,7 +48,6 @@ public class PrepareAction implements Action {
                     room.assignCardToPlayer();
                     cards = player.getCards();
                 }
-                System.out.println("send cards: " + cards);
                 message.setData(DsResult.data(cards));
                 context.writeAndFlush(ResponseUtil.response(message));
             });

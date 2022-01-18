@@ -1,6 +1,9 @@
 package ds.guang.majing.client.rule.platform;
 
-import ds.guang.majing.client.entity.ClientFourRoom;
+import ds.guang.majing.common.game.card.GameEvent;
+import ds.guang.majing.common.game.message.GameInfoRequest;
+import ds.guang.majing.common.game.message.GameInfoResponse;
+import ds.guang.majing.common.game.room.ClientFourRoom;
 import ds.guang.majing.client.network.*;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.util.JsonUtil;
@@ -48,7 +51,15 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
     private Supplier<State<String, String, DsResult>> prepareSupplier = () -> stateStrategy.newState(() -> STATE_PREPARE_ID);
 
-    private Supplier<State<String, String, DsResult>> initSupplier = () -> stateStrategy.newState(() -> STATE_PREPARE_ID);
+
+    /**
+     * 游戏状态 - 摸牌， 出牌, 等待
+     */
+    private Supplier<State<String, String, DsResult>> gameTakeCardStateSupplier = () -> stateStrategy.newState(() -> STATE_TAKE_CARD_ID);
+
+    private Supplier<State<String, String, DsResult>> gameTakeOutCardStateSupplier = () -> stateStrategy.newState(() -> STATE_TAKE_OUT_CARD_ID);
+
+    private Supplier<State<String, String, DsResult>> gameWaitStateSupplier = () -> stateStrategy.newState(() -> STATE_WAIT_ID);
 
     @Override
     public Rule<String, StateMachine<String, String, DsResult>> create(String s) {
@@ -58,6 +69,11 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             // 我应该把这里作为一个异步任务
             Request request = new LoginRequest(data);
             return request.execute(null);
+        });
+
+        loginState.onExit(data -> {
+            System.out.println("登录成功！");
+            return data;
         });
 
         State<String, String, DsResult> platformState = platformSupplier.get();
@@ -72,9 +88,10 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         });
         platformState.onEvent(EVENT_MATCH_FRIEND_ID, STATE_MATCH_FRIEND_ID);
 
-
         State<String, String, DsResult> prepareState = prepareSupplier.get();
+
         prepareState.onEntry(data -> {
+
             System.out.println("进入游戏准备阶段：" );
             // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
             // 直接进行游戏初始化操作
@@ -82,40 +99,77 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             DsResult dsResult = (DsResult) data;
             Room room = (Room) JsonUtil.mapToObj(dsResult.getData(), ClientFourRoom.class);
             Map<String, Object> attr = dsResult.getAttrMap();
-            String requestNo = attr.get("requestNo").toString();
+            String id = attr.get("requestNo").toString();
 
-            Request request = new InitRequest(DsMessage.build("-1", "-1", null));
-            request.execute(() -> {
+            DsMessage<String> message = DsMessage.build(EVENT_HANDCARD_ID, id, id);
 
-                DsMessage<String> message = DsMessage.build(EVENT_GET_HANDCARD_ID, requestNo, requestNo);
+            // 请求手牌
+            Request r = new GetHandCardRequest(message);
+            DsResult<List<Integer>> rs = r.execute(null);
 
-                // 请求手牌
-                Request r = new GetHandCardRequest(message);
-                DsResult<List<Integer>> rs = r.execute(null);
-                System.out.println("rs: " + rs);
-                List<Integer> cards = rs.getData();
-                Player p = room.findPlayerById(requestNo);
-                p.setCards(cards);
-                System.out.println("room: " + room);
-            });
+            // 将请求的手牌放入 room 中
+            List<Integer> cards = rs.getData();
+            Player p = room.findPlayerById(id);
+            p.setCards(cards);
+            System.out.println("room: " + room);
 
+            System.out.println(".....................................");
             // 判断状态，是否为自己的回合
-            if(room.isCurAround(requestNo)) {
-                // 触发摸牌事件
-                DsMessage<String> message = DsMessage.build(EVENT_POST_TAKE_CARD_ID, requestNo, requestNo);
-                Request takeCardRequest = new PostTakeCardRequest(message);
-                takeCardRequest.execute(null);
+            if(room.isCurAround(id)) {
+                // 触发摸牌事件 - 这是游戏初始化阶段摸牌
+                DsMessage<String> tm = DsMessage.build(EVENT_TAKE_CARD_ID, id, id);
+                Request takeCardRequest = new PostTakeCardRequest(tm);
+                DsResult<GameInfoResponse> tRs = takeCardRequest.execute(null);
 
+                System.out.println(".....................................");
+
+                // 更新玩家手牌
+                GameInfoResponse response = tRs.getData();
+                Integer take = (Integer) response.getCard().value();
+                p.addCard(take);
+
+                // 提交一个任务给 ui，并判断是否有特殊事件
+                // submit(uiTask)
+                GameEvent event = response.getEvent();
+
+                if(event.isEvent()) {
+                    System.out.println("有事件发生！");
+                    // submit(uiEventTask)
+                }
+
+                // 主动切换状态 - 切换为出牌状态
+                this.stateMachine.setCurrentState(STATE_TAKE_OUT_CARD_ID, tRs);
             }else {
-                throw new IllegalArgumentException("非本回合不能摸牌！");
+                // 进入等待状态
+                this.stateMachine.setCurrentState(STATE_WAIT_ID, null);
             }
-
             return data;
         });
 
-        State<String, String, DsResult> initState = initSupplier.get();
 
+        State<String, String, DsResult> takeOutState = gameTakeOutCardStateSupplier.get();
 
+        takeOutState.onEntry(data -> {
+           // 1.逻辑是先有
+            System.out.println("...............................");
+            System.out.println("进入出牌状态");
+            return this;
+        });
+
+        takeOutState.onEvent(EVENT_TAKE_OUT_CARD_ID, STATE_WAIT_ID, data -> {
+
+            // 1.正常摸牌之后，出牌
+            // 2.其他人摸牌之后，出牌，引发玩家特殊事件（PONG），出牌
+            // 3. data : 包含用户 id, 出的牌
+            GameInfoRequest info = (GameInfoRequest) data;
+
+            DsMessage<GameInfoRequest> message = DsMessage.build(EVENT_TAKE_OUT_CARD_ID, info.getUserId(), data);
+            Request request = new PostTakeOutRequest(info);
+            DsResult toRs = request.execute(null);
+
+            return null;
+
+        });
 //
 //            /**
 //             * TODO 接口的数据权限如何控制，会存在这样一种情况，该玩家利用自身 token 和 其他玩家 id
@@ -130,7 +184,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         StateMachine<String, String, DsResult> ruleActor = getRuleActor();
 
         ruleActor.registerInitialState(loginState);
-        ruleActor.registerState(platformState, prepareState);
+        ruleActor.registerState(platformState, prepareState, takeOutState);
         ruleActor.start();
 
         return this;

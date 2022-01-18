@@ -17,11 +17,12 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * @ClassName JsonUtil
- * @Description 操作 Json 工具类
- * @Author guangmingdexin
- * @Date 2021/4/1 9:40
- * @Version 1.0
+ *
+ * 操作 Json 工具类
+ *
+ * @author guangmingdexin
+ * @date 2021/4/1 9:40
+ * @version 1.0
  **/
 public final class JsonUtil {
 
@@ -35,22 +36,6 @@ public final class JsonUtil {
         SimpleModule module = new SimpleModule();
         module.addSerializer(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE);
         module.addDeserializer(LocalDateTime.class, LocalDateTimeDeserializer.INSTANCE);
-      //  JavaTimeModule javaTimeModule = new JavaTimeModule();
-//        //序列化
-//        javaTimeModule.addSerializer(LocalDateTime.class,
-//                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-//        javaTimeModule.addSerializer(LocalDate.class,
-//                new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-//        javaTimeModule.addSerializer(LocalTime.class,
-//                new LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
-//        //反序列化
-//        javaTimeModule.addDeserializer(LocalDateTime.class,
-//                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-//        javaTimeModule.addDeserializer(LocalDate.class,
-//                new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-//        javaTimeModule.addDeserializer(LocalTime.class,
-//                new LocalTimeDeserializer(DateTimeFormatter.ofPattern("HH:mm:ss")));
-
 
         mapper.registerModule(module);
 
@@ -135,33 +120,6 @@ public final class JsonUtil {
         @Override
         public LocalDateTime deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
             return LocalDateTime.parse(jsonParser.getText(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        }
-    }
-
-    static final class PlayerSerializer extends JsonSerializer<Player> {
-
-        final static PlayerSerializer INSTANCE = new PlayerSerializer();
-
-        PlayerSerializer() {
-        }
-
-        @Override
-        public void serialize(Player player, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-            // 序列化，将 player 转换为 ClientPlayer
-            jsonGenerator.writeString(player.toString());
-        }
-    }
-
-    static final class PlayerDeserializer extends JsonDeserializer<Player> {
-
-        final static PlayerDeserializer INSTANCE = new PlayerDeserializer();
-
-        PlayerDeserializer() {}
-
-        @Override
-        public Player deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-            String content = jsonParser.getText();
-            return (Player) JsonUtil.stringToObj(content, ServerPlayer.class);
         }
     }
 

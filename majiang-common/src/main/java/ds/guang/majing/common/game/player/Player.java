@@ -3,6 +3,7 @@ package ds.guang.majing.common.game.player;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ds.guang.majing.common.util.Algorithm;
 import ds.guang.majing.common.util.Converter;
 import ds.guang.majing.common.game.dto.GameUser;
 
@@ -18,7 +19,6 @@ import java.util.List;
 
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
-        include = JsonTypeInfo.As.PROPERTY,
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = ServerPlayer.class, name = "serverPlayer"),
@@ -56,12 +56,19 @@ public abstract class Player implements Cloneable, Serializable {
      *
      * 加入手牌
      *
-     * @param cardNum
-     * @return
+     * @param cardNum 手牌
+     * @return 添加是否成功
      */
-    boolean addCard(int cardNum) {
+    public boolean addCard(int cardNum) {
 
-        return false;
+        // 这里插入，必须保证手牌的有序性
+        int index = Algorithm.binarySearch(cards, cardNum);
+        if(index < 0) {
+            throw new IllegalArgumentException("插入算法出现问题！");
+        }
+        cards.set(index, cardNum);
+
+        return true;
     }
 
     /**
@@ -71,7 +78,7 @@ public abstract class Player implements Cloneable, Serializable {
      * @param cardIndex
      * @return
      */
-    boolean removeCard(int cardIndex) {
+    public boolean removeCard(int cardIndex) {
         return false;
     }
 
@@ -82,7 +89,7 @@ public abstract class Player implements Cloneable, Serializable {
      * @param cardNum 手牌
      * @return
      */
-    boolean remove(int cardNum) {
+    public boolean remove(int cardNum) {
         return false;
     }
 
