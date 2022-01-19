@@ -1,6 +1,7 @@
 package ds.guang.majing.common.game.dto;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class GameUser implements Serializable {
 
@@ -49,6 +50,26 @@ public class GameUser implements Serializable {
     public GameUser setScore(int score) {
         this.score = score;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        GameUser gameUser = (GameUser) o;
+        return vip == gameUser.vip &&
+                score == gameUser.score &&
+                Objects.equals(userId, gameUser.userId) &&
+                Objects.equals(username, gameUser.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, username, vip, score);
     }
 
     @Override

@@ -2,21 +2,25 @@ package ds.guang.majiang.server.layer.game;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
+import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majiang.server.network.ResponseUtil;
+import ds.guang.majing.common.game.card.Card;
+import ds.guang.majing.common.game.card.CardType;
+import ds.guang.majing.common.game.card.MaJiang;
+import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
-import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.State;
+import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
-import static ds.guang.majing.common.util.DsConstant.STATE_TAKE_CARD_ID;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  * 游戏摸牌逻辑处理状态，包括
@@ -30,12 +34,12 @@ public class GameTakeAction implements Action {
     public void handler(State state) {
 
         state.onEntry(data -> {
-
             System.out.println("进入摸牌状态！");
-
             return data;
         });
 
+        // 如果没有其他事件发生，则玩家正常进入下一个阶段
+        // 如果玩家有可选事件发生，则玩家进入事件阶段，处理事件
         state.onEvent(EVENT_TAKE_CARD_ID, data -> {
 
             Objects.requireNonNull(data, "data must be not empty!");
@@ -50,34 +54,41 @@ public class GameTakeAction implements Action {
                 // 从棋牌中，获取一张牌，放入玩家手牌中，并开始判断事件
                 int markIndex = room.getMarkIndex();
                 Integer take = room.getInitialCards().get(markIndex);
+                // 移动初始手牌，到下一张
                 room.setMarkIndex(markIndex + 1);
-
+                // 获取当前回合玩家
                 Player p = room.findPlayerById(id);
-                List<Integer> cards = p.getCards();
-
+                // 加入玩家手牌
                 p.addCard(take);
 
-                GameEvent gameEvent = new MaJiangEvent();
-
-                if(Room.isGangEvent(cards, -1)) {
-                    gameEvent.setEvent(MaJiangEvent.GANG_EVENT);
-                }
-
-                if(Room.isHuEvent(cards)) {
-                    gameEvent.setEvent(MaJiangEvent.HU_EVENT);
-                }
-
+                // 判断事件
+                // 麻将棋牌
                 Card majiang = new MaJiang(take, CardType.generate(take));
-                GameInfoResponse info = new GameInfoResponse(majiang, gameEvent);
 
+                Map<MaJiangEvent, Integer> event = p.event(majiang, EVENT_TAKE_CARD_ID);
+                GameInfoResponse info = new GameInfoResponse(id, majiang, event);
+
+                // 发送消息给玩家
                 ChannelHandlerContext context = (ChannelHandlerContext)p.getContext();
+                // 返回结果
+                DsResult<GameInfoResponse> r = DsResult.data(info);
                 context.channel().eventLoop().execute(() -> {
-                    message.setData(DsResult.data(info));
+                    message.setData(r);
                     context.writeAndFlush(ResponseUtil.response(message));
                 });
 
-                return DsResult.data(info);
+                StateMachine<String, String, DsResult> machine = StateMachines
+                        .get(preUserMachinekey(id));
 
+                // 状态转换，根据条件，如果没有特殊事件，则正常进入出牌状态
+                // 否则进入特殊事件状态，等待玩家响应之后，进入下一个状态
+                if(event.isEmpty()){
+                    machine.setCurrentState(STATE_TAKE_OUT_CARD_ID, r);
+                }else {
+                    System.out.println("event: " + event);
+                    machine.setCurrentState(STATE_EVENT_ID, r);
+                }
+                return r;
             }
             // 2.如果不是当前玩家，直接抛出异常
             throw new IllegalArgumentException("state is error!");

@@ -43,10 +43,9 @@ public class PrepareRequest extends Request {
 
         if(result.success()) {
             // 获取房间信息
-            System.out.println("room-info:" + result);
+            // System.out.println("room-info:" + result);
             return result;
         }
-
         return result;
     }
 

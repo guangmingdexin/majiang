@@ -256,6 +256,30 @@ public class Algorithm {
     }
 
 
+    /**
+     *
+     * 从 sort list 中查找是否出现四个重复的值
+     *
+     * @param nums
+     * @return
+     */
+    public static List<Integer> sortCountFour(List<Integer> nums) {
+
+        List<Integer> four = new ArrayList<>();
+
+        for (Integer num : nums) {
+            if(sortCountArr(nums, num) == 4) {
+                four.add(num);
+            }
+        }
+        return four;
+    }
+
+    public static boolean sortCountThree(List<Integer> nums, Integer num) {
+        return sortCountArr(nums, num) == 3;
+    }
+
+
     public static void main(String[] args) {
 //        List<Integer> list = Arrays.asList(11, 11, 17, 103, 105, 106, 107, 109, 109, 1004, 1005, 1006, 1009);
 //        List<Integer> copyList = new ArrayList<>(list);

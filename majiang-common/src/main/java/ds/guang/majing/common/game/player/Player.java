@@ -1,14 +1,22 @@
 package ds.guang.majing.common.game.player;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ds.guang.majing.common.game.card.Card;
+import ds.guang.majing.common.game.card.MaJiang;
+import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.util.Algorithm;
 import ds.guang.majing.common.util.Converter;
 import ds.guang.majing.common.game.dto.GameUser;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.*;
+
+import static ds.guang.majing.common.util.DsConstant.EVENT_RECEIVE_OTHER_CARD_ID;
+import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
+import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_OUT_CARD_ID;
 
 /**
  * 玩家抽象接口
@@ -28,14 +36,40 @@ public abstract class Player implements Cloneable, Serializable {
 
     private GameUser gameUser;
 
+    /**
+     * 玩家手牌：在初始化时，会涉及多线程操作
+     */
     @JsonSerialize(converter = Converter.class)
-    private List<Integer> cards;
+    private volatile List<Integer> cards;
+
+    /**
+     * 事件手牌，包括 Gang 牌，PONG 牌
+     */
+    @JsonIgnore
+    private Map<Card, Integer> eventCard;
+
+
+    /**
+     * 预留字段：提示胡牌值
+     */
+    @JsonIgnore
+    private Set<Card> selectHu;
+
+
+    /**
+     * 最终胡牌值
+     */
+    @JsonIgnore
+    private Card selectedHu;
+
 
     public Player() {
     }
 
     public Player(GameUser gameUser) {
         this.gameUser = gameUser;
+        // 最多七个对子
+        this.eventCard = new HashMap<>(8);
     }
 
     /**
@@ -66,10 +100,15 @@ public abstract class Player implements Cloneable, Serializable {
         if(index < 0) {
             throw new IllegalArgumentException("插入算法出现问题！");
         }
+        // 因为 ArrayList.set 会发生边界检查，所以不能插入到右边界之外
+        if(index >= cards.size()) {
+            cards.add(cardNum);
+            return true;
+        }
         cards.set(index, cardNum);
-
         return true;
     }
+
 
     /**
      *
@@ -90,10 +129,95 @@ public abstract class Player implements Cloneable, Serializable {
      * @return
      */
     public boolean remove(int cardNum) {
-        return false;
+        return cards.remove((Integer)cardNum);
     }
 
 
+    /**
+     *
+     * 检查玩家是否能出这张牌
+     *
+     * @param cardNum 这张牌是否在手牌中
+     * @return 能否出牌
+     */
+    public void checkOut(Integer cardNum) {
+        if(cards != null && cards.contains(cardNum)) {
+            return;
+        }
+        throw new IllegalArgumentException("错误的出牌-这张牌不存在手牌中！");
+    }
+
+    /**
+     *
+     * 1.摸牌阶段，会先将 value 添加到手牌中，再做判断
+     * 2.其他玩家出牌，则可以直接判断
+     *
+     *
+     * @param card 引发此次事件的值
+     * @param event 客户端事件
+     */
+    public Map<MaJiangEvent, Integer> event(Card card, String event) {
+
+        Objects.requireNonNull(card, "card is null");
+
+        Integer value = (Integer) card.value();
+        /**
+         * 玩家事件集合
+         */
+         Map<MaJiangEvent, Integer> selectEvent = new HashMap<>(16);
+
+        // 1.是否可以 PONG
+        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountArr(cards, value) == 2) {
+            selectEvent.put(MaJiangEvent.PONG, value);
+        }
+
+        // 2.其他玩家出牌自身判断是否可以 GANG
+        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountThree(cards, value)) {
+            selectEvent.put(MaJiangEvent.DIRECT_GANG, value);
+        }
+
+        // 4. 摸牌阶段判断是否可以暗杠
+        if(EVENT_TAKE_CARD_ID.equals(event)) {
+
+            List<Integer> four = Algorithm.sortCountFour(cards);
+
+            if(!four.isEmpty()) {
+                four.forEach(e -> selectEvent.put(MaJiangEvent.SELF_GANG, e));
+            }
+        }
+
+        // 5.摸牌阶段是否可以巴杠
+        if(EVENT_TAKE_CARD_ID.equals(event) && eventCard.containsKey(card)) {
+
+            Integer count = eventCard.get(card);
+            if(count == 3) {
+                selectEvent.put(MaJiangEvent.IN_DIRECT_GANG, value);
+            }else {
+                throw new UnsupportedOperationException("棋牌错误！");
+            }
+        }
+
+        // 6.摸牌阶段，判断是否可以自摸
+        if(EVENT_TAKE_CARD_ID.equals(event) && Algorithm.isHu(cards)) {
+            selectEvent.put(MaJiangEvent.SELF_HU, value);
+        }
+
+        // 其他玩家出牌自身判断是否可以
+        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event)) {
+
+            List<Integer> copy = new ArrayList<>(cards);
+
+            int i = Algorithm.binarySearch(copy, value);
+
+            copy.set(i, value);
+
+            if(Algorithm.isHu(copy)) {
+                selectEvent.put(MaJiangEvent.IN_DIRECT_HU, value);
+            }
+        }
+
+        return selectEvent;
+    }
 
     /**
      * 玩家 id
@@ -113,6 +237,15 @@ public abstract class Player implements Cloneable, Serializable {
         return this;
     }
 
+    public Map<Card, Integer> getEventCard() {
+        return eventCard;
+    }
+
+    public Player setEventCard(Map<Card, Integer> eventCard) {
+        this.eventCard = eventCard;
+        return this;
+    }
+
     /**
      * 返回 网络通道
      * @return 通道
@@ -126,6 +259,23 @@ public abstract class Player implements Cloneable, Serializable {
      */
     public abstract Player convertTo();
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Player player = (Player) o;
+        return Objects.equals(gameUser, player.gameUser);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(gameUser);
+    }
 
     @Override
     public String toString() {

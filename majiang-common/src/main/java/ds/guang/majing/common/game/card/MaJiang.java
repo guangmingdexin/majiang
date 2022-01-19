@@ -1,5 +1,7 @@
 package ds.guang.majing.common.game.card;
 
+import java.util.Objects;
+
 /**
  * @author guangmingdexin
  */
@@ -14,8 +16,7 @@ public class MaJiang implements Card {
 
     private CardType cardType;
 
-    public MaJiang() {
-    }
+    public MaJiang() {}
 
     public MaJiang(int value, CardType cardType) {
         this.value = value;
@@ -40,6 +41,24 @@ public class MaJiang implements Card {
     public MaJiang setCardType(CardType cardType) {
         this.cardType = cardType;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MaJiang maJiang = (MaJiang) o;
+        return value == maJiang.value &&
+                cardType == maJiang.cardType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, cardType);
     }
 
     @Override

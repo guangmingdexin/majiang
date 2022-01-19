@@ -2,6 +2,12 @@ package ds.guang.majing.client;
 
 
 import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
+import ds.guang.majing.common.game.card.CardType;
+import ds.guang.majing.common.game.card.MaJiang;
+import ds.guang.majing.common.game.message.GameInfoRequest;
+import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.game.room.RoomManager;
 import ds.guang.majing.common.util.DsConstant;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
@@ -16,12 +22,12 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
-import static ds.guang.majing.common.util.DsConstant.STATE_TAKE_CARD_ID;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  * @author guangyong.deng
@@ -39,7 +45,7 @@ public class Demo extends Application {
         // 1.创建一个按钮
         GridPane grid = new GridPane();
         Button button = new Button("登录");
-        Button take = new Button("发牌");
+        Button takeOut = new Button("出牌");
 
         Executor executor = new ExtendedExecutor(
                 10,
@@ -108,14 +114,27 @@ public class Demo extends Application {
             });
         });
 
-        take.setOnAction(event -> {
+        takeOut.setOnAction(event -> {
+
+            System.out.println("........................");
+            System.out.println("出牌！");
 
             GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
             String userId = gameUser == null ? "123456" : gameUser.getUserId();
-            DsMessage data = DsMessage.build(EVENT_TAKE_CARD_ID, requestNo, userId);
+            // 1.获取手牌
+            Room room = RoomManager.findRoomById(userId);
+
+            Player p = room.findPlayerById(userId);
+
+            int r = new Random().nextInt(p.getCards().size());
+
+            Integer value = p.getCards().get(r);
+            DsMessage data = DsMessage.build(EVENT_TAKE_OUT_CARD_ID,
+                    requestNo,
+                    new GameInfoRequest(userId, new MaJiang(value, CardType.generate(value)), null));
             CompletableFuture.runAsync(() -> {
-                ruleActor.setCurrentState(STATE_TAKE_CARD_ID, data);
-                ruleActor.event(EVENT_TAKE_CARD_ID, data);
+               // ruleActor.setCurrentState(STATE_TAKE_OUT_CARD_ID, data);
+                ruleActor.event(EVENT_TAKE_OUT_CARD_ID, data);
             }).exceptionally(e -> {
                 System.out.println(e.getMessage());
                 return null;
@@ -127,6 +146,7 @@ public class Demo extends Application {
 
         grid.add(button, 0, 0, 2, 1);
         grid.add(game, 0, 1, 2, 1);
+        grid.add(takeOut, 0, 2, 2, 1);
         Scene scene = new Scene(grid, 300, 275);
         primaryStage.setScene(scene);
 

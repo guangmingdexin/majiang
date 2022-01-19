@@ -55,5 +55,25 @@ public class DsMessageBuffer<E> implements MessageBuffer<E> {
         this.offset = offset;
     }
 
+    // 打印缓存区的元素
+    private String print() {
 
+        StringBuilder builder = new StringBuilder();
+
+        for (E e : buffer) {
+            builder.append(e.toString()).append(" ");
+        }
+
+        return builder.toString();
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"buffer\":").append(print())
+                .append(", \"offset\":").append(offset)
+                .append('}');
+        return sb.toString();
+    }
 }

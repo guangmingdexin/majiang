@@ -1,9 +1,6 @@
 package ds.guang.majing.common.game.room;
 
 import ds.guang.majing.common.game.player.Player;
-import ds.guang.majing.common.game.room.Room;
-
-import java.util.List;
 
 /**
  * @author guangyong.deng
@@ -24,8 +21,5 @@ public class ClientFourRoom extends Room {
        return true;
     }
 
-    @Override
-    public int checkEvent(List<Integer> cards) {
-        return 0;
-    }
+
 }

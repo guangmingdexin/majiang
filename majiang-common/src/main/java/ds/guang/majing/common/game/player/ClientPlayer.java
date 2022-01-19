@@ -9,8 +9,7 @@ import ds.guang.majing.common.game.dto.GameUser;
 public class ClientPlayer extends Player {
 
 
-    public ClientPlayer() {
-    }
+    public ClientPlayer() {}
 
     public ClientPlayer(GameUser gameUser) {
         super(gameUser);

@@ -62,7 +62,8 @@ public class BufferTest {
                 sendMessage(message, "t2");
             }else {
                 buffer2.addMessage(message, overflowHandler);
-                sendMessage(message, "t1");
+                // 模拟 worker2 发送给 worker1 的消息丢失
+             //   sendMessage(message, "t1");
             }
         }
 
@@ -96,15 +97,18 @@ public class BufferTest {
         Thread t1 = new Thread(() -> {
 
             worker1.sendMessage(1, "t1");
-            while (true) {
+            int count = 0;
+            while (count > 10) {
 
                 // 一直接受消息
                 System.out.println("t1 当前状态： " + worker1.state);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
+                count ++;
             }
 
         }, "t1");
@@ -128,6 +132,15 @@ public class BufferTest {
         t1.start();
         t2.start();
 
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(server.buffer1.toString());
+        System.out.println(server.buffer2.toString());
     }
 
     public static void main(String[] args) {

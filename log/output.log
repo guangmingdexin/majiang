@@ -312,3 +312,23 @@ java.lang.NullPointerException: null
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
 	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
 	at java.lang.Thread.run(Thread.java:748)
+14:34:07.020 [nioEventLoopGroup-3-2] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.basic.PrepareAction$$Lambda$63/1707517721@2573b755
+java.lang.NullPointerException: null
+	at ds.guang.majiang.server.layer.basic.PrepareAction.lambda$null$1(PrepareAction.java:51)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:497)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+14:34:07.022 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.basic.PrepareAction$$Lambda$63/1707517721@7ea73c19
+java.lang.NullPointerException: null
+	at ds.guang.majiang.server.layer.basic.PrepareAction.lambda$null$1(PrepareAction.java:51)
+	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
+	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:497)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)

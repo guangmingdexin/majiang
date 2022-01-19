@@ -1,51 +1,36 @@
 package ds.guang.majing.common.game.card;
 
 /**
- *
- * 麻将信息
- * @author asus
+ * @author guangyong.deng
+ * @date 2022-01-19 10:20
  */
-public class MaJiangEvent implements GameEvent {
+public enum MaJiangEvent {
+
+    PONG(1, "碰"),
+    SELF_GANG(2, "暗杠"),
+    DIRECT_GANG(3, "直杠"),
+    IN_DIRECT_GANG(4, "巴杠"),
+    SELF_HU(5, "自摸"),
+    IN_DIRECT_HU(6, "点炮"),
+
+    NOTHING(-1, "忽略")
+    ;
 
 
-    private int event;
+    /**
+     * 特殊事件值
+     */
+    private int value;
 
 
-    public static final int PONG_EVENT = 1;
+    /**
+     * 描述
+     */
+    private String desc;
 
 
-    public static final int GANG_EVENT = 1 << 1;
-
-
-    public static final int HU_EVENT = 1 << 2;
-
-
-    private static final int MASK = 111;
-
-    public MaJiangEvent() {
-    }
-
-    @Override
-    public void setEvent(int event) {
-        this.event = event & MASK;
-    }
-
-    @Override
-    public boolean isEvent() {
-        return event != 0;
-    }
-
-    @Override
-    public int getEvent() {
-        return event;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("{")
-                .append("\"event\":").append(event)
-                .append('}');
-        return sb.toString();
+    MaJiangEvent(int value, String desc) {
+        this.value = value;
+        this.desc = desc;
     }
 }

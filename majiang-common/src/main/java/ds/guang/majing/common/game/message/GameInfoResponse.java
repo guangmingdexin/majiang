@@ -2,15 +2,19 @@ package ds.guang.majing.common.game.message;
 
 
 import ds.guang.majing.common.game.card.Card;
-import ds.guang.majing.common.game.card.GameEvent;
+import ds.guang.majing.common.game.card.MaJiangEvent;
+
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * 返回的游戏包信息
  * @author asus
  */
 public class GameInfoResponse implements Serializable {
+
+    private String userId;
 
     /**
      * 棋牌信息
@@ -21,12 +25,13 @@ public class GameInfoResponse implements Serializable {
     /**
      * 游戏事件信息
      */
-    private GameEvent event;
+    private Map<MaJiangEvent, Integer> event;
 
     public GameInfoResponse() {
     }
 
-    public GameInfoResponse(Card card, GameEvent event) {
+    public GameInfoResponse(String userId, Card card, Map<MaJiangEvent, Integer> event) {
+        this.userId = userId;
         this.card = card;
         this.event = event;
     }
@@ -40,12 +45,21 @@ public class GameInfoResponse implements Serializable {
         return this;
     }
 
-    public GameEvent getEvent() {
+    public Map<MaJiangEvent, Integer> getEvent() {
         return event;
     }
 
-    public GameInfoResponse setEvent(GameEvent event) {
+    public GameInfoResponse setEvent(Map<MaJiangEvent, Integer> event) {
         this.event = event;
+        return this;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public GameInfoResponse setUserId(String userId) {
+        this.userId = userId;
         return this;
     }
 
@@ -53,7 +67,8 @@ public class GameInfoResponse implements Serializable {
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("{")
-                .append("\"card\":").append(card)
+                .append("\"userId\":").append(userId)
+                .append(", \"card\":").append(card)
                 .append(", \"event\":").append(event)
                 .append('}');
         return sb.toString();

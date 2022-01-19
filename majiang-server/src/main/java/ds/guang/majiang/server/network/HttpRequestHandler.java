@@ -56,12 +56,17 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-//        System.out.println("连接上线！");
+        System.out.println("连接上线！");
     }
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
        // System.out.println("发起连接！");
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("----------------------- 连接 inactive");
     }
 
     @Override

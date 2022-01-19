@@ -124,8 +124,8 @@ public class StateMachine<T,E,R extends Result> implements State.Notify<T> {
      *
      * 手动切换状态
      *
-     * @param stateId
-     * @param data
+     * @param stateId 状态 id
+     * @param data 数据
      */
     public void setCurrentState(T stateId, Object data) {
         Objects.requireNonNull(stateId, "state don't null");

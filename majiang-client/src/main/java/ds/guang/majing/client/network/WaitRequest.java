@@ -4,11 +4,11 @@ import ds.guang.majing.common.game.message.DsResult;
 
 /**
  * @author guangyong.deng
- * @date 2022-01-18 17:04
+ * @date 2022-01-19 15:59
  */
-public class PostTakeOutRequest extends Request {
+public class WaitRequest extends Request {
 
-    public PostTakeOutRequest(Object message) {
+    public WaitRequest(Object message) {
         super(message);
     }
 
@@ -19,6 +19,6 @@ public class PostTakeOutRequest extends Request {
 
     @Override
     protected DsResult after(String content) {
-        return null;
+        return DsResult.empty("等待");
     }
 }

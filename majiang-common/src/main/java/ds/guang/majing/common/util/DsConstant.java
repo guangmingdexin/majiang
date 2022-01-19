@@ -1,9 +1,5 @@
 package ds.guang.majing.common.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author guangyong.deng
  * @date 2021-12-08 15:48
@@ -57,6 +53,8 @@ public final class DsConstant {
 
     public static final String STATE_WAIT_ID = "STATE_WAIT_ID";
 
+    public static final String STATE_EVENT_ID = "STATE_EVENT_ID";
+
     /**
      * 事件 id 常量
      */
@@ -73,6 +71,25 @@ public final class DsConstant {
     public static final String EVENT_TAKE_CARD_ID = "EVENT_TAKE_CARD_ID";
 
     public static final String EVENT_TAKE_OUT_CARD_ID = "EVENT_TAKE_OUT_CARD_ID";
+
+    public static final String EVENT_PONG_ID = "EVENT_PONG_ID";
+
+    public static final String EVENT_SELF_GANG_ID = "EVENT_SELF_GANG_ID";
+
+    public static final String EVENT_DIRECT_GANG_ID = "EVENT_DIRECT_GANG_ID";
+
+    public static final String EVENT_IN_DIRECT_GANG_ID = "EVENT_IN_DIRECT_GANG_ID";
+
+    public static final String EVENT_SELF_HU_ID = "EVENT_SELF_HU_ID";
+
+    public static final String EVENT_IN_DIRECT_HU_ID = "EVENT_IN_DIRECT_HU_ID";
+
+    /**
+     * 客户端发起等待事件，等待服务端处理完成之后，响应
+     */
+    public static final String EVENT_WAIT_ID = "EVENT_WAIT_ID";
+
+    public static final String EVENT_RECEIVE_OTHER_CARD_ID = "EVENT_RECEIVE_OTHER_CARD_ID";
     /**
      * 设置缓存前缀
      */

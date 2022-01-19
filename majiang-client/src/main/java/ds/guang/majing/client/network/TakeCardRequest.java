@@ -3,18 +3,20 @@ package ds.guang.majing.client.network;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.util.JsonUtil;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 /**
+ *
+ * 摸牌请求
+ *
  * @author asus
  */
-public class GetHandCardRequest extends Request {
+public class TakeCardRequest extends Request {
 
-    public GetHandCardRequest(Object message) {
+    public TakeCardRequest(Object message) {
         super(message);
     }
 
@@ -25,19 +27,20 @@ public class GetHandCardRequest extends Request {
 
     @Override
     protected DsResult after(String content) {
+        // 每次摸牌请求，顺带可以判断，是否有特殊事件触发
 
-        DsMessage<DsResult<List<Integer>>> message = null;
+        DsMessage<DsResult<GameInfoResponse>> message = null;
 
         try {
-            message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<DsResult<List<Integer>>>>() {});
+            message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<DsResult<GameInfoResponse>>>() {});
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Objects.requireNonNull(message, "message is null");
-
+        if(message == null) {
+            // TODO : 这里应该抛异常
+            return DsResult.error("摸牌失败！");
+        }
         return message.getData();
     }
-
-
 }

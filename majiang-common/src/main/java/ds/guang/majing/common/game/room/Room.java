@@ -7,6 +7,8 @@ import ds.guang.majing.common.game.player.Player;
 import java.io.Serializable;
 import java.util.*;
 
+import static ds.guang.majing.common.util.Algorithm.sortCountFour;
+import static ds.guang.majing.common.util.Algorithm.sortCountThree;
 import static ds.guang.majing.common.util.DsConstant.preRoomInfoPrev;
 
 /**
@@ -54,6 +56,9 @@ public abstract class Room implements Serializable {
      */
     protected int minCardNum;
 
+    /**
+     * 手牌池，所有手牌集合
+     */
     @JsonIgnore
     private transient List<Integer> initialCards;
 
@@ -81,15 +86,6 @@ public abstract class Room implements Serializable {
      */
     public abstract boolean check(String userId);
 
-
-    /**
-     *
-     * 返回事件类型
-     *
-     * @param cards 玩家手牌
-     * @return
-     */
-    public abstract int checkEvent(List<Integer> cards);
 
     public Room setPlayers(Player[] players) {
         this.players = players;
@@ -222,11 +218,12 @@ public abstract class Room implements Serializable {
         for (int i = 0; i < initialCardNum; i++) {
             for (int j = 0; j < playerCount; j++) {
                 List<Integer> cards = players[j].getCards();
-                cards.add(initialCards.get(i));
-                markIndex ++;
+                // 从手牌池中取出一张手牌
+                cards.add(initialCards.get(markIndex++));
             }
         }
 
+        // 对每个玩家的手牌进行排序
         for (int i = 0; i < playerCount; i++) {
             Collections.sort(players[i].getCards());
         }
@@ -286,34 +283,6 @@ public abstract class Room implements Serializable {
      * @return
      */
     public static boolean isPongEvent(List<Integer> cards, int takeout) {
-
-        return false;
-    }
-
-
-    public static boolean isGangEvent(List<Integer> cards, int take) {
-
-        // 1.摸牌阶段判断，是否可以杠
-        // 2.其他玩家出牌阶段，需要再次判断是否可以杠
-        if(take == -1) {
-            // 第一种情况
-            for (Integer card : cards) {
-                // TODO: 这里还有可以优化的地方
-                int count = Algorithm.sortCountArr(cards, card);
-
-                if(count == 4) {
-                    return true;
-                }
-            }
-        }else {
-
-            int count = Algorithm.sortCountArr(cards, take);
-
-            if(count == 3) {
-                return true;
-            }
-
-        }
 
         return false;
     }

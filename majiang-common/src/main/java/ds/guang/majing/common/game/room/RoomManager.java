@@ -1,7 +1,11 @@
 package ds.guang.majing.common.game.room;
 
+import ds.guang.majing.common.util.DsConstant;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static ds.guang.majing.common.util.DsConstant.preRoomInfoPrev;
 
 /**
  * @author guangmingdexin
@@ -38,6 +42,17 @@ public class RoomManager {
         return INSTANCE;
     }
 
+
+    /**
+     *
+     * 获取房间
+     *
+     * @param playId 用户
+     * @return 关联的房间
+     */
+    public static Room findRoomById(String playId) {
+        return getInstance().get(preRoomInfoPrev(playId));
+    }
 
     @Override
     public String toString() {

@@ -43,11 +43,7 @@ public class ServerFourRoom extends Room implements Serializable {
         return true;
     }
 
-    @Override
-    public int checkEvent(List<Integer> cards) {
 
-        return 0;
-    }
 
     public ServerFourRoom(int playerCount,
                           int initialCardNum,
