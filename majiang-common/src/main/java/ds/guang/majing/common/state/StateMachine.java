@@ -107,7 +107,7 @@ public class StateMachine<T,E,R extends Result> implements State.Notify<T> {
         }
         if(loopCount == states.size()) {
             // 没有找到下一个状态
-            throw new NullPointerException("don't find next state!");
+            throw new NullPointerException("don't find next state! " + nextStateId);
         }
 
         if (currentState != null) {

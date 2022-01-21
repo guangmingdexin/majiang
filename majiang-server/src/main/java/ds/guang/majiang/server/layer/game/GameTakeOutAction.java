@@ -31,6 +31,12 @@ public class GameTakeOutAction implements Action {
     @Override
     public void handler(State state) {
 
+        state.onEntry(data -> {
+
+            System.out.println("进入出牌状态！");
+            return data;
+        });
+
         state.onEvent(EVENT_TAKE_OUT_CARD_ID, STATE_WAIT_ID, data -> {
 
             Objects.requireNonNull(data, "data must be not empty!");

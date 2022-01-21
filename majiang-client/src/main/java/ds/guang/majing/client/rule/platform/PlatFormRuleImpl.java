@@ -106,7 +106,8 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             String id = attr.get("requestNo").toString();
             System.out.println(".......................");
             // TODO: 后面对缓存需要更改
-            Cache.getInstance().setObject(DsConstant.preRoomInfoPrev(id), room, -1);
+            // 将房间数据缓存到本地
+            Cache.getInstance().setObject(preRoomInfoPrev(id), room, -1);
 
             DsMessage<String> message = DsMessage.build(EVENT_HANDCARD_ID, id, id);
 
@@ -123,6 +124,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             System.out.println(".....................................");
             // 判断状态，是否为自己的回合
             if(room.isCurAround(id)) {
+                // 进入摸牌状态
                 // 触发摸牌事件 - 这是游戏初始化阶段摸牌
                 DsMessage<String> tm = DsMessage.build(EVENT_TAKE_CARD_ID, id, id);
                 Request takeCardRequest = new TakeCardRequest(tm);
@@ -152,6 +154,9 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             }else {
                 // 进入等待状态
                 this.stateMachine.setCurrentState(STATE_WAIT_ID, DsResult.data(new GameInfoResponse(id, null, null)));
+                // 同时更新远程服务器状态，在这里我还需要依据当前状态，同时对服务器设置一个状态切换事件
+                // 不如直接
+
             }
             return data;
         });
@@ -161,9 +166,9 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         takeState.onEntry(data -> {
 
             System.out.println(".........................");
-            System.out.println("进入摸牌状态");
+          //  System.out.println("进入摸牌状态");
 
-            return this;
+            return data;
         });
 
 
@@ -172,7 +177,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         takeOutState.onEntry(data -> {
            // 1.逻辑是先有
             System.out.println("...............................");
-            System.out.println("进入出牌状态");
+          //  System.out.println("进入出牌状态");
             return this;
         });
 

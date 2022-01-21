@@ -2,12 +2,14 @@ package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
+import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majiang.server.network.ResponseUtil;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.State;
+import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.*;
@@ -63,6 +65,18 @@ public class PrepareAction implements Action {
 //                System.out.println("分配手牌：" + cards + " id: " + id);
                 context.writeAndFlush(ResponseUtil.response(message));
             });
+
+            // 根据是否为自身回合，到达下一状态
+            StateMachine<String, String, DsResult> stateMachine = StateMachines.get(preUserMachinekey(id));
+            if(room.isCurAround(id)) {
+
+                // 进入摸牌状态
+
+            }else {
+
+                // 进入等待状态
+                stateMachine.setCurrentState(STATE_WAIT_ID, data);
+            }
 
             return DsResult.ok();
         });

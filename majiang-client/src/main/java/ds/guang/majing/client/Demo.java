@@ -117,15 +117,14 @@ public class Demo extends Application {
         takeOut.setOnAction(event -> {
 
             System.out.println("........................");
-            System.out.println("出牌！");
+            //System.out.println("出牌！");
 
             GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
             String userId = gameUser == null ? "123456" : gameUser.getUserId();
+
             // 1.获取手牌
-            Room room = RoomManager.findRoomById(userId);
-
+            Room room = (Room) Cache.getInstance().getObject(preRoomInfoPrev(userId));
             Player p = room.findPlayerById(userId);
-
             int r = new Random().nextInt(p.getCards().size());
 
             Integer value = p.getCards().get(r);
