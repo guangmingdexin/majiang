@@ -13,9 +13,9 @@ public class JsonTest {
 
     public static void main(String[] args) {
 
-       // Test test = new Test("1", "2");
+        Test test = new Test("1");
 
-        Object message = DsMessage.build("-1", "-1", DsResult.data("hello"));
+        Object message = DsMessage.build("-1", "-1", DsResult.data(test));
 
 
         String json = JsonUtil.objToJson(message);
@@ -34,7 +34,7 @@ public class JsonTest {
 
         System.out.println(o);
 
-        DsResult<Test> data = (DsResult<Test>) o.getData();
+        DsResult<Test> data =  o.getData();
         System.out.println(data.getClass());
         System.out.println(data.getData().getClass());
     }
@@ -47,6 +47,10 @@ public class JsonTest {
         private String name;
 
         public Test() {
+        }
+
+        public Test(String id) {
+            this.id = id;
         }
 
         public Test(String id, String name) {
@@ -70,6 +74,16 @@ public class JsonTest {
         public Test setName(String name) {
             this.name = name;
             return this;
+        }
+
+        @Override
+        public String toString() {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("{")
+                    .append("\"id\":").append(id)
+                    .append(", \"name\":").append(name)
+                    .append('}');
+            return sb.toString();
         }
     }
 }

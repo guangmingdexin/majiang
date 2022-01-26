@@ -48,7 +48,7 @@ public class ActionManager {
 
     public static void onEvent(State... states) {
 
-       // 怎样自动找到 state 对应的 action，不用每次都需要去创建
+       // 怎样自动找到 state 对应的 contain，不用每次都需要去创建
         // 可以通过注解，根据 stateId 来进行设置（是否有这个必要）
         // 默认取最大优先级
         for (State state : states) {

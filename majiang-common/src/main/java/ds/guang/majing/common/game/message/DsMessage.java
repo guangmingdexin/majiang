@@ -1,5 +1,6 @@
 package ds.guang.majing.common.game.message;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import ds.guang.majing.common.util.DsConstant;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ import java.util.UUID;
  * @author guangyong.deng
  * @date 2021-12-10 17:24
  */
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class DsMessage<T> implements Serializable {
 
     private String id;

@@ -72,16 +72,34 @@ public final class DsConstant {
 
     public static final String EVENT_TAKE_OUT_CARD_ID = "EVENT_TAKE_OUT_CARD_ID";
 
+    /**
+     * 碰
+     */
     public static final String EVENT_PONG_ID = "EVENT_PONG_ID";
 
+    /**
+     * 暗杠
+     */
     public static final String EVENT_SELF_GANG_ID = "EVENT_SELF_GANG_ID";
 
+    /**
+     * 直杠
+     */
     public static final String EVENT_DIRECT_GANG_ID = "EVENT_DIRECT_GANG_ID";
 
+    /**
+     * 巴杠
+     */
     public static final String EVENT_IN_DIRECT_GANG_ID = "EVENT_IN_DIRECT_GANG_ID";
 
+    /**
+     * 自摸
+     */
     public static final String EVENT_SELF_HU_ID = "EVENT_SELF_HU_ID";
 
+    /**
+     * 放炮
+     */
     public static final String EVENT_IN_DIRECT_HU_ID = "EVENT_IN_DIRECT_HU_ID";
 
     /**
@@ -89,7 +107,32 @@ public final class DsConstant {
      */
     public static final String EVENT_WAIT_ID = "EVENT_WAIT_ID";
 
+    /**
+     * 接受到其他玩家出牌
+     */
     public static final String EVENT_RECEIVE_OTHER_CARD_ID = "EVENT_RECEIVE_OTHER_CARD_ID";
+
+
+    /**
+     * 用户对事件的响应，比如pong，gang, hu
+     */
+    public static final String EVENT_RECEIVE_EVENT_REPLY_ID = "EVENT_RECEIVE_EVENT_REPLY_ID";
+
+
+    /**
+     * 客户端预请求执行游戏事件
+     */
+    public static final String EVENT_IS_GAME_EVENT_ID = "EVENT_IS_GAME_EVENT_ID";
+
+    /**
+     * 三种游戏事件临时状态
+     */
+    public static final String EVENT_STATUS_WAIT = "WAIT";
+
+    public static final String EVENT_STATUS_CANCEL = "CANCEL";
+
+    public static final String EVENT_STATUS_ACTION = "ACTION";
+
     /**
      * 设置缓存前缀
      */
@@ -130,5 +173,10 @@ public final class DsConstant {
      * SYS_CONTEXT : netty ChannelHandlerContext 上下文缓存 key
      */
     public static final String SYS_CONTEXT = "sys-context";
+
+
+    public static final String BASE_URL = "http://localhost:9001/";
+
+    public static final String GAME_URL = "v3/game/";
 
 }

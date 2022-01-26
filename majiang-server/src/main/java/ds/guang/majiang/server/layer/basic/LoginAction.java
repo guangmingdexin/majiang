@@ -2,15 +2,16 @@ package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majiang.server.network.ResponseUtil;
+import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.dto.User;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.message.GameInfoRequest;
+import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.util.DsConstant;
-import ds.guang.majing.common.util.JsonUtil;
 import io.netty.channel.ChannelHandlerContext;
 
 import static ds.guang.majing.common.util.DsConstant.*;
@@ -31,10 +32,10 @@ public class LoginAction implements Action {
         // 注册事件就行了
         state.onEvent(EVENT_LOGIN_ID, STATE_PLATFORM_ID, data -> {
             // 查询远程数据数据库，比对数据
-            DsMessage message = (DsMessage) data;
+            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
 
             // 这里还需要将 data 重新反序列化
-            User user = (User) JsonUtil.mapToObj(message.getData(), User.class);
+            User user = message.getData().getUser();
 
             // 调用第三方权限验证框架进行账号验证
             // ...
@@ -58,20 +59,23 @@ public class LoginAction implements Action {
                 // 但是考虑这么一点，NioEventLoop 可能会有多个 Channel 绑定的 Channel
                 if(message.getAttrMap() != null && message.getAttrMap().containsKey(SYS_CONTEXT)) {
                     ChannelHandlerContext context = (ChannelHandlerContext) message.getAttrMap().get(SYS_CONTEXT);
-
-                    DsResult reply = DsResult.data(gameUser);
+                    GameInfoResponse response = new GameInfoResponse().setGameUser(gameUser);
+                    DsResult reply = DsResult.data(response);
                     //  构造返回消息
-                    DsMessage copyMessage = DsMessage
-                            .copy(message)
-                            .setData(reply)
-                            .setAttrMap(null);
+                    DsMessage<DsResult<GameInfoResponse>> respMessage = DsMessage.build(
+                            message.getServiceNo(),
+                            message.getRequestNo(),
+                            reply
+                            );
+
+                    // 防止 后期 Context 无法回收
+                    message.setAttrMap(SYS_CONTEXT, null);
 
                     // 构造一个 http 的响应 即 httpResponse
-                    context.writeAndFlush(ResponseUtil.response(copyMessage));
+                    context.writeAndFlush(ResponseUtil.response(respMessage));
                     return reply;
                 }
             }else {
-                //
                 return DsResult.empty("该玩家已存在，不要重复登陆！");
             }
 

@@ -1,6 +1,7 @@
 package ds.guang.majing.client.network;
 
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.DsConstant;
 import ds.guang.majing.common.util.JsonUtil;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -45,6 +46,7 @@ public abstract class Request  {
      */
     protected static int waitTime;
 
+
     protected String url;
 
     static {
@@ -56,21 +58,35 @@ public abstract class Request  {
                 .setConnectTimeout(waitTime)
                 .build();
 
+
+
     }
 
     public Request() {
     }
 
     public Request(Object message) {
+        this.message = message;
+        this.url = DsConstant.BASE_URL;
+        init();
+    }
+
+    public Request(Object message, String url) {
         // 默认请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
         // 直接将 data 封装为 message，或者直接传一个
 
         // 创建Post请求
-        this.setUrl("http://localhost:9001/")
-                .setMessage(message)
-                .setHttpPost(new HttpPost(url))
-                .setConfig(config);
+        this.message = message;
+        this.url = DsConstant.BASE_URL + url;
+        init();
+    }
+
+    private void init() {
+
+        this.setMessage(message)
+        .setHttpPost(new HttpPost(url))
+        .setConfig(config);
 
         try {
             this.getHttpPost().setHeader("Content-Type", "application/json;charset=utf8");

@@ -1,6 +1,8 @@
 package ds.guang.majing.common.game.room;
 
+import ds.guang.majing.common.game.card.GameEventHandler;
 import ds.guang.majing.common.game.player.Player;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.UUID;
 /**
  * @author guangmingdexin
  */
+@Accessors(chain = true)
 public class ServerFourRoom extends Room implements Serializable {
 
 
@@ -49,12 +52,14 @@ public class ServerFourRoom extends Room implements Serializable {
                           int initialCardNum,
                           int maxCardNum,
                           int minCardNum,
-                          Player[] players) {
+                          Player[] players,
+                          GameEventHandler eventHandler) {
         super();
         super.id = UUID.randomUUID().toString().substring(0, 6);
         super.playerCount = playerCount;
         super.players = players;
         super.initialCardNum = initialCardNum;
+        super.eventHandler = eventHandler;
 
         if(getInitialCards() == null || getInitialCards().isEmpty()) {
             // 还未进行初始化

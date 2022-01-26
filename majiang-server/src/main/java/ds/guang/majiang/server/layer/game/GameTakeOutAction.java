@@ -1,9 +1,10 @@
 package ds.guang.majiang.server.layer.game;
 
 import ds.guang.majiang.server.layer.Action;
+import ds.guang.majing.common.game.card.GameEventHandler;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majiang.server.network.ResponseUtil;
-import ds.guang.majing.common.game.card.Card;
+import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
@@ -12,7 +13,6 @@ import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.room.RoomManager;
 import ds.guang.majing.common.state.State;
-import ds.guang.majing.common.util.JsonUtil;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Objects;
@@ -32,7 +32,6 @@ public class GameTakeOutAction implements Action {
     public void handler(State state) {
 
         state.onEntry(data -> {
-
             System.out.println("进入出牌状态！");
             return data;
         });
@@ -40,8 +39,9 @@ public class GameTakeOutAction implements Action {
         state.onEvent(EVENT_TAKE_OUT_CARD_ID, STATE_WAIT_ID, data -> {
 
             Objects.requireNonNull(data, "data must be not empty!");
-            DsMessage message = (DsMessage) data;
-            GameInfoRequest request = (GameInfoRequest) JsonUtil.mapToObj(message.getData(), GameInfoRequest.class);
+            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
+            GameInfoRequest request = message.getData();
+
             String id = request.getUserId();
             Room room = RoomManager.findRoomById(id);
             Player p = room.findPlayerById(id);
@@ -61,32 +61,39 @@ public class GameTakeOutAction implements Action {
                 // 3.通知其他玩家
                 Player[] players = room.getPlayers();
 
-                for (Player player : players) {
+                GameEventHandler eventHandler = room.getEventHandler();
 
+                for (Player player : players) {
                     if(!player.equals(p)) {
+                        String userId = player.id();
+                        // 判断其他玩家能不能够形成其他事件
+                        GameEvent gameEvent = p.event(card, EVENT_RECEIVE_OTHER_CARD_ID, userId);
+                        // 注意：这里是线程安全的
+                        // 将玩家事件加入处理器中，稍后处理
+                        eventHandler.addEvent(gameEvent);
+
                         ChannelHandlerContext context = (ChannelHandlerContext)player.getContext();
                         context.channel().eventLoop().execute(() -> {
+
                             // 提交任务
                             // 封装一个 Response 对象
-                            String userId = player.id();
-                            GameInfoResponse r = new GameInfoResponse(userId, card, null);
+                            GameInfoResponse r = new GameInfoResponse()
+                                    .setUserId(userId)
+                                    .setCard(card);
 
                             context.writeAndFlush(
                                     ResponseUtil.response(
                                             DsMessage.build(EVENT_RECEIVE_OTHER_CARD_ID, userId, DsResult.data(r))));
+
+
                         });
                     }
-
                 }
 
                 return DsResult.ok();
             }
-
             throw new IllegalArgumentException("错误的出牌请求");
 
         });
-
-
-
     }
 }

@@ -161,7 +161,7 @@ public class Algorithm {
             // 组成顺子
             Integer index1 = item + 1;
             Integer index2 = item + 2;
-            if(binarySearch(cards, index1) >= 0 && binarySearch(cards, index2) >= 0) {
+            if(binarySearch(cards, index1, false) >= 0 && binarySearch(cards, index2, false) >= 0) {
                 cards.remove(item);
                 cards.remove(index1);
                 cards.remove(index2);
@@ -207,7 +207,7 @@ public class Algorithm {
             return cards;
         }
 
-        int index = binarySearch(cards, card);
+        int index = binarySearch(cards, card, false);
 
         if(index >= 0) {
             cards.remove(index);
@@ -222,9 +222,10 @@ public class Algorithm {
      *
      * @param nums 手牌集合
      * @param num 手牌
+     * @param isInsert 是否需要插入
      * @return 插入的下标
      */
-    public static int binarySearch(List<Integer> nums, Integer num) {
+    public static int binarySearch(List<Integer> nums, Integer num, boolean isInsert) {
 
         // 1.确定范围 [0, nums.len - 1] 闭区间
         // 2. [left, mid - 1], [mid + 1, right]
@@ -251,9 +252,11 @@ public class Algorithm {
         // 目标值等于数组中某一个元素  return middle;
         // 目标值插入数组中的位置 [left, right]，return  right + 1
         // 目标值在数组所有元素之后的情况 [left, right]， return right + 1
-        return high + 1;
+        return isInsert ? high + 1 : (-low + 1);
 
     }
+
+
 
 
     /**

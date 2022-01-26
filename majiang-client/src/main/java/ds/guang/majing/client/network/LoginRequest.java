@@ -3,6 +3,7 @@ package ds.guang.majing.client.network;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.game.dto.GameUser;
@@ -29,23 +30,23 @@ public class LoginRequest extends Request {
     @Override
     protected DsResult after(String content) {
 
-        DsMessage<DsResult<GameUser>> message = null;
+        DsMessage<DsResult<GameInfoResponse>> message = null;
 
         try {
            message = JsonUtil.getMapper().readValue(
                     content,
-                    new TypeReference<DsMessage<DsResult<GameUser>>>() {});
+                    new TypeReference<DsMessage<DsResult<GameInfoResponse>>>() {});
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Objects.requireNonNull(message, "message is null");
 
-        DsResult<GameUser> result = message.getData();
+        DsResult<GameInfoResponse> result = message.getData();
 
         if( result != null && result.success()) {
             // 这里应该还需要一个上下文解析器，用来保存用户基本信息和游戏信息
-            GameUser data = (GameUser)JsonUtil.mapToObj(result.getData(), GameUser.class);
+            GameUser data = result.getData().getGameUser();
             Cache.getInstance().setObject(data.getUsername(), data, -1);
             return DsResult.data("token-123344");
         }

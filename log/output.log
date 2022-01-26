@@ -215,7 +215,7 @@ java.util.concurrent.RejectedExecutionException: 获取通道失败！
 13:45:01.776 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majiang.server.network.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:164)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -267,7 +267,7 @@ java.util.ConcurrentModificationException: null
 15:12:10.331 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1387016645@555a12d2
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majiang.server.network.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:85)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -279,7 +279,7 @@ java.lang.NullPointerException: null
 15:21:59.324 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1340713777@567c5e0a
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majiang.server.network.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:82)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -291,7 +291,7 @@ java.lang.NullPointerException: null
 15:26:51.666 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1349313202@42aaeac5
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majiang.server.network.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:82)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -303,7 +303,7 @@ java.lang.NullPointerException: null
 15:32:35.032 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1387016645@555a12d2
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majiang.server.network.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:82)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -331,4 +331,22 @@ java.lang.NullPointerException: null
 	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:986)
 	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
 	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.lang.Thread.run(Thread.java:748)
+16:03:23.172 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:174)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+16:07:18.873 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.NullPointerException: null
+	at java.util.Objects.requireNonNull(Objects.java:203)
+	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:174)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
 	at java.lang.Thread.run(Thread.java:748)

@@ -16,8 +16,8 @@ import java.io.IOException;
  */
 public class TakeCardRequest extends Request {
 
-    public TakeCardRequest(Object message) {
-        super(message);
+    public TakeCardRequest(Object message, String url) {
+        super(message, url);
     }
 
     @Override

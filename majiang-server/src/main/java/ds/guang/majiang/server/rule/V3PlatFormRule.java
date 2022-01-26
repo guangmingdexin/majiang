@@ -41,8 +41,6 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
 
     private Supplier<State<String, String, DsResult>> prepareSupplier = () -> stateStrategy.newState(() -> STATE_PREPARE_ID);
 
-    private Supplier<State<String, String, DsResult>> initialStateSupplier = () -> stateStrategy.newState(() -> STATE_INITIAL_ID);
-
     /**
      * 游戏状态 - 摸牌， 出牌，事件
      */
@@ -60,7 +58,7 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
         State<String, String, DsResult> loginState = loginStateSupplier.get();
         State<String, String, DsResult> platformState = platformSupplier.get();
         State<String, String, DsResult> prepareState = prepareSupplier.get();
-        State<String, String, DsResult> initialState = initialStateSupplier.get();
+
 
         State<String, String, DsResult> takeCardState = gameTakeCardStateSupplier.get();
         State<String, String, DsResult> takeOutCardState = gameTakeOutCardStateSupplier.get();
@@ -68,7 +66,7 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
         State<String, String, DsResult> waitState = gameWaitStateSupplier.get();
 
         // 直接注册事件
-        ActionManager.onEvent(loginState, platformState, prepareState, initialState, takeCardState, takeOutCardState, eventState);
+        ActionManager.onEvent(loginState, platformState, prepareState,  takeCardState, takeOutCardState, eventState);
 
         // 创建状态机
         StateMachine<String, String, DsResult> ruleActor = getRuleActor();

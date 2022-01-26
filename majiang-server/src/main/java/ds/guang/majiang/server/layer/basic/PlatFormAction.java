@@ -2,6 +2,7 @@ package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
+import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.player.ServerPlayer;
 import ds.guang.majiang.server.pool.MatchPool;
 import ds.guang.majing.common.util.ClassUtil;
@@ -14,6 +15,7 @@ import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.state.State;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 import static ds.guang.majing.common.util.DsConstant.*;
@@ -33,10 +35,11 @@ public class PlatFormAction implements Action {
 
         state.onEvent(EVENT_PREPARE_ID, STATE_PREPARE_ID, data -> {
 
-            DsMessage message = ClassUtil.convert(data, DsMessage.class);
+            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
             // 这里还需要将 data 重新反序列化
-            String userId = (String) JsonUtil.mapToObj(message.getData(), String.class);
-
+            GameInfoRequest request = message.getData();
+            String userId = request.getUserId();
+            // 开启匹配池
             MatchPool matchPool = MatchPool.getInstance();
             matchPool.start();
             // 1.获取游戏玩家 id
@@ -62,27 +65,6 @@ public class PlatFormAction implements Action {
                 throw new NullPointerException("context is null!");
             }
 
-
-                /**
-                 *  EventLoop A,B
-                 *
-                 *  A 执行 #match，启动 Pool C 线程（同时可能竞争 阻塞队列--无影响）
-                 *
-                 *  此时接入 另一个客户端 ，启动线程 B (同时可能竞争 阻塞队列)
-                 *
-                 *  1. C 线程获取到锁， A，B 继续阻塞 ，执行循环，直到 B 线程取得锁，加入阻塞队列
-                 *      C 此时陷入阻塞，然后 B 加入之后，释放锁，C 开始执行循环
-                 *      异常情况#1 B 还未执行到 match 方法 C 就返回了，然后 B 执行 match
-                 *      进入阻塞，但是 队列中的玩家已被移除，不满足条件一直阻塞
-                 *
-                 *
-                 *  满足退出 C 线程的条件，返回 future
-                 *
-                 *  #result 现在线程 A 返回结束，B 继续被阻塞，且客户端都无数据收到
-                 *
-                 *
-                 *
-                 */
             return DsResult.wait("游戏匹配中！");
         });
 

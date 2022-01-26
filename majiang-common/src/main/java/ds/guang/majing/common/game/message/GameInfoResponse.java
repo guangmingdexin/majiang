@@ -2,18 +2,39 @@ package ds.guang.majing.common.game.message;
 
 
 import ds.guang.majing.common.game.card.Card;
+import ds.guang.majing.common.game.card.GameEvent;
+import ds.guang.majing.common.game.card.MaGameEvent;
 import ds.guang.majing.common.game.card.MaJiangEvent;
-
+import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.room.Room;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 返回的游戏包信息
  * @author asus
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@Accessors(chain = true)
 public class GameInfoResponse implements Serializable {
 
+
+    /**
+     * 请求序号
+     */
+    private String requestNo;
+
+    /**
+     * 玩家 id
+     */
     private String userId;
 
     /**
@@ -25,51 +46,50 @@ public class GameInfoResponse implements Serializable {
     /**
      * 游戏事件信息
      */
-    private Map<MaJiangEvent, Integer> event;
+    private GameEvent event;
 
-    public GameInfoResponse() {
-    }
+    /**
+     * 游戏事件状态
+     */
+    private String eventStatus;
 
-    public GameInfoResponse(String userId, Card card, Map<MaJiangEvent, Integer> event) {
-        this.userId = userId;
-        this.card = card;
-        this.event = event;
-    }
+    /**
+     * 手牌信息
+     */
+    private List<Integer> cards;
 
-    public Card getCard() {
-        return card;
-    }
 
-    public GameInfoResponse setCard(Card card) {
-        this.card = card;
-        return this;
-    }
+    /**
+     * 房间信息
+     */
+    private Room room;
 
-    public Map<MaJiangEvent, Integer> getEvent() {
-        return event;
-    }
+    /**
+     * 玩家信息
+     */
+    private GameUser gameUser;
 
-    public GameInfoResponse setEvent(Map<MaJiangEvent, Integer> event) {
-        this.event = event;
-        return this;
-    }
 
-    public String getUserId() {
-        return userId;
-    }
+    /**
+     * 当前玩家回合
+     */
+    private int curRoundIndex;
 
-    public GameInfoResponse setUserId(String userId) {
-        this.userId = userId;
-        return this;
-    }
+
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("{")
-                .append("\"userId\":").append(userId)
+                .append("\"requestNo\":").append(requestNo)
+                .append(", \"userId\":").append(userId)
                 .append(", \"card\":").append(card)
                 .append(", \"event\":").append(event)
+                .append(", \"eventStatus\":").append(eventStatus)
+                .append(", \"cards\":").append(cards)
+                .append(", \"room\":").append(room)
+                .append(", \"gameUser\":").append(gameUser)
+                .append(", \"curRoundIndex\":").append(curRoundIndex)
                 .append('}');
         return sb.toString();
     }

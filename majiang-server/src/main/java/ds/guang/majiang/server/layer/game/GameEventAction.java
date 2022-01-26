@@ -29,6 +29,13 @@ public class GameEventAction implements Action {
     @SuppressWarnings("unchecked")
     @Override
     public void handler(State state) {
+
+        state.onEntry(data -> {
+
+            System.out.println("有事件发生！");
+            return data;
+        });
+
         // 触发 PONG 事件的前一个状态 一定只有一种情况
         // 1.其他玩家出牌，当前玩家状态由 wait -> event 传入的数据一定包括 接受到的其他玩家的牌
         state.onEvent(EVENT_PONG_ID, data -> {
@@ -37,22 +44,13 @@ public class GameEventAction implements Action {
             // 1.检查服务端手牌是否符合要求
 
 
-            return this;
+            return data;
         });
 
 
         state.onEvent(EVENT_SELF_GANG_ID, data -> {
             // 1.获取房间号，获取玩家手牌
-            Objects.requireNonNull(data, "data must be not empty!");
-            DsMessage message = (DsMessage) data;
-            // TODO：后面统一发送 GameInfoRequest
-            GameInfoRequest request = (GameInfoRequest) JsonUtil.mapToObj(message.getData(), GameInfoRequest.class);
-            String id = request.getUserId();
-            Room room = RoomManager.findRoomById(id);
-            Player p = room.findPlayerById(id);
-            Card card = request.getCard();
-
-            System.out.println("-------------" + id + " 杠牌：" + request + "-----------------");
+           // System.out.println("-------------" + id + " 杠牌：" + request + "-----------------");
 
             return this;
         });

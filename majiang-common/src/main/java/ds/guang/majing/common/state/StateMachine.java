@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * 状态机
@@ -140,15 +141,24 @@ public class StateMachine<T,E,R extends Result> implements State.Notify<T> {
             }
         });
 
-        if(currentState.getId() != stateId) {
-            throw new NullPointerException("don't find the next state");
-        }
+        // 有可能状态会经过两次切换，所以这里不能这么判断
+//        if(!(currentState.getId().equals(stateId))) {
+//            System.out.println(toString());
+//            throw new NullPointerException("don't find the next state! " + stateId);
+//        }
 
     }
 
 
-    public State<T, E, R> getCurState() {
-        return currentState;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"states\":").append(states.stream().map(State::getId).collect(Collectors.toList()))
+                .append(", \"initStateId\":").append(initStateId)
+                .append(", \"currentState\":").append(currentState.getId())
+                .append('}');
+        return sb.toString();
     }
 }
 

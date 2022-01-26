@@ -1,5 +1,6 @@
 package ds.guang.majing.common.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -36,6 +37,8 @@ public final class JsonUtil {
         SimpleModule module = new SimpleModule();
         module.addSerializer(LocalDateTime.class, LocalDateTimeSerializer.INSTANCE);
         module.addDeserializer(LocalDateTime.class, LocalDateTimeDeserializer.INSTANCE);
+
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         mapper.registerModule(module);
 

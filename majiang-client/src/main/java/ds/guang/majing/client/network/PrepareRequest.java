@@ -1,6 +1,7 @@
 package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.room.ClientFourRoom;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
@@ -17,36 +18,27 @@ import java.util.Objects;
 public class PrepareRequest extends Request {
 
 
-    public PrepareRequest(Object message) {
-        super(message);
+    public PrepareRequest(Object message, String url) {
+        super(message, url);
     }
 
     @Override
-    protected void before(Runnable task) {
-
-    }
+    protected void before(Runnable task) {}
 
 
     @Override
     protected DsResult after(String content) {
 
-        DsMessage<DsResult<Room>> message = null;
+        DsMessage<DsResult<GameInfoResponse>> message = null;
         try {
-            message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<DsResult<ClientFourRoom>>>() {});
+            message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<DsResult<GameInfoResponse>>>() {});
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         Objects.requireNonNull(message, "message is null");
 
-        DsResult<Room> result = message.getData();
-
-        if(result.success()) {
-            // 获取房间信息
-            // System.out.println("room-info:" + result);
-            return result;
-        }
-        return result;
+        return message.getData();
     }
 
 }

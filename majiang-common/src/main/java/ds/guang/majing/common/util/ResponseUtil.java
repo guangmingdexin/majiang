@@ -1,4 +1,4 @@
-package ds.guang.majiang.server.network;
+package ds.guang.majing.common.util;
 
 import ds.guang.majing.common.util.JsonUtil;
 import io.netty.buffer.ByteBuf;

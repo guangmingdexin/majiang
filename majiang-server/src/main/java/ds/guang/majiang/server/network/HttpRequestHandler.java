@@ -1,10 +1,13 @@
 package ds.guang.majiang.server.network;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majiang.server.machines.StateMachines;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.state.StateMachine;
+import ds.guang.majing.common.util.ResponseUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
@@ -26,6 +29,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
     protected void channelRead0(ChannelHandlerContext context, HttpObject httpObject) throws Exception {
 
         // 判断 msg 是否为 http 请求
+        // 后期会将游戏业务与普通业务分类，所以可以添加 uri 做判断
         if(httpObject instanceof FullHttpRequest) {
             FullHttpRequest request = (FullHttpRequest) httpObject;
             DecoderResult result = request.decoderResult();
@@ -35,11 +39,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
             }
             String content = HttpRequestParser.getContent(request);
             System.out.println("content: " + content);
-            DsMessage message = (DsMessage) JsonUtil.stringToObj(content, DsMessage.class);
+
+            // 不忽略大小写
+            DsMessage message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<GameInfoRequest>>() {});
 
             Objects.requireNonNull(message, "message is null");
             Objects.requireNonNull(message.getRequestNo(), "requestNo is null");
-
 
             // 根据不同业务调用不同的处理逻辑
             StateMachine<String, String, DsResult> machine = StateMachines

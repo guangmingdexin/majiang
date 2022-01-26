@@ -1,12 +1,29 @@
 package ds.guang.majing.common.game.message;
 
 import ds.guang.majing.common.game.card.Card;
-import ds.guang.majing.common.game.card.MaJiangEvent;
+import ds.guang.majing.common.game.card.GameEvent;
+import ds.guang.majing.common.game.dto.User;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
+import java.io.Serializable;
 
 /**
  * @author asus
  */
-public class GameInfoRequest {
+@Getter
+@Setter
+@NoArgsConstructor
+@Accessors(chain = true)
+public class GameInfoRequest implements Serializable {
+
+
+    /**
+     * 消息请求序号，先暂时和 userId 一致，后期再更改
+     */
+    private String requestNo;
 
     /**
      * 玩家 id
@@ -22,30 +39,23 @@ public class GameInfoRequest {
     /**
      * 游戏事件
      */
-    private MaJiangEvent event;
+    private GameEvent event;
 
-    public GameInfoRequest() {}
+    /**
+     * 用户信息
+     */
+    private User user;
 
-    public GameInfoRequest(String userId, MaJiangEvent event) {
-        this.userId = userId;
-        this.event = event;
-    }
 
-    public GameInfoRequest(String userId, Card card, MaJiangEvent event) {
-        this.userId = userId;
-        this.card = card;
-        this.event = event;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public Card getCard() {
-        return card;
-    }
-
-    public MaJiangEvent getEvent() {
-        return event;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append("{")
+                .append("\"requestNo\":").append(requestNo)
+                .append(", \"userId\":").append(userId)
+                .append(", \"card\":").append(card)
+                .append(", \"event\":").append(event)
+                .append('}');
+        return sb.toString();
     }
 }

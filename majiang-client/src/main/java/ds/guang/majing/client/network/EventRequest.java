@@ -4,11 +4,11 @@ import ds.guang.majing.common.game.message.DsResult;
 
 /**
  * @author guangyong.deng
- * @date 2022-01-18 17:04
+ * @date 2022-01-26 13:39
  */
-public class TakeOutRequest extends Request {
+public class EventRequest extends Request {
 
-    public TakeOutRequest(Object message, String url) {
+    public EventRequest(Object message, String url) {
         super(message, url);
     }
 

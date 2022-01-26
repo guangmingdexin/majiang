@@ -1,19 +1,31 @@
 package ds.guang.majing.common.game.room;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ds.guang.majing.common.util.Algorithm;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import ds.guang.majing.common.game.card.GameEventHandler;
 import ds.guang.majing.common.game.player.Player;
+import io.netty.channel.ChannelHandlerContext;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.*;
 
-import static ds.guang.majing.common.util.Algorithm.sortCountFour;
-import static ds.guang.majing.common.util.Algorithm.sortCountThree;
 import static ds.guang.majing.common.util.DsConstant.preRoomInfoPrev;
 
 /**
  * @author asus
  */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = ServerFourRoom.class, name = "serverRoom"),
+        @JsonSubTypes.Type(value = ClientFourRoom.class, name = "clientRoom")
+})
+@Getter
+@Setter
 public abstract class Room implements Serializable {
 
     /**
@@ -62,6 +74,13 @@ public abstract class Room implements Serializable {
     @JsonIgnore
     private transient List<Integer> initialCards;
 
+
+    /**
+     * 游戏事件处理器
+     */
+    protected transient GameEventHandler eventHandler;
+
+
     public Player[] getPlayers() {
         return players;
     }
@@ -87,65 +106,6 @@ public abstract class Room implements Serializable {
     public abstract boolean check(String userId);
 
 
-    public Room setPlayers(Player[] players) {
-        this.players = players;
-        return this;
-    }
-
-    public int getMarkIndex() {
-        return markIndex;
-    }
-
-    public Room setMarkIndex(int markIndex) {
-        this.markIndex = markIndex;
-        return this;
-    }
-
-    public int getCurRoundIndex() {
-        return curRoundIndex;
-    }
-
-    public Room setCurRoundIndex(int curRoundIndex) {
-        this.curRoundIndex = curRoundIndex;
-        return this;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Room setId(String id) {
-        this.id = id;
-        return this;
-    }
-
-    public int getPlayerCount() {
-        return playerCount;
-    }
-
-    public Room setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
-        return this;
-    }
-
-    public List<Integer> getInitialCards() {
-        return initialCards;
-    }
-
-    public Room setInitialCards(List<Integer> initialCards) {
-        this.initialCards = initialCards;
-        return this;
-    }
-
-    public int getInitialCardNum() {
-        return initialCardNum;
-    }
-
-    public Room setInitialCardNum(int initialCardNum) {
-        this.initialCardNum = initialCardNum;
-        return this;
-    }
-
     /**
      *
      * 根据用户 id 获取玩家信息
@@ -156,15 +116,37 @@ public abstract class Room implements Serializable {
     public Player findPlayerById(String userId) {
 
         Objects.requireNonNull(userId, "userId must be not empty!");
-
         for (Player player : players) {
             if(userId.equals(player.id())) {
                 return player;
             }
         }
-
         return null;
     }
+
+//    /**
+//     * 获取指定玩家的方位
+//     * @param userId
+//     * @return
+//     */
+//    public int getDirection(String userId) {
+//        int direction = findPlayerById(userId).getDirection();
+//        if(direction == 0) {
+//            throw new NullPointerException("方位没有初始化");
+//        }
+//        return direction;
+//    }
+//
+//
+//    /**
+//     * 获取当前回合玩家的方位
+//     */
+//    public int getCurDirection() {
+//        int curRoundIndex = getCurRoundIndex();
+//        String curId = players[curRoundIndex % players.length].id();
+//        return getDirection(curId);
+//    }
+
 
     /**
      *
@@ -275,23 +257,22 @@ public abstract class Room implements Serializable {
         return roomManager.get(preRoomInfoPrev(id));
     }
 
-    /**
-     *
-     * 在麻将这里设计中，必须时刻保持手牌是有序的，所以
-     *
-     * @param cards
-     * @return
-     */
-    public static boolean isPongEvent(List<Integer> cards, int takeout) {
 
-        return false;
+    public static void write(String id, Object message) {
+
+        Room room = getRoomById(id);
+
+        Player p = room.findPlayerById(id);
+
+        ChannelHandlerContext context = (ChannelHandlerContext) p.getContext();
+
+        context.channel().eventLoop().execute(() -> {
+
+           context.writeAndFlush(message);
+        });
+
     }
 
-
-    public static boolean isHuEvent(List<Integer> cards) {
-
-        return Algorithm.isHu(cards);
-    }
 
 
     @Override

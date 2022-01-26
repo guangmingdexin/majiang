@@ -1,10 +1,21 @@
 package ds.guang.majing.common.game.card;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.Accessors;
+
 import java.util.Objects;
 
 /**
  * @author guangmingdexin
  */
+@Getter
+@Setter
+@Accessors(chain = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class MaJiang implements Card {
 
     /**
@@ -16,32 +27,6 @@ public class MaJiang implements Card {
 
     private CardType cardType;
 
-    public MaJiang() {}
-
-    public MaJiang(int value, CardType cardType) {
-        this.value = value;
-        this.cardType = cardType;
-    }
-
-
-    public int getValue() {
-        return value;
-    }
-
-    public MaJiang setValue(int value) {
-        this.value = value;
-        return this;
-    }
-
-
-    public CardType getCardType() {
-        return cardType;
-    }
-
-    public MaJiang setCardType(CardType cardType) {
-        this.cardType = cardType;
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {

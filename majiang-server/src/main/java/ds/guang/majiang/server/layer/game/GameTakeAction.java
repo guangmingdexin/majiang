@@ -3,13 +3,11 @@ package ds.guang.majiang.server.layer.game;
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majiang.server.machines.StateMachines;
-import ds.guang.majiang.server.network.ResponseUtil;
-import ds.guang.majing.common.game.card.Card;
-import ds.guang.majing.common.game.card.CardType;
-import ds.guang.majing.common.game.card.MaJiang;
-import ds.guang.majing.common.game.card.MaJiangEvent;
+import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
@@ -17,7 +15,6 @@ import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.util.Map;
 import java.util.Objects;
 
 import static ds.guang.majing.common.util.DsConstant.*;
@@ -43,8 +40,9 @@ public class GameTakeAction implements Action {
         state.onEvent(EVENT_TAKE_CARD_ID, data -> {
 
             Objects.requireNonNull(data, "data must be not empty!");
-            DsMessage message = (DsMessage) data;
-            String id = message.getData().toString();
+            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
+            GameInfoRequest request = message.getData();
+            String id = request.getUserId();
 
             // 1.获取房间信息，判断是否为当前玩家，如果是，则返回棋牌信息，包括判断是否有特殊事件
             Room room = Room.getRoomById(id);
@@ -64,17 +62,24 @@ public class GameTakeAction implements Action {
                 // 判断事件
                 // 麻将棋牌
                 Card majiang = new MaJiang(take, CardType.generate(take));
+                GameEvent event = p.event(majiang, EVENT_TAKE_CARD_ID, id);
 
-                Map<MaJiangEvent, Integer> event = p.event(majiang, EVENT_TAKE_CARD_ID);
-                GameInfoResponse info = new GameInfoResponse(id, majiang, event);
+                GameInfoResponse info = new GameInfoResponse()
+                        .setUserId(id)
+                        .setCard(majiang)
+                        .setEvent(event);
 
                 // 发送消息给玩家
                 ChannelHandlerContext context = (ChannelHandlerContext)p.getContext();
                 // 返回结果
                 DsResult<GameInfoResponse> r = DsResult.data(info);
                 context.channel().eventLoop().execute(() -> {
-                    message.setData(r);
-                    context.writeAndFlush(ResponseUtil.response(message));
+                    DsMessage<GameInfoResponse> respMessage = DsMessage.build(
+                            message.getServiceNo(),
+                            message.getRequestNo(),
+                            DsResult.data(info)
+                    );
+                    context.writeAndFlush(ResponseUtil.response(respMessage));
                 });
 
                 StateMachine<String, String, DsResult> machine = StateMachines
@@ -82,7 +87,7 @@ public class GameTakeAction implements Action {
 
                 // 状态转换，根据条件，如果没有特殊事件，则正常进入出牌状态
                 // 否则进入特殊事件状态，等待玩家响应之后，进入下一个状态
-                if(event.isEmpty()){
+                if(event == null){
                     machine.setCurrentState(STATE_TAKE_OUT_CARD_ID, r);
                 }else {
                     System.out.println("event: " + event);

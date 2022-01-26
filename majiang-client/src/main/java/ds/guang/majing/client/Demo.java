@@ -7,8 +7,6 @@ import ds.guang.majing.common.game.card.MaJiang;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
-import ds.guang.majing.common.game.room.RoomManager;
-import ds.guang.majing.common.util.DsConstant;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.cache.Cache;
@@ -83,8 +81,7 @@ public class Demo extends Application {
         String requestNo = UUID.randomUUID().toString().substring(0, 8);
 
         button.setOnAction(event -> {
-            // TODO 多次点击登录 会出现返回值不一致的情况
-            // TODO 异步状态下，在无法获取服务端的响应下就进行了状态的转换
+
             // TODO 巨大隐患，当服务器没有即使响应之后
             // TODO 同样还是服务器-客户端状态如何保持一致（在客户端发送正式请求前，先
             //  发送一个预请求，用来同步服务器-客户端状态，或者在处理请求时进行判断，主要是
@@ -94,22 +91,26 @@ public class Demo extends Application {
             // 并需要时刻同步两个状态机的状态一致，缓存
             System.out.println("登陆开始了！");
             User u = new User("guangmingdexin", "123");
-            DsMessage data = DsMessage.build(DsConstant.EVENT_LOGIN_ID, requestNo, u);
+            GameInfoRequest request = new GameInfoRequest();
+            DsMessage data = DsMessage.build(EVENT_LOGIN_ID, requestNo, request.setUser(u));
             CompletableFuture.runAsync(() -> {
-                ruleActor.setCurrentState(DsConstant.STATE_LOGIN_ID, data);
-                ruleActor.event(DsConstant.EVENT_LOGIN_ID, data);
+                ruleActor.setCurrentState(STATE_LOGIN_ID, data);
+                ruleActor.event(EVENT_LOGIN_ID, data);
             });
         });
 
         game.setOnAction(event -> {
             GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
             String userId = gameUser == null ? "123456" : gameUser.getUserId();
-            DsMessage data = DsMessage.build(DsConstant.EVENT_PREPARE_ID, requestNo, userId);
+
+            GameInfoRequest request = new GameInfoRequest().setUserId(userId);
+            DsMessage data = DsMessage.build(EVENT_PREPARE_ID, requestNo, request);
+
             CompletableFuture.runAsync(() -> {
-                ruleActor.setCurrentState(DsConstant.STATE_PLATFORM_ID, data);
-                ruleActor.event(DsConstant.EVENT_PREPARE_ID, data);
+                ruleActor.setCurrentState(STATE_PLATFORM_ID, data);
+                ruleActor.event(EVENT_PREPARE_ID, data);
             }).exceptionally(e -> {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 return null;
             });
         });
@@ -130,12 +131,15 @@ public class Demo extends Application {
             Integer value = p.getCards().get(r);
             DsMessage data = DsMessage.build(EVENT_TAKE_OUT_CARD_ID,
                     requestNo,
-                    new GameInfoRequest(userId, new MaJiang(value, CardType.generate(value)), null));
+                    new GameInfoRequest()
+                            .setUserId(userId)
+                            .setCard(new MaJiang(value, CardType.generate(value))));
+
             CompletableFuture.runAsync(() -> {
-               // ruleActor.setCurrentState(STATE_TAKE_OUT_CARD_ID, data);
+                System.out.println("出牌 " + value);
                 ruleActor.event(EVENT_TAKE_OUT_CARD_ID, data);
             }).exceptionally(e -> {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
                 return null;
             });
 

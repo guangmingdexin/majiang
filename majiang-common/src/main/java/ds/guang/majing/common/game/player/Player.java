@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ds.guang.majing.common.game.card.Card;
-import ds.guang.majing.common.game.card.MaJiang;
-import ds.guang.majing.common.game.card.MaJiangEvent;
+import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.util.Algorithm;
 import ds.guang.majing.common.util.Converter;
 import ds.guang.majing.common.game.dto.GameUser;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.*;
@@ -32,6 +33,9 @@ import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_OUT_CARD_ID;
         @JsonSubTypes.Type(value = ServerPlayer.class, name = "serverPlayer"),
         @JsonSubTypes.Type(value = ClientPlayer.class, name = "clientPlayer")
 })
+@Getter
+@Setter
+@Accessors(chain = true)
 public abstract class Player implements Cloneable, Serializable {
 
     private GameUser gameUser;
@@ -63,8 +67,20 @@ public abstract class Player implements Cloneable, Serializable {
     private Card selectedHu;
 
 
-    public Player() {
-    }
+    /**
+     * 是否已经接受到其他玩家的牌
+     */
+    @JsonIgnore
+    public volatile boolean receivePending;
+
+    /**
+     *
+     * 1 - 北， 2 - 西，  3 - 南， 4 - 东
+     * 方位
+     */
+    public int direction;
+
+    public Player() {}
 
     public Player(GameUser gameUser) {
         this.gameUser = gameUser;
@@ -72,19 +88,7 @@ public abstract class Player implements Cloneable, Serializable {
         this.eventCard = new HashMap<>(8);
     }
 
-    /**
-     * 获取玩家手牌
-     *
-     * @return
-     */
-    public List<Integer> getCards() {
-        return cards;
-    };
 
-    public Player setCards(List<Integer> cards) {
-        this.cards = cards;
-        return this;
-    }
 
     /**
      *
@@ -96,16 +100,12 @@ public abstract class Player implements Cloneable, Serializable {
     public boolean addCard(int cardNum) {
 
         // 这里插入，必须保证手牌的有序性
-        int index = Algorithm.binarySearch(cards, cardNum);
+        int index = Algorithm.binarySearch(cards, cardNum, true);
         if(index < 0) {
             throw new IllegalArgumentException("插入算法出现问题！");
         }
         // 因为 ArrayList.set 会发生边界检查，所以不能插入到右边界之外
-        if(index >= cards.size()) {
-            cards.add(cardNum);
-            return true;
-        }
-        cards.set(index, cardNum);
+        cards.add(index, cardNum);
         return true;
     }
 
@@ -156,14 +156,13 @@ public abstract class Player implements Cloneable, Serializable {
      * @param card 引发此次事件的值
      * @param event 客户端事件
      */
-    public Map<MaJiangEvent, Integer> event(Card card, String event) {
+    public GameEvent event(Card card, String event, String id) {
 
         Objects.requireNonNull(card, "card is null");
 
         Integer value = (Integer) card.value();
-        /**
-         * 玩家事件集合
-         */
+
+         // 玩家事件集合
          Map<MaJiangEvent, Integer> selectEvent = new HashMap<>(16);
 
         // 1.是否可以 PONG
@@ -199,24 +198,32 @@ public abstract class Player implements Cloneable, Serializable {
 
         // 6.摸牌阶段，判断是否可以自摸
         if(EVENT_TAKE_CARD_ID.equals(event) && Algorithm.isHu(cards)) {
-            selectEvent.put(MaJiangEvent.SELF_HU, value);
+            selectEvent.put( MaJiangEvent.SELF_HU, value);
         }
 
-        // 其他玩家出牌自身判断是否可以
+        // 其他玩家出牌自身判断是否可以 胡
         if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event)) {
 
             List<Integer> copy = new ArrayList<>(cards);
 
-            int i = Algorithm.binarySearch(copy, value);
+            int i = Algorithm.binarySearch(copy, value, true);
 
-            copy.set(i, value);
+            copy.add(i, value);
 
             if(Algorithm.isHu(copy)) {
                 selectEvent.put(MaJiangEvent.IN_DIRECT_HU, value);
             }
         }
 
-        return selectEvent;
+        if(selectEvent.isEmpty()) {
+            return null;
+        }
+        // 加上默认忽略值
+        selectEvent.put(MaJiangEvent.NOTHING, value);
+
+        return new MaGameEvent()
+                                .setSelectEvent(Collections.unmodifiableMap(selectEvent))
+                                .setPlayId(id);
     }
 
     /**
@@ -227,24 +234,6 @@ public abstract class Player implements Cloneable, Serializable {
         return gameUser.getUserId();
     }
 
-
-    public GameUser getGameUser() {
-        return gameUser;
-    }
-
-    public Player setGameUser(GameUser gameUser) {
-        this.gameUser = gameUser;
-        return this;
-    }
-
-    public Map<Card, Integer> getEventCard() {
-        return eventCard;
-    }
-
-    public Player setEventCard(Map<Card, Integer> eventCard) {
-        this.eventCard = eventCard;
-        return this;
-    }
 
     /**
      * 返回 网络通道

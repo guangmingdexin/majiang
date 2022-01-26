@@ -2,7 +2,9 @@ package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
 import ds.guang.majiang.server.machines.StateMachines;
-import ds.guang.majiang.server.network.ResponseUtil;
+import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majing.common.game.card.MaEventHandler;
+import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.ServerPlayer;
 import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.game.room.RoomManager;
@@ -131,8 +133,6 @@ public class MatchPoolImpl implements MatchPool {
         if(!isValid() || !isStart()) {
             throw new DsBasicException("加入游戏匹配池失败！");
         }
-      //  System.out.println("当前处理匹配线程---" + Thread.currentThread().getName() + "当前的线程池对象... " + this + playerCount);
-
 
         DsTimerTask timerTask = timeout -> {
 
@@ -144,7 +144,12 @@ public class MatchPoolImpl implements MatchPool {
                 }
                 // 获取全局变量
                 RoomManager manager = RoomManager.getInstance();
-                Room room = new ServerFourRoom(playerCount, 13, 14, 1, players);
+                Room room = new ServerFourRoom(playerCount,
+                        13,
+                        14,
+                        1,
+                        players,
+                        new MaEventHandler());
                 for (Player player : players) {
                     // 获取 Channel 输出数据
 
@@ -156,9 +161,16 @@ public class MatchPoolImpl implements MatchPool {
                         // 按理来说这里应该使用异步线程，但是 netty 的特性，会将这次发送
                         // 消息封装为一个任务加入到任务队列中，等待 NioEventLoop 执行，所以
                         // 这里并不会阻塞定时器
+                        GameInfoResponse response = new GameInfoResponse()
+                                .setUserId(player.id())
+                                // requestNo 暂时使用 id
+                                .setRequestNo(player.id())
+                                .setRoom(room);
+
                         DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID,
                                 player.id(),
-                                DsResult.data(room).setAttrMap("requestNo", player.id()));
+                                DsResult.data(response));
+
                         context.writeAndFlush(ResponseUtil.response(dsMessage));
 
                         StateMachine<String, String, DsResult> machine = StateMachines
