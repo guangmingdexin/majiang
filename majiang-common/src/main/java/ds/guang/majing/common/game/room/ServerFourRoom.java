@@ -2,6 +2,8 @@ package ds.guang.majing.common.game.room;
 
 import ds.guang.majing.common.game.card.GameEventHandler;
 import ds.guang.majing.common.game.player.Player;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
@@ -12,10 +14,10 @@ import java.util.UUID;
  * @author guangmingdexin
  */
 @Accessors(chain = true)
+@NoArgsConstructor
 public class ServerFourRoom extends Room implements Serializable {
 
 
-    public ServerFourRoom() {}
 
     @Override
     public boolean isCurAround(String userId) {
@@ -45,8 +47,6 @@ public class ServerFourRoom extends Room implements Serializable {
         }
         return true;
     }
-
-
 
     public ServerFourRoom(int playerCount,
                           int initialCardNum,

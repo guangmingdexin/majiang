@@ -43,7 +43,7 @@ public class GameTakeOutAction implements Action {
             GameInfoRequest request = message.getData();
 
             String id = request.getUserId();
-            Room room = RoomManager.findRoomById(id);
+            Room room = Room.getRoomById(id);
             Player p = room.findPlayerById(id);
             Card card = request.getCard();
             Integer value = (Integer) card.value();
@@ -64,6 +64,7 @@ public class GameTakeOutAction implements Action {
                 GameEventHandler eventHandler = room.getEventHandler();
 
                 for (Player player : players) {
+
                     if(!player.equals(p)) {
                         String userId = player.id();
                         // 判断其他玩家能不能够形成其他事件
@@ -79,7 +80,8 @@ public class GameTakeOutAction implements Action {
                             // 封装一个 Response 对象
                             GameInfoResponse r = new GameInfoResponse()
                                     .setUserId(userId)
-                                    .setCard(card);
+                                    .setCard(card)
+                                    .setServiceName(EVENT_RECEIVE_OTHER_CARD_ID);
 
                             context.writeAndFlush(
                                     ResponseUtil.response(
@@ -88,6 +90,10 @@ public class GameTakeOutAction implements Action {
 
                         });
                     }
+                }
+
+                if(eventHandler.isEmpty()) {
+                    eventHandler.nextRound(MaJiangEvent.NOTHING.getValue() ,id, room);
                 }
 
                 return DsResult.ok();

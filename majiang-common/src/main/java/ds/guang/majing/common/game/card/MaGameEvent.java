@@ -1,6 +1,7 @@
 package ds.guang.majing.common.game.card;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import ds.guang.majing.common.game.room.Room;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -36,12 +37,13 @@ public class MaGameEvent implements GameEvent {
 
     private Map<MaJiangEvent, Integer> selectEvent;
 
-
+    @JsonIgnore
     @Override
     public int getEvent() {
         return actionEvent == null ? -1: actionEvent.getValue();
     }
 
+    @JsonIgnore
     @Override
     public int getPriority() {
 
@@ -92,9 +94,34 @@ public class MaGameEvent implements GameEvent {
 
         if(o instanceof GameEvent) {
 
+            GameEvent e = (GameEvent) o;
+
+            // 1.事件优先级
+            // 2.发起事件玩家的位置，即按照当前回合顺时针方向进行
+
+            if(this.getPriority() == e.getPriority()) {
+
+                Room room = Room.getRoomById(playId);
+                int roundIndex = room.getCurRoundIndex();
+                // 获取各个玩家的位置
+                int cur = room.direction(playId);
+                int compare = room.direction(e.getPlayId());
+
+                // 两种情况
+                // 一：都比 roundIndex 大，越小的顺序越先执行
+                // 二：其余情况，越靠近 roundIndex，即差值越大的越先执行，越大的越先执行
+
+                if(cur >= roundIndex && compare >= roundIndex) {
+
+                    return cur <= compare ? 1 : -1;
+                }
+                return (cur - roundIndex) >= (compare - roundIndex) ? 1: -1;
+
+            }
+
             // 因为游戏事件的特殊性，其不太可能出现同一级别的事件
             // 只有一种例外，同时胡牌（放炮），所以只需要单独考虑就行了
-            return this.getPriority() - ((GameEvent)o).getPriority();
+            return this.getPriority() - e.getPriority();
         }
 
         throw new ClassCastException("o is not GameEvent");
@@ -103,11 +130,14 @@ public class MaGameEvent implements GameEvent {
 
 
     @Override
-    public boolean contain(GameEvent o) {
+    public boolean contain(Object o) {
+
+        if(o instanceof MaJiangEvent) {
+            throw new IllegalArgumentException("不是麻将游戏事件");
+        }
 
         return selectEvent != null
-                && selectEvent.containsKey(((MaGameEvent)o).getActionEvent())
-                && Objects.equals(playId, o.getPlayId());
+                && selectEvent.containsKey(o);
     }
 
     @Override

@@ -140,7 +140,10 @@ public class MatchPoolImpl implements MatchPool {
                 int index = 0;
                 Player[] players = new ServerPlayer[playerCount];
                 while (!deque.isEmpty() && index < playerCount) {
-                    players[index++] = deque.poll();
+                    players[index] = deque.poll();
+                    // 设置方位
+                    players[index].setDirection(index);
+                    index ++;
                 }
                 // 获取全局变量
                 RoomManager manager = RoomManager.getInstance();

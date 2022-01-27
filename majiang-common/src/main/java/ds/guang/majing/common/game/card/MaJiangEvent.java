@@ -1,7 +1,5 @@
 package ds.guang.majing.common.game.card;
 
-import java.util.Comparator;
-
 /**
  * @author guangyong.deng
  * @date 2022-01-19 10:20
@@ -16,7 +14,6 @@ public enum MaJiangEvent {
     IN_DIRECT_GANG(4, "巴杠", 0),
     SELF_HU(5, "自摸", 1),
     IN_DIRECT_HU(6, "点炮", 1),
-
     NOTHING(-1, "忽略", -99)
     ;
 
@@ -51,5 +48,17 @@ public enum MaJiangEvent {
 
     public int getPriority() {
         return priority;
+    }
+
+
+    public static MaJiangEvent generate(int eventValue) {
+
+        for (MaJiangEvent event : values()) {
+            if(event.getValue() == eventValue) {
+                return event;
+            }
+        }
+
+        throw new IllegalArgumentException("错误的事件");
     }
 }

@@ -45,7 +45,6 @@ public final class DsConstant {
 
     public static final String STATE_MATCH_FRIEND_ID = "STATE_MATCH_FRIEND_ID";
 
-    public static final String STATE_INITIAL_ID = "STATE_INITIAL_ID";
 
     public static final String STATE_TAKE_CARD_ID = "STATE_TAKE_CARD_ID";
 
@@ -123,6 +122,8 @@ public final class DsConstant {
      * 客户端预请求执行游戏事件
      */
     public static final String EVENT_IS_GAME_EVENT_ID = "EVENT_IS_GAME_EVENT_ID";
+
+
 
     /**
      * 三种游戏事件临时状态

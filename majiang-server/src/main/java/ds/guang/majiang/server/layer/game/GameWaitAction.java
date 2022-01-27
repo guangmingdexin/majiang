@@ -7,14 +7,11 @@ import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
-import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.room.RoomManager;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
-
-import java.util.Objects;
-import java.util.concurrent.SynchronousQueue;
+import ds.guang.majing.common.util.ResponseUtil;
 
 import static ds.guang.majing.common.util.DsConstant.*;
 
@@ -35,44 +32,45 @@ public class GameWaitAction implements Action {
         });
 
 
-        state.onEvent(EVENT_RECEIVE_OTHER_CARD_ID, data -> {
+        state.onEvent(EVENT_IS_GAME_EVENT_ID, STATE_EVENT_ID, data -> {
 
-            Objects.requireNonNull(data, "data must be not empty!");
-            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
-            GameInfoRequest request = message.getData();
-            String id = request.getUserId();
+            GameInfoRequest request = ResponseUtil.getGameInfoRequest(data);
+            // 通知客户端，并确定是否能够执行游戏事件
+            Room.announce(request.getUserId());
 
-            Player p = RoomManager.findRoomById(id).findPlayerById(id);
-
-            return DsResult.ok("其他玩家已经出牌！");
-        });
-
-        state.onEvent(EVENT_RECEIVE_EVENT_REPLY_ID, data -> {
-
-            Objects.requireNonNull(data, "data must be not empty!");
-            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
-            GameInfoRequest request = message.getData();
-            String id = request.getUserId();
-
-
-            // 有如下几种情况
-            // 玩家 A 出一张牌：
-            // 一：玩家 B 可以 PONG， 玩家 C、D 无动作，此时回合由 A -> (B) -> C
-            // 二：玩家 B 可以 GANG, 玩家 C、D 无动作，此时回合由 A -> B
-            // 三：玩家 B 可以 hu，玩家 C、D 无动作，此时回合由 A -> (B) -> C
-            // 四：玩家 B 可以 PONG 或者 hu，此时 玩家 C 或者 D 可以 hu A -> C/D
-
-            return DsResult.ok("点击成功");
+            return DsResult.data(data);
         });
 
 
-        state.onEvent(EVENT_IS_GAME_EVENT_ID, data -> {
+        state.onEvent(EVENT_WAIT_ID, data -> {
 
-            // 1.获取房间
-            // 2.获取事件处理器
+            System.out.println("返回最新的位置： ");
+
+            GameInfoRequest request = ResponseUtil.getGameInfoRequest(data);
+
+            String userId = request.getUserId();
+            Room room = Room.getRoomById(userId);
+
+            DsMessage<DsResult<GameInfoResponse>> message = DsMessage.build(
+                    EVENT_RECEIVE_EVENT_REPLY_ID,
+                    userId,
+                    DsResult.data(new GameInfoResponse()
+                            .setUserId(userId)
+                            .setCurRoundIndex(room.getCurRoundIndex())
+                    ));
+
+            Room.write(userId, ResponseUtil.response(message));
 
 
-            return data;
+            if(room.isCurAround(userId)) {
+
+                StateMachine<String, String, DsResult> stateMachine = StateMachines.get(preUserMachinekey(userId));
+                stateMachine.setCurrentState(STATE_TAKE_CARD_ID, data);
+            }
+
+            return DsResult.ok();
         });
+
     }
+
 }

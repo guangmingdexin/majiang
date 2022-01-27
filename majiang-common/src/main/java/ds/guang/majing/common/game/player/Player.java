@@ -132,6 +132,25 @@ public abstract class Player implements Cloneable, Serializable {
         return cards.remove((Integer)cardNum);
     }
 
+    public boolean addEventCard(int cardNum, int eventValue) {
+
+        Card card = new MaJiang(cardNum, CardType.generate(cardNum));
+
+        if(eventValue == MaJiangEvent.PONG.getValue()) {
+            if(eventCard.containsKey(card)) {
+                throw new IllegalArgumentException("已经存在");
+            }
+            eventCard.put(card, 3);
+        }else if(eventValue == MaJiangEvent.DIRECT_GANG.getValue()) {
+            eventCard.put(card, 4);
+        }else {
+            throw new IllegalArgumentException("暂时无法处理");
+        }
+
+        return true;
+
+    }
+
 
     /**
      *

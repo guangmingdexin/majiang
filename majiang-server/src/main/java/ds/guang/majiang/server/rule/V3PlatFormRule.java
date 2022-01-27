@@ -66,7 +66,7 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
         State<String, String, DsResult> waitState = gameWaitStateSupplier.get();
 
         // 直接注册事件
-        ActionManager.onEvent(loginState, platformState, prepareState,  takeCardState, takeOutCardState, eventState);
+        ActionManager.onEvent(loginState, platformState, prepareState,  takeCardState, takeOutCardState, eventState, waitState);
 
         // 创建状态机
         StateMachine<String, String, DsResult> ruleActor = getRuleActor();

@@ -93,7 +93,7 @@ public class GameTakeAction implements Action {
                     System.out.println("event: " + event);
                     machine.setCurrentState(STATE_EVENT_ID, r);
                 }
-                return r;
+                return DsResult.ok();
             }
             // 2.如果不是当前玩家，直接抛出异常
             throw new IllegalArgumentException("state is error!");

@@ -27,6 +27,8 @@ import java.util.Map;
 public class GameInfoResponse implements Serializable {
 
 
+    private String serviceName;
+
     /**
      * 请求序号
      */

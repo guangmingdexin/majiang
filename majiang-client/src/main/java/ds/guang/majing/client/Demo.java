@@ -125,23 +125,31 @@ public class Demo extends Application {
 
             // 1.获取手牌
             Room room = (Room) Cache.getInstance().getObject(preRoomInfoPrev(userId));
-            Player p = room.findPlayerById(userId);
-            int r = new Random().nextInt(p.getCards().size());
 
-            Integer value = p.getCards().get(r);
-            DsMessage data = DsMessage.build(EVENT_TAKE_OUT_CARD_ID,
-                    requestNo,
-                    new GameInfoRequest()
-                            .setUserId(userId)
-                            .setCard(new MaJiang(value, CardType.generate(value))));
+            if(room.isCurAround(userId)) {
 
-            CompletableFuture.runAsync(() -> {
-                System.out.println("出牌 " + value);
-                ruleActor.event(EVENT_TAKE_OUT_CARD_ID, data);
-            }).exceptionally(e -> {
-                e.printStackTrace();
-                return null;
-            });
+                Player p = room.findPlayerById(userId);
+                int r = new Random().nextInt(p.getCards().size());
+
+                Integer value = p.getCards().get(r);
+                DsMessage data = DsMessage.build(EVENT_TAKE_OUT_CARD_ID,
+                        requestNo,
+                        new GameInfoRequest()
+                                .setUserId(userId)
+                                .setCard(new MaJiang(value, CardType.generate(value))));
+
+                CompletableFuture.runAsync(() -> {
+                    System.out.println("出牌 " + value);
+                    ruleActor.event(EVENT_TAKE_OUT_CARD_ID, data);
+                }).exceptionally(e -> {
+                    e.printStackTrace();
+                    return null;
+                });
+
+            }else {
+
+                System.out.println("不是你的回合");
+            }
 
         });
 

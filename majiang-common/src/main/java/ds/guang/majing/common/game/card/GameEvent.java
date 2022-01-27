@@ -69,6 +69,6 @@ public interface GameEvent extends Serializable, Comparable {
      * @param o 客户端发送的游戏事件
      * @return
      */
-    boolean contain(GameEvent o);
+    boolean contain(Object o);
 
 }

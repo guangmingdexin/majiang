@@ -43,17 +43,6 @@ public class RoomManager {
     }
 
 
-    /**
-     *
-     * 获取房间
-     *
-     * @param playId 用户
-     * @return 关联的房间
-     */
-    public static Room findRoomById(String playId) {
-        return getInstance().get(preRoomInfoPrev(playId));
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

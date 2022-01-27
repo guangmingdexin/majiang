@@ -4,8 +4,11 @@ import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.game.room.RoomManager;
 import ds.guang.majing.common.util.ResponseUtil;
+import lombok.Getter;
 
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 import static ds.guang.majing.common.util.DsConstant.*;
@@ -14,6 +17,7 @@ import static ds.guang.majing.common.util.DsConstant.*;
  * @author guangyong.deng
  * @date 2022-01-26 9:21
  */
+@SuppressWarnings("unchecked")
 public class MaEventHandler implements GameEventHandler {
 
     /**
@@ -25,12 +29,11 @@ public class MaEventHandler implements GameEventHandler {
     private static int maxEventNum = 5;
 
 
-    private int huCount = 0;
-
     /**
      * 游戏事件执行队列
      */
-    private PriorityQueue<GameEvent> priorityQueue;
+    @Getter
+    private  PriorityQueue<GameEvent> priorityQueue;
 
     public MaEventHandler() {
         // 一次最多四个事件加入
@@ -38,72 +41,11 @@ public class MaEventHandler implements GameEventHandler {
         priorityQueue = new PriorityQueue<>(maxEventNum, Comparable::compareTo);
     }
 
-    @SuppressWarnings("unchecked")
+
     @Override
-    public void handler(GameEvent event) {
-        // 1.同一回合中，需要收集其他玩家的游戏事件
-        // 2.首先比较是否为高优先级事件
-        if(priorityQueue == null || priorityQueue.isEmpty()) {
-            throw new NullPointerException("游戏事件状态错误");
-        }
-
-        GameEvent serverGameEvent = priorityQueue.peek();
-        // 通知相关客户端
-        String id = serverGameEvent.getPlayId();
-
-        GameInfoResponse infoResponse = new GameInfoResponse();
-
-        DsMessage<DsResult<GameInfoResponse>> eventResp = DsMessage.build(
-               EVENT_IS_GAME_EVENT_ID,
-                id,
-                infoResponse);
-
-        // 判断是否可以执行事件
-        if(serverGameEvent.contain(event)) {
-
-            // 客户端可以执行游戏事件了
-            infoResponse.setEventStatus(EVENT_STATUS_ACTION);
-
-            priorityQueue.poll();
-            // 胡牌的优先级
-            int huPriority = MaJiangEvent.IN_DIRECT_HU.getPriority();
-            if(event.getPriority() == huPriority) {
-                // 判断一下后面的任务优先级，如果最大任务优先级低于胡牌的，直接全部放弃
-                // 否则继续
-                huCount ++;
-
-                if(!priorityQueue.isEmpty() && priorityQueue.peek().getPriority() < huPriority) {
-                    // 直接将后面的游戏事件无效化
-                    // 场景：玩家 A 胡牌，玩家 B 的 碰牌/杠牌事件无效
-                    while (!priorityQueue.isEmpty()) {
-
-                        GameEvent o = priorityQueue.poll();
-
-                        DsMessage<DsResult<GameInfoResponse>> cancel = DsMessage.build(
-                                EVENT_IS_GAME_EVENT_ID,
-                                o.getPlayId(),
-                                new GameInfoResponse()
-                                        .setUserId(o.getPlayId())
-                                        .setEventStatus(EVENT_STATUS_CANCEL)
-                        );
-
-                        // 发信息
-                        Room.write(o.getPlayId(), ResponseUtil.response(cancel));
-
-                    }
-                }
-            }
-
-        }else {
-            // 继续等待
-            infoResponse.setEventStatus(EVENT_STATUS_WAIT);
-        }
-
-        // 发送消息
-        Room.write(id, ResponseUtil.response(eventResp));
-
+    public boolean isEmpty() {
+        return priorityQueue == null || priorityQueue.isEmpty();
     }
-
 
     @Override
     public void addEvent(GameEvent event) {
@@ -122,11 +64,99 @@ public class MaEventHandler implements GameEventHandler {
         }
     }
 
+    @Override
+    public void announce(String userId, boolean cancel) {
+
+        if(priorityQueue.isEmpty()) {
+            return;
+        }
+
+        GameEvent e = priorityQueue.poll();
+
+
+        if(!userId.equals(e.getPlayId())) {
+            // 此时还不是该玩家
+            return;
+        }
+
+        // 只有四种情况
+        // 1.玩家有pong/gang ，其余玩家无事件
+        // 2.玩家有pong/gang, 其余玩家有一个或多个可以hu
+        // 3.玩家有pong/gang/hu, 其余玩家无事件
+        // 4.玩家有 hu，其他玩家无事件
+        // 4.都无事件
+        String eventStatus = EVENT_STATUS_ACTION;
+
+
+        if(e.contain(MaJiangEvent.PONG)
+                || e.contain(MaJiangEvent.DIRECT_GANG)) {
+
+            // 第一种情况
+            // 异常判断
+            // 同一回合，最多一个玩家可以pong
+            if(!priorityQueue.isEmpty()) {
+                throw new IllegalArgumentException("错误的游戏事件");
+            }
+
+            eventStatus = cancel ? EVENT_STATUS_CANCEL : eventStatus;
+
+
+        }else if (!e.contain(MaJiangEvent.IN_DIRECT_HU)) {
+            throw new IllegalArgumentException("不是该阶段处理的游戏事件");
+        }
+
+        // 通知相关客户端
+        String id = e.getPlayId();
+        GameInfoResponse infoResponse = new GameInfoResponse().setEventStatus(eventStatus);
+        DsMessage<DsResult<GameInfoResponse>> action = DsMessage.build(
+                EVENT_IS_GAME_EVENT_ID,
+                id,
+                infoResponse);
+
+        // 发信息
+        Room.write(id, ResponseUtil.response(action));
+
+    }
 
     @Override
-    public int nextRound() {
-        // 1.首先判断是否还有事件没有处理完成
+    public void announceNext() {
+        // 1.调用者只能为hu 事件
 
-        return 0;
+        if(priorityQueue.isEmpty()) {
+            // 所有事件都已经结束了
+
+            return;
+        }
+        // 类似于唤醒头部节点
+        announce(priorityQueue.peek().getPlayId(), true);
+
+    }
+
+
+    @Override
+    public int nextRound(int eventValue, String id, Room room) {
+
+        int direction = room.findPlayerById(id).getDirection();
+
+        if(eventValue == MaJiangEvent.NOTHING.getValue()) {
+            room.setCurRoundIndex(direction + 1);
+        }
+
+        // 1.首先判断是否还有事件没有处理完成
+        if(!priorityQueue.isEmpty()) {
+
+            // 当前房间回合切换到下家
+
+            if(eventValue == MaJiangEvent.PONG.getValue()
+                    || eventValue == MaJiangEvent.IN_DIRECT_HU.getValue()) {
+
+                room.setCurRoundIndex(direction + 1);
+
+            }else if(eventValue == MaJiangEvent.DIRECT_GANG.getValue()) {
+                // 当前回合切换到事件发起者
+                room.setCurRoundIndex(direction);
+            }
+        }
+        return room.getCurRoundIndex();
     }
 }

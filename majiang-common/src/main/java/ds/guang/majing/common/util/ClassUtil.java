@@ -246,7 +246,7 @@ public final class ClassUtil {
                     // 比如：jackson 框架在进行泛型对象转换时，会动态的生成一些增强类，影响创建实例
                     classFiles.add(Class.forName(className));
                 } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                  // e.printStackTrace();
                 }
             }
         }

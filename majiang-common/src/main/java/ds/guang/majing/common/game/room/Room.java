@@ -44,7 +44,9 @@ public abstract class Room implements Serializable {
     protected int markIndex;
 
     /**
-     * 当前玩家回合下标
+     * 当前玩家回合下标（同位置相关，即该数字 % 4 可以对应到相应玩家，同时
+     * 数组下标即为方位 比如 [A, B, C, D] -> [北，西，南，东]
+     * ）
      */
     protected int curRoundIndex;
 
@@ -74,12 +76,11 @@ public abstract class Room implements Serializable {
     @JsonIgnore
     private transient List<Integer> initialCards;
 
-
     /**
      * 游戏事件处理器
      */
+    @JsonIgnore
     protected transient GameEventHandler eventHandler;
-
 
     public Player[] getPlayers() {
         return players;
@@ -124,28 +125,23 @@ public abstract class Room implements Serializable {
         return null;
     }
 
-//    /**
-//     * 获取指定玩家的方位
-//     * @param userId
-//     * @return
-//     */
-//    public int getDirection(String userId) {
-//        int direction = findPlayerById(userId).getDirection();
-//        if(direction == 0) {
-//            throw new NullPointerException("方位没有初始化");
-//        }
-//        return direction;
-//    }
-//
-//
-//    /**
-//     * 获取当前回合玩家的方位
-//     */
-//    public int getCurDirection() {
-//        int curRoundIndex = getCurRoundIndex();
-//        String curId = players[curRoundIndex % players.length].id();
-//        return getDirection(curId);
-//    }
+    /**
+     * 获取指定玩家的方位
+     * @param userId 玩家 id
+     * @return
+     */
+    public int direction(String userId) {
+
+        for (int i = 0; i < players.length; i++) {
+
+            if(players[i].id().equals(userId)) {
+
+                return i;
+            }
+        }
+
+        return -1;
+    }
 
 
     /**
@@ -257,22 +253,57 @@ public abstract class Room implements Serializable {
         return roomManager.get(preRoomInfoPrev(id));
     }
 
+  /**                封装的一些方法，减少代码量                   */
 
     public static void write(String id, Object message) {
 
         Room room = getRoomById(id);
-
         Player p = room.findPlayerById(id);
-
         ChannelHandlerContext context = (ChannelHandlerContext) p.getContext();
 
         context.channel().eventLoop().execute(() -> {
-
            context.writeAndFlush(message);
         });
 
     }
 
+    /**
+     *
+     *
+     *
+     * @param id 调用者 id
+     * @return Room
+     */
+    public static void announce(String id) {
+        Room room = getRoomById(id);
+        GameEventHandler eventHandler = room.getEventHandler();
+        eventHandler.announce(id, false);
+    }
+
+    public static Room nextRound(String id, int eventValue) {
+
+        Room room = getRoomById(id);
+        GameEventHandler eventHandler = room.getEventHandler();
+        eventHandler.nextRound(eventValue, id, room);
+
+        return room;
+    }
+
+
+
+    public boolean remove(String id, int cardNum) {
+        Player p = findPlayerById(id);
+        return p.remove(cardNum);
+    }
+
+    public void addEventCard(String id, int cardNum, int eventValue) {
+        Player p = findPlayerById(id);
+        p.addEventCard(cardNum, eventValue);
+    }
+
+    public void announceNext() {
+        eventHandler.announceNext();
+    }
 
 
     @Override

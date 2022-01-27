@@ -1,5 +1,7 @@
 package ds.guang.majing.common.util;
 
+import ds.guang.majing.common.game.message.DsMessage;
+import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.util.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -32,5 +34,17 @@ public final class ResponseUtil {
         response.headers().add(HttpHeaderNames.CONTENT_TYPE, "application/json; charset=utf-8");
         response.headers().add(HttpHeaderNames.CONTENT_LENGTH, content.readableBytes());
         return response;
+    }
+
+
+    public static GameInfoRequest getGameInfoRequest(Object data) {
+        Objects.requireNonNull(data, "data must be not empty!");
+        if(data instanceof DsMessage) {
+            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
+            return message.getData();
+        }else {
+            throw new ClassCastException("message is error");
+        }
+
     }
 }

@@ -153,22 +153,28 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         State<String, String, DsResult> takeState = gameTakeCardStateSupplier.get();
 
         takeState.onEntry(data -> {
+
             System.out.println(".........................");
             System.out.println("进入摸牌状态");
+
             DsResult<GameInfoResponse> dsResult = (DsResult<GameInfoResponse>)data;
 
             GameInfoResponse response = dsResult.getData();
 
             String id = response.getUserId();
             String requestNo = response.getRequestNo();
-            Player p = response.getRoom().findPlayerById(id);
+
+            Room room = (Room) Cache.getInstance().getObject(preRoomInfoPrev(id));
+
+            Player p = room.findPlayerById(id);
 
             // 进入摸牌状态
             // 触发摸牌事件 - 这是游戏初始化阶段摸牌
             DsMessage<GameInfoRequest> tm = DsMessage.build(
                     EVENT_TAKE_CARD_ID,
                     requestNo,
-                    new GameInfoRequest().setUserId(id)
+                    new GameInfoRequest()
+                            .setUserId(id)
             );
 
             Request takeCardRequest = new TakeCardRequest(tm, GAME_URL);
@@ -187,14 +193,12 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             // 提交一个任务给 ui，并判断是否有特殊事件
             // submit(uiTask)
 
-            GameEvent event = response.getEvent();
+            GameEvent event = resp.getEvent();
 
             if(event != null && !event.isEmpty()) {
                 System.out.println("有事件发生！");
                 // submit(uiEventTask)
             }
-
-
 
             // 主动切换状态 - 切换为出牌状态
             this.stateMachine.setCurrentState(STATE_TAKE_OUT_CARD_ID, tRs);
@@ -217,7 +221,31 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             // 2.其他人摸牌之后，出牌，引发玩家特殊事件（PONG），出牌
             // 3. data : 包含用户 id, 出的牌
             Request request = new TakeOutRequest(data, GAME_URL);
-            return (DsResult<GameInfoResponse>) request.execute(null);
+            DsResult<GameInfoResponse> execute = request.execute(null);
+
+            // 更新回合
+            // 获取最终位置
+            String userId = execute.getData().getUserId();
+            Room room = (Room) Cache.getInstance().getObject(preRoomInfoPrev(userId));
+
+            DsMessage<GameInfoRequest> roundMessage = DsMessage.build(
+                    EVENT_WAIT_ID,
+                    userId,
+                    new GameInfoRequest()
+                            .setUserId(userId)
+                            .setRequestNo(userId)
+
+
+            );
+            Request roundRequest = new RoundRequest(roundMessage);
+
+            DsResult<GameInfoResponse> roundResp = roundRequest.execute(null);
+
+            int roundIndex = roundResp.getData().getCurRoundIndex();
+
+            room.setCurRoundIndex(roundIndex);
+
+            return execute;
 
         });
 
@@ -228,6 +256,12 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         State<String, String, DsResult> waitState = gameWaitStateSupplier.get();
 
         waitState.onEntry(data -> {
+
+            // 一：改变回合，设置为 -1
+
+            // 二：等待其他玩家的游戏事件，1.其他玩家出牌， 2.其他玩家 pong/gang/hu
+
+            // 三：请求服务器，获得最新回合，如果不是自己的回合，重新上面过程
 
             System.out.println("..............................");
             System.out.println("正在等待其他玩家出牌！");
@@ -252,45 +286,94 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
             // 提交一个 ui 任务
 
-            // 获取其他玩家出的牌
-            Card takeOut = takeOutResponse.getData().getCard();
+            String serviceName = takeOutResponse.getData().getServiceName();
+
             // 从缓存中获取房间
             Room room = (Room) Cache.getInstance().getObject(preRoomInfoPrev(userId));
             Player p = room.findPlayerById(userId);
 
-            GameEvent event = p.event(takeOut, EVENT_RECEIVE_OTHER_CARD_ID, userId);
+            if(serviceName.equals(EVENT_RECEIVE_OTHER_CARD_ID)) {
 
-            System.out.println("event: " + event);
+                // 获取其他玩家出的牌
+                Card takeOut = takeOutResponse.getData().getCard();
 
-            // 减少不必要的网络消耗
-            message.setServiceNo(EVENT_IS_GAME_EVENT_ID).setData(null);
+                GameEvent event = p.event(takeOut, EVENT_RECEIVE_OTHER_CARD_ID, userId);
 
-            if(event != null) {
+                System.out.println("event: " + event);
 
-                String eventStatus = r.getData().getEventStatus();
+                if(event != null) {
 
-                while (eventStatus == null || eventStatus.equals(EVENT_STATUS_WAIT)) {
+                    // 减少不必要的网络消耗
+                    message.setServiceNo(EVENT_IS_GAME_EVENT_ID).setData(null);
+                    String eventStatus = r.getData().getEventStatus();
 
-                    // 是否可以执行游戏事件
-                    Request eventRequest = new EventRequest(message, GAME_URL);
-                    r = eventRequest.execute(null);
+                    while (eventStatus == null || eventStatus.equals(EVENT_STATUS_WAIT)) {
+
+                        // 是否可以执行游戏事件
+                        Request eventRequest = new EventRequest(message, GAME_URL);
+                        r = eventRequest.execute(null);
+                    }
+
+
+                    if(eventStatus.equals(EVENT_STATUS_CANCEL)) {
+                        // nothing
+                    }
+
+                    if(eventStatus.equals(EVENT_STATUS_ACTION)) {
+
+                        // 提交一个 ui 任务
+
+                    }
+
                 }
+            }else if(serviceName.equals(EVENT_RECEIVE_EVENT_REPLY_ID)) {
 
+                System.out.println("其他玩家的游戏事件");
 
-                if(eventStatus.equals(EVENT_STATUS_CANCEL)) {
-                    // nothing
-                }
+                GameEvent event = takeOutResponse.getData().getEvent();
 
-                if(eventStatus.equals(EVENT_STATUS_ACTION)) {
+                String id = takeOutResponse.getData().getUserId();
 
-                    // 提交一个 ui 任务
+                // 根据 event 提交 ui 任务
 
-                }
+                System.out.println(id + " 发起了 " + event + " 任务");
 
             }
 
-            System.out.println("takeOutResponse: " + takeOutResponse);
-            return takeOutResponse;
+
+            // 获取最终位置
+            DsMessage<GameInfoRequest> roundMessage = DsMessage.build(
+                    EVENT_WAIT_ID,
+                    userId,
+                    new GameInfoRequest()
+                            .setUserId(userId)
+                            .setRequestNo(userId)
+
+
+            );
+            Request roundRequest = new RoundRequest(roundMessage);
+
+            DsResult<GameInfoResponse> roundResp = roundRequest.execute(null);
+
+            int roundIndex = roundResp.getData().getCurRoundIndex();
+
+            room.setCurRoundIndex(roundIndex);
+
+            // 递归调用
+            r.getData().setRequestNo(userId);
+            if(p.direction == roundIndex % room.getPlayers().length) {
+
+                // 到了该玩家的回合
+                System.out.println("到你的回合了！");
+                stateMachine.setCurrentState(STATE_TAKE_CARD_ID, data);
+
+            }else {
+                System.out.println("继续等待！");
+                stateMachine.setCurrentState(STATE_WAIT_ID, r);
+            }
+
+
+            return r;
         });
 
 
