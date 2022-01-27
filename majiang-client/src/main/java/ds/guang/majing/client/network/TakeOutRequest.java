@@ -1,5 +1,6 @@
 package ds.guang.majing.client.network;
 
+import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 
 /**
@@ -10,6 +11,9 @@ public class TakeOutRequest extends Request {
 
     public TakeOutRequest(Object message, String url) {
         super(message, url);
+        if(message instanceof DsMessage) {
+            throw new IllegalArgumentException("消息类型错误");
+        }
     }
 
     @Override

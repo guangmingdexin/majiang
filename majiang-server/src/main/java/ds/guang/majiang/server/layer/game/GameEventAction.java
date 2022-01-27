@@ -40,7 +40,6 @@ public class GameEventAction implements Action {
 
 
         state.onEvent(EVENT_PONG_ID, data -> {
-
             eventAction(data);
             return DsResult.ok();
         });

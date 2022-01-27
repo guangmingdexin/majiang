@@ -58,6 +58,7 @@ public class GameTakeOutAction implements Action {
                 // 2.移除手牌中的值
                 p.remove(value);
 
+
                 // 3.通知其他玩家
                 Player[] players = room.getPlayers();
 
