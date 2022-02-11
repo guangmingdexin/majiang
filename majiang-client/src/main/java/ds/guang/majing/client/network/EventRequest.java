@@ -19,6 +19,7 @@ public class EventRequest extends Request {
 
     @Override
     protected DsResult after(String content) {
-        return null;
+        System.out.println("content: " + content);
+        return response(content);
     }
 }

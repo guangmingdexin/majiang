@@ -1,7 +1,7 @@
 package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
-import ds.guang.majiang.server.machines.StateMachines;
+import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.card.MaEventHandler;
 import ds.guang.majing.common.game.message.GameInfoResponse;

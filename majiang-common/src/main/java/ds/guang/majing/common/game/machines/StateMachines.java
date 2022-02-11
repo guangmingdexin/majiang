@@ -1,4 +1,4 @@
-package ds.guang.majiang.server.machines;
+package ds.guang.majing.common.game.machines;
 
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.exception.DsBasicException;
@@ -33,11 +33,11 @@ public class StateMachines  {
             return map.get(key);
         }
 
-        StateMachine defaultValue = DefaultMachineFactory.FACTORY.create();
+       // StateMachine defaultValue = DefaultMachineFactory.FACTORY.create();
 
-        put(key, defaultValue);
+      //  put(key, defaultValue);
 
-        return defaultValue;
+        return null;
     }
 
 

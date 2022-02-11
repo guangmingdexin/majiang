@@ -78,6 +78,7 @@ public class GameInfoResponse implements Serializable {
     private int curRoundIndex;
 
 
+    private int cardNum;
 
     @Override
     public String toString() {

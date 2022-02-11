@@ -1,7 +1,9 @@
 package ds.guang.majiang.server.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import ds.guang.majiang.server.machines.StateMachines;
+import ds.guang.majiang.server.rule.V3PlatFormRule;
+import ds.guang.majing.common.game.machines.DefaultMachineFactory;
+import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
@@ -38,7 +40,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                 return;
             }
             String content = HttpRequestParser.getContent(request);
-            System.out.println("content: " + content);
+            // System.out.println("content: " + content);
 
             // 不忽略大小写
             DsMessage message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<GameInfoRequest>>() {});
@@ -49,6 +51,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
             // 根据不同业务调用不同的处理逻辑
             StateMachine<String, String, DsResult> machine = StateMachines
                     .get(preUserMachinekey(message.getRequestNo()));
+
+            if(machine == null) {
+                // 创建一个 状态机
+                machine = DefaultMachineFactory.FACTORY.create(new V3PlatFormRule());
+                StateMachines.put(preUserMachinekey(message.getRequestNo()), machine);
+            }
 
             // 执行事件
             machine.event(message.getServiceNo(),

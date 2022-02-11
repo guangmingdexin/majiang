@@ -89,17 +89,23 @@ public final class DsConstant {
     /**
      * 巴杠
      */
-    public static final String EVENT_IN_DIRECT_GANG_ID = "EVENT_IN_DIRECT_GANG_ID";
+    public static final String EVENT_GANG_ID = "EVENT_IN_DIRECT_GANG_ID";
 
     /**
      * 自摸
      */
-    public static final String EVENT_SELF_HU_ID = "EVENT_SELF_HU_ID";
+    public static final String EVENT_HU_ID = "EVENT_SELF_HU_ID";
 
     /**
      * 放炮
      */
     public static final String EVENT_IN_DIRECT_HU_ID = "EVENT_IN_DIRECT_HU_ID";
+
+
+    /**
+     * 过
+     */
+    public static final String EVENT_IGNORE_ID = "EVENT_IGNORE_ID";
 
     /**
      * 客户端发起等待事件，等待服务端处理完成之后，响应
@@ -116,6 +122,12 @@ public final class DsConstant {
      * 用户对事件的响应，比如pong，gang, hu
      */
     public static final String EVENT_RECEIVE_EVENT_REPLY_ID = "EVENT_RECEIVE_EVENT_REPLY_ID";
+
+
+    /**
+     * 用户获取下一回合
+     */
+    public static final String EVENT_RECEIVE_ROUND_INDEX_ID = "EVENT_RECEIVE_ROUND_INDEX_ID";
 
 
     /**

@@ -2,7 +2,7 @@ package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majiang.server.machines.StateMachines;
+import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;

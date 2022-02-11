@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import ds.guang.majing.common.game.card.GameEventHandler;
+import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +15,7 @@ import java.io.Serializable;
 import java.util.*;
 
 import static ds.guang.majing.common.util.DsConstant.preRoomInfoPrev;
+import static ds.guang.majing.common.util.DsConstant.preUserMachinekey;
 
 /**
  * @author asus
@@ -48,7 +51,7 @@ public abstract class Room implements Serializable {
      * 数组下标即为方位 比如 [A, B, C, D] -> [北，西，南，东]
      * ）
      */
-    protected int curRoundIndex;
+    protected volatile int curRoundIndex;
 
     /**
      * 玩家人数
@@ -107,6 +110,8 @@ public abstract class Room implements Serializable {
     public abstract boolean check(String userId);
 
 
+
+
     /**
      *
      * 根据用户 id 获取玩家信息
@@ -141,6 +146,18 @@ public abstract class Room implements Serializable {
         }
 
         return -1;
+    }
+
+
+    public StateMachine findPlayerState(String userId) {
+        return StateMachines.get(preUserMachinekey(userId));
+    }
+
+
+    public StateMachine nextPlayerState() {
+        int next = getCurRoundIndex() % getPlayerCount();
+        Player nextPlayer = players[next];
+        return findPlayerState(nextPlayer.id());
     }
 
 
@@ -269,10 +286,8 @@ public abstract class Room implements Serializable {
 
     /**
      *
-     *
-     *
      * @param id 调用者 id
-     * @return Room
+     *
      */
     public static void announce(String id) {
         Room room = getRoomById(id);
@@ -281,14 +296,11 @@ public abstract class Room implements Serializable {
     }
 
     public static Room nextRound(String id, int eventValue) {
-
         Room room = getRoomById(id);
         GameEventHandler eventHandler = room.getEventHandler();
         eventHandler.nextRound(eventValue, id, room);
-
         return room;
     }
-
 
 
     public boolean remove(String id, int cardNum) {
@@ -296,13 +308,13 @@ public abstract class Room implements Serializable {
         return p.remove(cardNum);
     }
 
-    public void addEventCard(String id, int cardNum, int eventValue) {
-        Player p = findPlayerById(id);
-        p.addEventCard(cardNum, eventValue);
-    }
-
     public void announceNext() {
         eventHandler.announceNext();
+    }
+
+    public void eventHandler(String id, int eventValue, int cardNum) {
+        Player p = findPlayerById(id);
+        p.eventHandler(eventValue, cardNum);
     }
 
 

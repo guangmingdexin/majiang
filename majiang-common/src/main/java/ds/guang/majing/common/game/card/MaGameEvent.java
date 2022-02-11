@@ -132,7 +132,7 @@ public class MaGameEvent implements GameEvent {
     @Override
     public boolean contain(Object o) {
 
-        if(o instanceof MaJiangEvent) {
+        if(!(o instanceof MaJiangEvent)) {
             throw new IllegalArgumentException("不是麻将游戏事件");
         }
 

@@ -17,7 +17,6 @@ import java.util.*;
 
 import static ds.guang.majing.common.util.DsConstant.EVENT_RECEIVE_OTHER_CARD_ID;
 import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
-import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_OUT_CARD_ID;
 
 /**
  * 玩家抽象接口
@@ -38,40 +37,44 @@ import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_OUT_CARD_ID;
 @Accessors(chain = true)
 public abstract class Player implements Cloneable, Serializable {
 
-    private GameUser gameUser;
+    protected GameUser gameUser;
 
     /**
      * 玩家手牌：在初始化时，会涉及多线程操作
      */
     @JsonSerialize(converter = Converter.class)
-    private volatile List<Integer> cards;
+    protected volatile List<Integer> cards;
 
     /**
      * 事件手牌，包括 Gang 牌，PONG 牌
      */
     @JsonIgnore
-    private Map<Card, Integer> eventCard;
+    protected Map<Card, Integer> eventCard;
 
 
     /**
      * 预留字段：提示胡牌值
      */
     @JsonIgnore
-    private Set<Card> selectHu;
+    protected Set<Card> selectHu;
 
 
     /**
      * 最终胡牌值
      */
     @JsonIgnore
-    private Card selectedHu;
+    protected Card selectedHu;
 
 
     /**
-     * 是否已经接受到其他玩家的牌
+     * 胡牌
      */
-    @JsonIgnore
-    public volatile boolean receivePending;
+    protected int stateHu;
+
+    /**
+     * 是否胡牌
+     */
+    protected boolean isHu;
 
     /**
      *
@@ -95,9 +98,8 @@ public abstract class Player implements Cloneable, Serializable {
      * 加入手牌
      *
      * @param cardNum 手牌
-     * @return 添加是否成功
      */
-    public boolean addCard(int cardNum) {
+    public void addCard(int cardNum) {
 
         // 这里插入，必须保证手牌的有序性
         int index = Algorithm.binarySearch(cards, cardNum, true);
@@ -106,7 +108,6 @@ public abstract class Player implements Cloneable, Serializable {
         }
         // 因为 ArrayList.set 会发生边界检查，所以不能插入到右边界之外
         cards.add(index, cardNum);
-        return true;
     }
 
 
@@ -114,8 +115,8 @@ public abstract class Player implements Cloneable, Serializable {
      *
      * 移除下标为 cardIndex 的手牌
      *
-     * @param cardIndex
-     * @return
+     * @param cardIndex 索引
+     * @return 删除成功
      */
     public boolean removeCard(int cardIndex) {
         return false;
@@ -126,29 +127,19 @@ public abstract class Player implements Cloneable, Serializable {
      * 移除点数为 cardNum 的手牌
      *
      * @param cardNum 手牌
-     * @return
+     * @return 删除成功
      */
     public boolean remove(int cardNum) {
+        // 移除一个元素
         return cards.remove((Integer)cardNum);
     }
 
-    public boolean addEventCard(int cardNum, int eventValue) {
-
-        Card card = new MaJiang(cardNum, CardType.generate(cardNum));
-
-        if(eventValue == MaJiangEvent.PONG.getValue()) {
-            if(eventCard.containsKey(card)) {
-                throw new IllegalArgumentException("已经存在");
+    public void remove(int cardNum, int count) {
+        for (int i = 0; i < count; i++) {
+            if(!remove(cardNum)) {
+                throw new IllegalArgumentException("移除失败，移除的次数" + i + 1);
             }
-            eventCard.put(card, 3);
-        }else if(eventValue == MaJiangEvent.DIRECT_GANG.getValue()) {
-            eventCard.put(card, 4);
-        }else {
-            throw new IllegalArgumentException("暂时无法处理");
         }
-
-        return true;
-
     }
 
 
@@ -157,7 +148,6 @@ public abstract class Player implements Cloneable, Serializable {
      * 检查玩家是否能出这张牌
      *
      * @param cardNum 这张牌是否在手牌中
-     * @return 能否出牌
      */
     public void checkOut(Integer cardNum) {
         if(cards != null && cards.contains(cardNum)) {
@@ -185,7 +175,7 @@ public abstract class Player implements Cloneable, Serializable {
          Map<MaJiangEvent, Integer> selectEvent = new HashMap<>(16);
 
         // 1.是否可以 PONG
-        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountArr(cards, value) == 2) {
+        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountArr(cards, value) == 1) {
             selectEvent.put(MaJiangEvent.PONG, value);
         }
 
@@ -266,6 +256,16 @@ public abstract class Player implements Cloneable, Serializable {
      * @return
      */
     public abstract Player convertTo();
+
+
+    /**
+     *
+     * 对游戏事件进行处理
+     *
+     * @param eventValue 事件 id
+     * @param cardNum 棋牌值
+     */
+    public abstract void eventHandler(int eventValue, int cardNum);
 
 
     @Override

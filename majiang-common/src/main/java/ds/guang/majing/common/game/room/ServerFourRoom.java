@@ -21,6 +21,9 @@ public class ServerFourRoom extends Room implements Serializable {
 
     @Override
     public boolean isCurAround(String userId) {
+        if(curRoundIndex < 0) {
+            return false;
+        }
         Player player = super.players[curRoundIndex % playerCount];
         return player != null && player.id().equals(userId);
     }

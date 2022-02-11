@@ -57,7 +57,7 @@ public class MaJiang implements Card {
     }
 
     @Override
-    public Object value() {
+    public int value() {
         return getValue();
     }
 }

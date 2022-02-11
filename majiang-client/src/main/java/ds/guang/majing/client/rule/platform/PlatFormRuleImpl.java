@@ -1,6 +1,8 @@
 package ds.guang.majing.client.rule.platform;
 
 import ds.guang.majing.client.event.DsRequest;
+import ds.guang.majing.client.javafx.task.OperationTask;
+import ds.guang.majing.client.javafx.ui.action.OperationAction;
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.GameEvent;
@@ -24,11 +26,13 @@ import ds.guang.majing.common.game.rule.AbstractRule;
 import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
+import javafx.application.Platform;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import static ds.guang.majing.client.rule.platform.CacheUtil.getRoomById;
 import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
@@ -150,6 +154,11 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
         State<String, String, DsResult> takeState = gameTakeCardStateSupplier.get();
 
+
+
+
+
+
         takeState.onEntry(data -> {
 
             System.out.println(".........................");
@@ -182,7 +191,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             GameInfoResponse takeCardResponse = takeCardResult.getData();
 
             Card card = takeCardResponse.getCard();
-            Integer take = (Integer) card.value();
+            int take = (int) card.value();
             p.addCard(take);
 
             System.out.println("摸到的牌是：" + card + " id: " + userId);
@@ -199,49 +208,40 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
             // 主动切换状态 - 切换为出牌状态
             this.stateMachine.setCurrentState(STATE_TAKE_OUT_CARD_ID, takeCardResponse);
-
             return takeCardResult;
         });
-
 
         State<String, String, DsResult> takeOutState = gameTakeOutCardStateSupplier.get();
 
         takeOutState.onEntry(data -> {
            // 1.逻辑是先有
             System.out.println("...............................");
-          //  System.out.println("进入出牌状态");
+            System.out.println("进入出牌状态");
+            // 2.先将自身状态设置为不能再次出牌，防止多次出牌
             return data;
         });
 
         takeOutState.onEvent(EVENT_TAKE_OUT_CARD_ID, STATE_WAIT_ID, data -> {
-
             // 1.正常摸牌之后，出牌
             // 2.其他人摸牌之后，出牌，引发玩家特殊事件（PONG），出牌
             // 3. data : 包含用户 id, 出的牌
+
+            // 更新回合
+            // 获取最终位置
+            GameInfoRequest takeOutInfo = ((DsMessage<GameInfoRequest>) data).getData();
+            String userId = takeOutInfo.getUserId();
+            Room room = getRoomById(userId);
+            room.setCurRoundIndex(-1);
+
             Request takeOutRequest = new TakeOutRequest(data, GAME_URL);
             DsResult<GameInfoResponse> takeOutResult = takeOutRequest.execute(null);
             GameInfoResponse takeOutResponse = takeOutResult.getData();
 
-            // 更新回合
-            // 获取最终位置
-            String userId = takeOutResponse.getUserId();
-            Room room = getRoomById(userId);
-
-            DsMessage<GameInfoRequest> roundMessage = DsMessage.build(
-                    EVENT_WAIT_ID,
-                    userId,
-                    new GameInfoRequest()
-                            .setUserId(userId)
-                            .setRequestNo(userId)
-
-
-            );
-            // 请求位置
-            Request roundRequest = new RoundRequest(roundMessage);
-            DsResult<GameInfoResponse> roundResp = roundRequest.execute(null);
+            room.remove(userId, takeOutInfo.getCard().value());
 
             // 更新位置
-            int roundIndex = roundResp.getData().getCurRoundIndex();
+            int roundIndex = takeOutResponse.getCurRoundIndex();
+            // RoundIndex 应该是线程安全的
             room.setCurRoundIndex(roundIndex);
 
             return takeOutResult;
@@ -270,10 +270,8 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             GameInfoResponse otherResponse = getGameInfoResponse(data);
             String userId = otherResponse.getUserId();
 
-
             GameInfoRequest otherRequest = new GameInfoRequest()
                     .setUserId(userId);
-
             DsMessage<GameInfoRequest> message = DsMessage.build(
                     EVENT_RECEIVE_OTHER_CARD_ID,
                     userId,
@@ -283,24 +281,26 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             // 等待其他玩家出牌
             Request waitRequest = new WaitRequest(message, GAME_URL);
             DsResult<GameInfoResponse> waitResponseResult = waitRequest.execute(null);
-            GameInfoResponse waitResponse = waitResponseResult.getData();
+            otherResponse = waitResponseResult.getData();
 
             // 提交一个 ui 任务
-            String serviceName = waitResponse.getServiceName();
+            String serviceName = otherResponse.getServiceName();
 
             // 从缓存中获取房间
             Room room = getRoomById(userId);
             Player p = room.findPlayerById(userId);
 
+            System.out.println("service-name...." + serviceName);
+
             if(serviceName.equals(EVENT_RECEIVE_OTHER_CARD_ID)) {
 
                 // 获取其他玩家出的牌
-                Card takeOut = waitResponse.getCard();
+                Card takeOut = otherResponse.getCard();
                 GameEvent event = p.event(takeOut, EVENT_RECEIVE_OTHER_CARD_ID, userId);
-                System.out.println("event: " + event);
+                System.out.println(" 其他玩家出的牌是： " + takeOut + " event: " + event);
 
                 if(event != null) {
-
+                    System.out.println("otherRes: " + otherResponse);
                     // 减少不必要的网络消耗
                     message.setServiceNo(EVENT_IS_GAME_EVENT_ID)
                             .setData(
@@ -314,61 +314,45 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
                         // 是否可以执行游戏事件
                         Request eventRequest = new EventRequest(message, GAME_URL);
-                        otherResponse = getGameInfoResponse(eventRequest.execute(null));
+                        waitResponseResult = eventRequest.execute(null);
+                        System.out.println("eventResult: " + waitResponseResult);
+                        otherResponse = getGameInfoResponse(waitResponseResult);
                         eventStatus = otherResponse.getEventStatus();
                     }
 
-
                     if(eventStatus.equals(EVENT_STATUS_CANCEL)) {
                         // nothing
+                        System.out.println("取消任务");
+                        // Platform.runLater(OperationTask.getInstance());
                     }
 
                     if(eventStatus.equals(EVENT_STATUS_ACTION)) {
-
                         // 提交一个 ui 任务
-                        System.out.println();
+
+                        Platform.runLater(OperationTask.getInstance()
+                                .setGameEvent(otherResponse.getEvent())
+                                .setMessage(
+                                        DsMessage.build(null, userId, null)
+                                )
+                                .setCard(takeOut)
+                        );
                     }
 
+                }else {
+                    next(otherResponse,  waitResponseResult, room, p);
                 }
             }else if(serviceName.equals(EVENT_RECEIVE_EVENT_REPLY_ID)) {
                 System.out.println("其他玩家的游戏事件");
-                GameEvent event = waitResponse.getEvent();
-                String otherId = waitResponse.getUserId();
+                GameEvent event = otherResponse.getEvent();
+                String otherId = event.getPlayId();
                 // 根据 event 提交 ui 任务
                 System.out.println(otherId + " 发起了 " + event + " 任务");
 
+                // 渲染界面，同时更新回合
+                Platform.runLater(new OperationAction());
+                next(otherResponse, waitResponseResult, room, p);
             }
-
-            // 获取最终位置
-            DsMessage<GameInfoRequest> roundMessage = DsMessage.build(
-                    EVENT_WAIT_ID,
-                    userId,
-                    new GameInfoRequest()
-                            .setUserId(userId)
-                            .setRequestNo(userId)
-
-
-            );
-            Request roundRequest = new RoundRequest(roundMessage);
-            DsResult otherResult = roundRequest.execute(null);
-            GameInfoResponse roundResp = getGameInfoResponse(otherResult);
-            int roundIndex = roundResp.getCurRoundIndex();
-            room.setCurRoundIndex(roundIndex);
-
-            // 递归调用
-            otherResponse.setRequestNo(userId);
-            if(p.direction == roundIndex % room.getPlayers().length) {
-
-                // 到了该玩家的回合
-                System.out.println("到你的回合了！");
-                stateMachine.setCurrentState(STATE_TAKE_CARD_ID, data);
-
-            }else {
-                System.out.println("继续等待！");
-                stateMachine.setCurrentState(STATE_WAIT_ID, otherResult);
-            }
-
-            return otherResult;
+            return waitResponseResult;
         });
 
 
@@ -381,13 +365,30 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         return this;
     }
 
+    private void next(GameInfoResponse otherResponse,  DsResult<GameInfoResponse> waitResponseResult, Room room, Player p) {
+        System.out.println("otherResponse: " + otherResponse);
+        int roundIndex = otherResponse.getCurRoundIndex();
+        if(roundIndex == -1){
+            throw new IllegalArgumentException("还有事件未处理完成，无法进行回合切换！");
+        }
+        room.setCurRoundIndex(roundIndex);
+        System.out.println("after roundIndex: " + room.getCurRoundIndex());
+        // 递归调用
+        if(p.direction == roundIndex % room.getPlayers().length) {
+
+            // 到了该玩家的回合
+            System.out.println("到你的回合了！");
+            stateMachine.setCurrentState(STATE_TAKE_CARD_ID, waitResponseResult);
+
+        }else {
+            System.out.println("继续等待！");
+            // TODO 似乎有内存泄漏的风险，每次进入下一回合，
+            stateMachine.setCurrentState(STATE_WAIT_ID, waitResponseResult);
+        }
+    }
+
     private GameInfoResponse getGameInfoResponse(Object data) {
         DsResult<GameInfoResponse> dsResult = (DsResult<GameInfoResponse>) data;
         return dsResult.getData();
-    }
-
-    private Room getRoomById(String id) {
-
-        return (Room) Cache.getInstance().getObject(preRoomInfoPrev(id));
     }
 }

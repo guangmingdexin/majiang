@@ -1,5 +1,6 @@
-package ds.guang.majiang.server.machines;
+package ds.guang.majing.common.game.machines;
 
+import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
 
 /**
@@ -15,5 +16,5 @@ public interface StateMachineFactory {
      *
      * @return 状态机
      */
-    StateMachine create();
+    StateMachine create(Rule rule);
 }

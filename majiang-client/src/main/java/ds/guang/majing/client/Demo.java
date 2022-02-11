@@ -1,9 +1,13 @@
 package ds.guang.majing.client;
 
 
+import ds.guang.majing.client.javafx.task.OperationTask;
+import ds.guang.majing.client.network.EventRequest;
+import ds.guang.majing.client.network.Request;
 import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
 import ds.guang.majing.common.game.card.CardType;
 import ds.guang.majing.common.game.card.MaJiang;
+import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
@@ -15,6 +19,7 @@ import ds.guang.majing.common.game.dto.User;
 import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -38,12 +43,32 @@ public class Demo extends Application {
         launch(args);
     }
 
+
+    public static Button pong;
+
+    public static Button gang;
+
+    public static Button hu;
+
+    public static Button ignore;
+
     @Override
     public void start(Stage primaryStage) throws Exception  {
         // 1.创建一个按钮
         GridPane grid = new GridPane();
         Button button = new Button("登录");
         Button takeOut = new Button("出牌");
+
+        pong = new Button("碰");
+        gang = new Button("杠");
+        hu = new Button("胡");
+        ignore = new Button("过");
+
+
+        pong.setVisible(false);
+        gang.setVisible(false);
+        hu.setVisible(false);
+        ignore.setVisible(false);
 
         Executor executor = new ExtendedExecutor(
                 10,
@@ -117,7 +142,7 @@ public class Demo extends Application {
 
         takeOut.setOnAction(event -> {
 
-            System.out.println("........................");
+            //System.out.println("........................");
             //System.out.println("出牌！");
 
             GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
@@ -153,11 +178,15 @@ public class Demo extends Application {
 
         });
 
-
-
         grid.add(button, 0, 0, 2, 1);
         grid.add(game, 0, 1, 2, 1);
         grid.add(takeOut, 0, 2, 2, 1);
+
+        grid.add(pong, 0, 3);
+        grid.add(gang, 1, 3);
+        grid.add(hu, 2, 3);
+        grid.add(ignore, 3, 3);
+
         Scene scene = new Scene(grid, 300, 275);
         primaryStage.setScene(scene);
 

@@ -26,6 +26,6 @@ public interface Card extends Serializable {
      *
      * @return value 值
      */
-    Object value();
+    int value();
 
 }

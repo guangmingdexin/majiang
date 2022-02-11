@@ -50,6 +50,8 @@ public enum MaJiangEvent {
         return priority;
     }
 
+    public String getName() { return desc;}
+
 
     public static MaJiangEvent generate(int eventValue) {
 

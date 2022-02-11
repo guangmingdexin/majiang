@@ -2,7 +2,7 @@ package ds.guang.majiang.server.layer.game;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majiang.server.machines.StateMachines;
+import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.DsMessage;
@@ -31,7 +31,7 @@ public class GameTakeAction implements Action {
     public void handler(State state) {
 
         state.onEntry(data -> {
-            System.out.println("进入摸牌状态！");
+            System.out.println("进入摸牌状态！" + data);
             return data;
         });
 
@@ -62,8 +62,8 @@ public class GameTakeAction implements Action {
                 // 判断事件
                 // 麻将棋牌
                 Card majiang = new MaJiang(take, CardType.generate(take));
-                GameEvent event = p.event(majiang, EVENT_TAKE_CARD_ID, id);
-
+              //  GameEvent event = p.event(majiang, EVENT_TAKE_CARD_ID, id);
+                GameEvent event = null;
                 GameInfoResponse info = new GameInfoResponse()
                         .setUserId(id)
                         .setCard(majiang)

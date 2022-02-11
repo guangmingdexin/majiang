@@ -25,6 +25,7 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
 
     private StateStrategy stateStrategy;
 
+
     public V3PlatFormRule() {
         stateStrategyFactory = DefaultStateStrategyFactory.INSTANCE;
         stateStrategy = stateStrategyFactory.newStateStrategy();
@@ -58,7 +59,6 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
         State<String, String, DsResult> loginState = loginStateSupplier.get();
         State<String, String, DsResult> platformState = platformSupplier.get();
         State<String, String, DsResult> prepareState = prepareSupplier.get();
-
 
         State<String, String, DsResult> takeCardState = gameTakeCardStateSupplier.get();
         State<String, String, DsResult> takeOutCardState = gameTakeOutCardStateSupplier.get();

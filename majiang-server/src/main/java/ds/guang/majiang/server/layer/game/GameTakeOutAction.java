@@ -61,7 +61,6 @@ public class GameTakeOutAction implements Action {
 
                 // 3.通知其他玩家
                 Player[] players = room.getPlayers();
-
                 GameEventHandler eventHandler = room.getEventHandler();
 
                 for (Player player : players) {
@@ -69,34 +68,40 @@ public class GameTakeOutAction implements Action {
                     if(!player.equals(p)) {
                         String userId = player.id();
                         // 判断其他玩家能不能够形成其他事件
-                        GameEvent gameEvent = p.event(card, EVENT_RECEIVE_OTHER_CARD_ID, userId);
+                        GameEvent gameEvent = player.event(card, EVENT_RECEIVE_OTHER_CARD_ID, userId);
                         // 注意：这里是线程安全的
                         // 将玩家事件加入处理器中，稍后处理
                         eventHandler.addEvent(gameEvent);
-
-                        ChannelHandlerContext context = (ChannelHandlerContext)player.getContext();
-                        context.channel().eventLoop().execute(() -> {
-
-                            // 提交任务
-                            // 封装一个 Response 对象
-                            GameInfoResponse r = new GameInfoResponse()
-                                    .setUserId(userId)
-                                    .setCard(card)
-                                    .setServiceName(EVENT_RECEIVE_OTHER_CARD_ID);
-
-                            context.writeAndFlush(
-                                    ResponseUtil.response(
-                                            DsMessage.build(EVENT_RECEIVE_OTHER_CARD_ID, userId, DsResult.data(r))));
-
-
-                        });
                     }
                 }
-
+                int roundIndex = -1;
                 if(eventHandler.isEmpty()) {
-                    eventHandler.nextRound(MaJiangEvent.NOTHING.getValue() ,id, room);
+                    roundIndex = eventHandler.nextRound(MaJiangEvent.NOTHING.getValue(), id, room);
                 }
+                System.out.println("eventHandler: " + eventHandler);
+                for (Player player : players) {
 
+                    ChannelHandlerContext context = (ChannelHandlerContext)player.getContext();
+
+                    // 提交任务
+                    // 封装一个 Response 对象
+                    String playId = player.id();
+                    GameInfoResponse r = new GameInfoResponse()
+                            .setUserId(playId)
+                            .setCard(card)
+                            .setServiceName(EVENT_RECEIVE_OTHER_CARD_ID)
+                            .setCurRoundIndex(roundIndex);
+
+                    DsMessage<DsResult<GameInfoResponse>> reply = DsMessage.build(
+                            EVENT_RECEIVE_EVENT_REPLY_ID,
+                            playId,
+                            DsResult.data(r)
+                    );
+                    context.channel().eventLoop().execute(() -> {
+                        Room.write(playId, ResponseUtil.response(reply));
+                    });
+
+                }
                 return DsResult.ok();
             }
             throw new IllegalArgumentException("错误的出牌请求");

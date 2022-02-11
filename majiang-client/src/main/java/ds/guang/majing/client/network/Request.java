@@ -1,6 +1,9 @@
 package ds.guang.majing.client.network;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.util.DsConstant;
 import ds.guang.majing.common.util.JsonUtil;
 import org.apache.http.HttpEntity;
@@ -127,7 +130,7 @@ public abstract class Request  {
      */
     public String call() {
 
-        System.out.println("发起请求的线程-" + Thread.currentThread().getName());
+        System.out.println("发起请求的线程-" + Thread.currentThread().getName() + " service: " + ((DsMessage)message).getServiceNo());
         // 1.向远程服务器发送准备游戏的请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
         String reply = null;
@@ -148,6 +151,24 @@ public abstract class Request  {
             e.printStackTrace();
         }
         return reply;
+    }
+
+
+    protected DsResult response(String content) {
+
+        DsMessage<DsResult<GameInfoResponse>> message = null;
+
+        try {
+            message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<DsResult<GameInfoResponse>>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(message == null) {
+            // TODO : 这里应该抛异常
+            return DsResult.error("error！");
+        }
+        return message.getData();
     }
 
 

@@ -2,9 +2,7 @@ package ds.guang.majiang.server.layer.game;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majing.common.game.card.Card;
-import ds.guang.majing.common.game.card.GameEventHandler;
-import ds.guang.majing.common.game.card.MaJiangEvent;
+import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
@@ -38,15 +36,13 @@ public class GameEventAction implements Action {
             return data;
         });
 
-
         state.onEvent(EVENT_PONG_ID, data -> {
+            System.out.println("对pong 事件进行处理");
             eventAction(data);
             return DsResult.ok();
         });
 
-
         state.onEvent(EVENT_IN_DIRECT_HU_ID, data -> {
-
             eventAction(data);
             return DsResult.ok();
         });
@@ -59,36 +55,49 @@ public class GameEventAction implements Action {
         GameInfoRequest request = ResponseUtil.getGameInfoRequest(data);
 
         String userId = request.getUserId();
-        int value = (int) request.getCard().value();
+        Card card = request.getCard();
+        int value =  card.value();
 
-        int eventValue = request.getEvent().getEvent();
+        MaGameEvent gameEvent = (MaGameEvent)request.getEvent();
+        int eventValue = gameEvent.getEvent();
         Room room = Room.nextRound(userId, eventValue);
 
         // condition
-        MaJiangEvent event = MaJiangEvent.generate(eventValue);
+        MaJiangEvent event = gameEvent.getActionEvent();
 
         switch (event) {
             case PONG:
-                room.remove(userId, value);
+
                 break;
             case IN_DIRECT_HU:
+                // 因为有可能有多个玩家同时胡牌所以可能需要唤醒其他挂起玩家
                 room.announceNext();
             default:
                 break;
         }
-
-        room.addEventCard(userId, value, eventValue);
+        // 处理事件
+        room.eventHandler(userId, eventValue, value);
 
         for (Player player : room.getPlayers()) {
 
             DsMessage<DsResult<GameInfoResponse>> message = DsMessage.build(
                     EVENT_RECEIVE_EVENT_REPLY_ID,
-                    userId,
-                    new GameInfoResponse()
-                            .setUserId(userId)
-                            .setEventStatus("COMPLETE")
-                            .setCurRoundIndex(room.getCurRoundIndex())
-            );
+                    player.id(),
+                    DsResult.data(
+                            new GameInfoResponse()
+                                .setServiceName(EVENT_RECEIVE_EVENT_REPLY_ID)
+                                .setUserId(player.id())
+                                .setEventStatus("COMPLETE")
+                                    // 判断是否还有其他事件需要执行，如果没有则可以进入下一个回合
+                                .setCurRoundIndex(room.getEventHandler().isEmpty() ? room.getCurRoundIndex() : -1)
+                                .setEvent(
+                                        new MaGameEvent()
+                                                .setPlayId(userId)
+                                                .setActionEvent(event)
+                                                .setEventName(event.getName())
+                                )
+                                .setCard(card)
+                    ));
 
             Room.write(player.id(), ResponseUtil.response(message));
         }

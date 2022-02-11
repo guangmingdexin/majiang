@@ -20,7 +20,9 @@ public interface GameEventHandler {
     /**
      *
      * 处理游戏事件，主要包括状态切换，回合转换
+     * 必须保证是线程安全的
      *
+     * @return boolean 是否为空
      */
     boolean isEmpty();
 

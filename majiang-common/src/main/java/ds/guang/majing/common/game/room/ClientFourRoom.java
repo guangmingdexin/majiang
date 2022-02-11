@@ -1,5 +1,8 @@
 package ds.guang.majing.common.game.room;
 
+import ds.guang.majing.common.game.card.CardType;
+import ds.guang.majing.common.game.card.MaJiang;
+import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.game.player.Player;
 
 /**
@@ -8,11 +11,12 @@ import ds.guang.majing.common.game.player.Player;
  */
 public class ClientFourRoom extends Room {
 
-
     @Override
     public boolean isCurAround(String userId) {
         // 1.判断 curIndex 下标是否为 存在玩家
-
+        if(curRoundIndex < 0) {
+            return false;
+        }
         Player p = super.players[curRoundIndex];
         return p != null && p.id().equals(userId);
     }
