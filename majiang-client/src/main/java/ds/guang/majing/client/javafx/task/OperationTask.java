@@ -2,7 +2,7 @@ package ds.guang.majing.client.javafx.task;
 
 import ds.guang.majing.client.network.EventRequest;
 import ds.guang.majing.client.network.Request;
-import ds.guang.majing.common.cache.CacheUtil;
+import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.GameEvent;
 import ds.guang.majing.common.game.card.MaGameEvent;

@@ -1,11 +1,11 @@
-package ds.guang.majing.common.game.room;
+package ds.guang.majing.client;
 
-import ds.guang.majing.common.cache.CacheUtil;
+import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.common.game.card.GameEvent;
-import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.StateMachine;
 import lombok.NoArgsConstructor;
 

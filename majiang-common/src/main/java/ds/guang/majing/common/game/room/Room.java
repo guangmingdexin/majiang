@@ -21,8 +21,7 @@ import java.util.Objects;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ServerFourRoom.class, name = "serverRoom"),
-        @JsonSubTypes.Type(value = ClientFourRoom.class, name = "clientRoom")
+        @JsonSubTypes.Type(value = ServerFourRoom.class, name = "serverRoom")
 })
 @Getter
 @Setter

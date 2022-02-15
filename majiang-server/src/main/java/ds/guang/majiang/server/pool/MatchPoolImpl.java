@@ -172,16 +172,12 @@ public class MatchPoolImpl implements MatchPool {
                                 .setRequestNo(player.id())
                                 .setRoom(room);
 
-                        DsMessage dsMessage = DsMessage.build(EVENT_PREPARE_ID,
+                        DsMessage dsMessage = DsMessage.build(EVENT_RANDOM_MATCH_ID,
                                 player.id(),
                                 DsResult.data(response));
 
                         context.writeAndFlush(ResponseUtil.response(dsMessage));
 
-                        StateMachine<String, String, DsResult> machine = StateMachines
-                                .get(preUserMachinekey(player.id()));
-                        // 手动切换状态
-                        machine.nextState(STATE_PREPARE_ID, dsMessage);
                     }else {
                         throw new RejectedExecutionException("获取通道失败！");
                     }

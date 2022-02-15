@@ -3,6 +3,9 @@ package ds.guang.majing.common.game.message;
 
 import ds.guang.majing.common.util.DsConstant;
 import ds.guang.majing.common.state.Result;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -14,9 +17,12 @@ import java.util.Map;
  * @author guangyong.deng
  * @date 2021-11-17 14:37
  */
+@Getter
+@Setter
+@Accessors(chain = true)
 public class DsResult<T>  implements Result, Serializable {
 
-    int code;
+    String code;
 
     T data;
 
@@ -34,77 +40,12 @@ public class DsResult<T>  implements Result, Serializable {
 
     }
 
-    public DsResult(int code, String msg, T data) {
+    public DsResult(String code, String msg, T data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
     }
 
-    /**
-     * 获取code
-     *
-     * @return code
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * 获取msg
-     *
-     * @return msg
-     */
-    public String getMsg() {
-        return msg;
-    }
-
-    /**
-     * 获取data
-     *
-     * @return data
-     */
-    public T getData() {
-        return data;
-    }
-
-    /**
-     * 给code赋值，连缀风格
-     *
-     * @param code code
-     * @return 对象自身
-     */
-    public DsResult setCode(int code) {
-        this.code = code;
-        return this;
-    }
-
-    /**
-     * 给msg赋值，连缀风格
-     *
-     * @param msg msg
-     * @return 对象自身
-     */
-    public DsResult setMsg(String msg) {
-        this.msg = msg;
-        return this;
-    }
-
-    /**
-     * 给data赋值，连缀风格
-     *
-     * @param data data
-     * @return 对象自身
-     */
-    public DsResult setData(T data) {
-        this.data = data;
-        return this;
-    }
-
-
-
-    public Map<String, Object> getAttrMap() {
-        return attrMap;
-    }
 
     public DsResult setAttrMap(String key, Object value) {
         if(this.attrMap == null) {
@@ -124,9 +65,6 @@ public class DsResult<T>  implements Result, Serializable {
     }
 
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     // 构建成功
     public static DsResult ok() {
@@ -137,7 +75,7 @@ public class DsResult<T>  implements Result, Serializable {
         return new DsResult<>(DsConstant.CODE_SUCCESS, msg, null);
     }
 
-    public static DsResult code(int code) {
+    public static DsResult code(String code) {
         return new DsResult<>(code, null, null);
     }
 
@@ -155,12 +93,12 @@ public class DsResult<T>  implements Result, Serializable {
     }
 
     // 构建指定状态码 
-    public static DsResult get(int code, String msg, Object data) {
+    public static DsResult get(String code, String msg, Object data) {
         return new DsResult<>(code, msg, data);
     }
 
     public static DsResult empty(String msg) {
-        return new DsResult<>(-1, msg, null);
+        return new DsResult<>("-1", msg, null);
     }
 
     public static DsResult wait(String msg) {
@@ -176,13 +114,13 @@ public class DsResult<T>  implements Result, Serializable {
      * @return
      */
     public boolean waitState() {
-        return this.code == DsConstant.CODE_WAIT;
+        return this.code.equals(DsConstant.CODE_WAIT);
     }
 
 
     @Override
     public boolean success() {
-        return this.code == DsConstant.CODE_SUCCESS;
+        return this.code.equals(DsConstant.CODE_SUCCESS);
     }
 
     @Override

@@ -26,20 +26,18 @@ public final class DsConstant {
     /**
      * 消息体code
      */
-    public static final int CODE_SUCCESS = 200;
+    public static final String CODE_SUCCESS = "200";
 
-    public static final int CODE_ERROR = 500;
+    public static final String CODE_ERROR = "500";
 
-    public static final int CODE_WAIT = -1;
+    public static final String CODE_WAIT = "-1";
 
 
     /**
      *  状态 id 常量
      *
      */
-    public static final String STATE_LOGIN_ID = "STATE_LOGIN_ID";
-
-    public static final String STATE_PLATFORM_ID = "STATE_PLATFORM_ID";
+    public static final String STATE_START_ID = "STATE_START_ID";
 
     public static final String STATE_PREPARE_ID = "STATE_PREPARE_ID";
 
@@ -62,13 +60,11 @@ public final class DsConstant {
     /**
      * 事件 id 常量
      */
-    public static final String EVENT_LOGIN_ID = "EVENT_LOGIN_ID";
-
-    public static final String EVENT_PLATFORM_ID = "EVENT_PLATFORM_ID";
-
     public static final String EVENT_PREPARE_ID = "EVENT_PREPARE_ID";
 
     public static final String EVENT_MATCH_FRIEND_ID = "EVENT_MATCH_FRIEND_ID";
+
+    public static final String EVENT_RANDOM_MATCH_ID = "EVENT_RANDOM_MATCH_ID";
 
     public static final String EVENT_HANDCARD_ID = "EVENT_HANDCARD_ID";
 
@@ -81,15 +77,6 @@ public final class DsConstant {
      */
     public static final String EVENT_PONG_ID = "EVENT_PONG_ID";
 
-    /**
-     * 暗杠
-     */
-    public static final String EVENT_SELF_GANG_ID = "EVENT_SELF_GANG_ID";
-
-    /**
-     * 直杠
-     */
-    public static final String EVENT_DIRECT_GANG_ID = "EVENT_DIRECT_GANG_ID";
 
     /**
      * 巴杠
@@ -101,10 +88,6 @@ public final class DsConstant {
      */
     public static final String EVENT_HU_ID = "EVENT_HU_ID";
 
-    /**
-     * 放炮
-     */
-    public static final String EVENT_IN_DIRECT_HU_ID = "EVENT_IN_DIRECT_HU_ID";
 
 
     /**
@@ -128,11 +111,6 @@ public final class DsConstant {
      */
     public static final String EVENT_RECEIVE_EVENT_REPLY_ID = "EVENT_RECEIVE_EVENT_REPLY_ID";
 
-
-    /**
-     * 用户获取下一回合
-     */
-    public static final String EVENT_RECEIVE_ROUND_INDEX_ID = "EVENT_RECEIVE_ROUND_INDEX_ID";
 
 
     /**
@@ -159,8 +137,7 @@ public final class DsConstant {
     public static final String USER_MACHINE_PREV = "user-machine-id:";
 
     public static final String ROOM_INFO_PREV = "room-info-id:";
-    
-    public static final String USER_CHANEL_PREV = "user-channel-id:";
+
 
     public static String preGameUserInfoKey(String id) {
         return GAMEUSER_INFO_PREV + id;
@@ -174,9 +151,6 @@ public final class DsConstant {
         return ROOM_INFO_PREV + id;
     }
 
-    public static String preUserChanelPrev(String id) {
-        return USER_CHANEL_PREV + id;
-    }
     /**
      * 系统
      */
@@ -194,6 +168,8 @@ public final class DsConstant {
 
 
     public static final String BASE_URL = "http://localhost:9001/";
+
+    public static final String REMOTE_URL = "http://localhost:9999/";
 
     public static final String GAME_URL = "v3/game/";
 

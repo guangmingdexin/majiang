@@ -1,0 +1,101 @@
+package ds.guang.majing.client.remote.service;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majing.client.network.Request;
+import ds.guang.majing.client.remote.dto.ao.AccountAo;
+import ds.guang.majing.client.remote.dto.vo.LoginVo;
+import ds.guang.majing.client.cache.Cache;
+import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.util.DsConstant;
+import ds.guang.majing.common.util.JsonUtil;
+
+import java.io.IOException;
+import java.util.Objects;
+
+import static ds.guang.majing.common.util.DsConstant.REMOTE_URL;
+
+/**
+ *
+ * 不保证线程安全，所以必须在单线程内使用
+ *
+ * @author guangyong.deng
+ * @date 2022-02-15 15:05
+ */
+public class UserService implements IUserService {
+
+
+    @Override
+    public GameUser getOne(String uId) {
+        // 1.创建一个连接，发起请求
+        Request request = new Request(uId, DsConstant.REMOTE_URL + "majiang/ds-user/user") {
+
+            @Override
+            protected void before(Runnable task) {}
+
+            @Override
+            protected DsResult after(String content) {
+
+                DsResult<GameUser> responseVo = null;
+
+                try {
+                    responseVo = JsonUtil.getMapper().readValue(
+                            content,
+                            new TypeReference<DsResult<GameUser>>() {});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Objects.requireNonNull(responseVo, "response is null");
+
+                if(responseVo.success()) {
+                    // 这里应该还需要一个上下文解析器，用来保存用户基本信息和游戏信息
+                    GameUser data = responseVo.getData();
+                    Cache.getInstance().setObject("User-Session:", data, -1);
+                    return responseVo;
+                }
+                return responseVo;
+            }
+        };
+        return (GameUser) request.execute(null).getData();
+    }
+
+    @Override
+    public LoginVo login(AccountAo accountAo) {
+
+        Request request = new Request(accountAo, REMOTE_URL + "majiang/ds-auth/login") {
+            @Override
+            protected void before(Runnable task) {
+
+            }
+
+            @Override
+            protected DsResult after(String content) {
+
+                DsResult<LoginVo> responseVo = null;
+
+                try {
+                    responseVo = JsonUtil.getMapper().readValue(
+                            content,
+                            new TypeReference<DsResult<LoginVo>>() {});
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Objects.requireNonNull(responseVo, "response is null");
+
+                if(responseVo.success()) {
+                    // 这里应该还需要一个上下文解析器，用来保存用户基本信息和游戏信息
+                    LoginVo data = responseVo.getData();
+                    System.out.println("登录成功：" + data);
+                    Cache.getInstance().setObject("User-Token:", data, -1);
+                    return responseVo;
+                }
+
+                return DsResult.error("登录错误！");
+            }
+        };
+
+        return (LoginVo) request.execute(null).getData();
+    }
+}

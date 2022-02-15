@@ -1,25 +1,23 @@
 package ds.guang.majing.client;
 
 
-import ds.guang.majing.client.javafx.task.OperationTask;
-import ds.guang.majing.client.network.EventRequest;
-import ds.guang.majing.client.network.Request;
+import ds.guang.majing.client.remote.dto.ao.AccountAo;
+import ds.guang.majing.client.remote.dto.vo.LoginVo;
+import ds.guang.majing.client.remote.service.IUserService;
+import ds.guang.majing.client.remote.service.UserService;
 import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
 import ds.guang.majing.common.game.card.CardType;
 import ds.guang.majing.common.game.card.MaJiang;
-import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
-import ds.guang.majing.common.cache.Cache;
+import ds.guang.majing.client.cache.Cache;
 import ds.guang.majing.common.game.dto.GameUser;
-import ds.guang.majing.common.game.dto.User;
 import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.StateMachine;
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -115,28 +113,22 @@ public class Demo extends Application {
             // 我应该维护一个状态机 map，根据用户 id 或者 其他标识符 作为 key
             // 并需要时刻同步两个状态机的状态一致，缓存
             System.out.println("登陆开始了！");
-            User u = new User("guangmingdexin", "123");
-            GameInfoRequest request = new GameInfoRequest();
-            DsMessage data = DsMessage.build(EVENT_LOGIN_ID, requestNo, request.setUser(u));
+
+            AccountAo accountAo = new AccountAo("guangmingdexin", "123");
+
             CompletableFuture.runAsync(() -> {
-                ruleActor.setCurrentState(STATE_LOGIN_ID, data);
-                ruleActor.event(EVENT_LOGIN_ID, data);
+                IUserService userService = new UserService();
+                userService.login(accountAo);
             });
+
         });
 
         game.setOnAction(event -> {
-            GameUser gameUser = (GameUser) Cache.getInstance().getObject("guangmingdexin");
-            String userId = gameUser == null ? "123456" : gameUser.getUserId();
-
-            GameInfoRequest request = new GameInfoRequest().setUserId(userId);
-            DsMessage data = DsMessage.build(EVENT_PREPARE_ID, requestNo, request);
-
+             // 开始游戏
+            // 1.加入游戏池，将状态机状态设置为进入游戏状态
+            // 2.匹配成功，则获取到房间信息
             CompletableFuture.runAsync(() -> {
-                ruleActor.setCurrentState(STATE_PLATFORM_ID, data);
-                ruleActor.event(EVENT_PREPARE_ID, data);
-            }).exceptionally(e -> {
-                e.printStackTrace();
-                return null;
+                ruleActor.setCurrentState(STATE_PREPARE_ID, null);
             });
         });
 

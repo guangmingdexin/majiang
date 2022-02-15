@@ -1,4 +1,4 @@
-package ds.guang.majing.common.cache;
+package ds.guang.majing.client.cache;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

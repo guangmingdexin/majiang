@@ -92,6 +92,8 @@ public class GameTakeAction implements Action {
                             .setEvent(new MaGameEvent(MaJiangEvent.OVER, id, null, null));
 
                     machine.setCurrentState(STATE_GAME_OVER_ID, id);
+
+                    // 通知其他玩家
                 }
 
 

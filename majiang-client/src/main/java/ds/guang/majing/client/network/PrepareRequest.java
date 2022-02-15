@@ -16,6 +16,10 @@ import java.util.Objects;
 public class PrepareRequest extends Request {
 
 
+    public PrepareRequest(Object message) {
+        super(message);
+    }
+
     public PrepareRequest(Object message, String url) {
         super(message, url);
     }
@@ -36,7 +40,11 @@ public class PrepareRequest extends Request {
 
         Objects.requireNonNull(message, "message is null");
 
-        return message.getData();
+        if(message.getData().success()) {
+            return message.getData();
+        }
+
+        return DsResult.error("请求失败");
     }
 
 }

@@ -23,6 +23,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class GameUser implements Comparable<GameUser>, Serializable {
 
+
     private long userId;
 
     private String userName;

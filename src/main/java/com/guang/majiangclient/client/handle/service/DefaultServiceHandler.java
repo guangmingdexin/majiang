@@ -22,7 +22,7 @@ public class DefaultServiceHandler extends ServiceHandler {
 
     @Override
     public void handle(Task task, Class<?> request, Event event) {
-        // 首先获取 request 上是否有 响应注解
+        // 首先获取 service 上是否有 响应注解
         Package pa = request.getAnnotation(Package.class);
         if(pa == null || task.getEvent() != event) {
             next(task, request, event);

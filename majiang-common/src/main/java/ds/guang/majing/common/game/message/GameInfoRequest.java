@@ -2,6 +2,7 @@ package ds.guang.majing.common.game.message;
 
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.GameEvent;
+import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.dto.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,12 @@ public class GameInfoRequest implements Serializable {
      * 用户信息
      */
     private User user;
+
+
+    /**
+     * 游戏用户，由客户端从第三方服务获取
+     */
+    private GameUser gameUser;
 
 
     @Override

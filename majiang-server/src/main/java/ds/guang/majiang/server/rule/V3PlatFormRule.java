@@ -36,9 +36,7 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
         stateStrategy = stateStrategyFactory.newStateStrategy();
     }
 
-    private Supplier<State<String, String, DsResult>> loginStateSupplier = () -> stateStrategy.newState(() -> STATE_LOGIN_ID);
-
-    private Supplier<State<String, String, DsResult>> platformSupplier = () -> stateStrategy.newState(() -> STATE_PLATFORM_ID);
+    private Supplier<State<String, String, DsResult>> startSupplier = () -> stateStrategy.newState(() -> STATE_START_ID);
 
     private Supplier<State<String, String, DsResult>> prepareSupplier = () -> stateStrategy.newState(() -> STATE_PREPARE_ID);
 
@@ -56,8 +54,7 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
     @Override
     public Rule<String, StateMachine<String, String, DsResult>> create(String s) {
 
-        State<String, String, DsResult> loginState = loginStateSupplier.get();
-        State<String, String, DsResult> platformState = platformSupplier.get();
+        State<String, String, DsResult> startState = startSupplier.get();
         State<String, String, DsResult> prepareState = prepareSupplier.get();
 
         State<String, String, DsResult> takeCardState = gameTakeCardStateSupplier.get();
@@ -66,12 +63,12 @@ public class V3PlatFormRule extends AbstractRule<String, StateMachine<String, St
         State<String, String, DsResult> waitState = gameWaitStateSupplier.get();
 
         // 直接注册事件
-        ActionManager.onEvent(loginState, platformState, prepareState,  takeCardState, takeOutCardState, eventState, waitState);
+        ActionManager.onEvent(prepareState,  takeCardState, takeOutCardState, eventState, waitState);
 
         // 创建状态机
         StateMachine<String, String, DsResult> ruleActor = getRuleActor();
-        ruleActor.registerInitialState(loginState);
-        ruleActor.registerState(platformState, prepareState, takeCardState, takeOutCardState, eventState, waitState);
+        ruleActor.registerInitialState(startState);
+        ruleActor.registerState(prepareState, takeCardState, takeOutCardState, eventState, waitState);
         // 开启状态机，必不可少的一步
         ruleActor.start();
         return this;

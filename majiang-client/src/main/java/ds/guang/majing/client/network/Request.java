@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Objects;
 
+import static ds.guang.majing.common.util.DsConstant.BASE_URL;
+
 /**
  *
  * 封装的 http 请求
@@ -65,13 +67,8 @@ public abstract class Request  {
 
     }
 
-    public Request() {
-    }
-
     public Request(Object message) {
-        this.message = message;
-        this.url = DsConstant.BASE_URL;
-        init();
+        this(message, BASE_URL);
     }
 
     public Request(Object message, String url) {
@@ -81,23 +78,18 @@ public abstract class Request  {
 
         // 创建Post请求
         this.message = message;
-        this.url = DsConstant.BASE_URL + url;
-        init();
-    }
-
-    private void init() {
-
-        this.setMessage(message)
-        .setHttpPost(new HttpPost(url))
-        .setConfig(config);
-
+        this.url = url;
+        this.httpPost = new HttpPost(url);
+        this.httpPost.setHeader("Content-Type", "application/json;charset=utf8");
         try {
-            this.getHttpPost().setHeader("Content-Type", "application/json;charset=utf8");
             this.getHttpPost().setEntity(new StringEntity(JsonUtil.objToJson(message)));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+        setConfig(config);
+
     }
+
 
     /**
      * 提交任务
@@ -130,7 +122,7 @@ public abstract class Request  {
      */
     public String call() {
 
-        System.out.println("发起请求的线程-" + Thread.currentThread().getName() + " service: " + ((DsMessage)message).getServiceNo());
+        System.out.println("发起请求的线程-" + Thread.currentThread().getName() + " service: " + url);
         // 1.向远程服务器发送准备游戏的请求
         // 获得Http客户端(可以理解为:你得先有一个浏览器;注意:实际上HttpClient与浏览器是不一样的)
         String reply = null;

@@ -1,4 +1,4 @@
-package ds.guang.majing.common.cache;
+package ds.guang.majing.client.cache;
 
 /**
  * @author asus
