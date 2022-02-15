@@ -2,13 +2,11 @@ package ds.guang.majing.client.javafx.task;
 
 import ds.guang.majing.client.network.EventRequest;
 import ds.guang.majing.client.network.Request;
-import ds.guang.majing.client.rule.platform.CacheUtil;
-import ds.guang.majing.common.cache.Cache;
+import ds.guang.majing.common.cache.CacheUtil;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.GameEvent;
 import ds.guang.majing.common.game.card.MaGameEvent;
 import ds.guang.majing.common.game.card.MaJiangEvent;
-import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
@@ -26,7 +24,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static ds.guang.majing.client.Demo.*;
-import static ds.guang.majing.common.util.DsConstant.GAME_URL;
+import static ds.guang.majing.common.game.card.MaJiangEvent.*;
+import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
  *
@@ -71,17 +70,24 @@ public class OperationTask implements Task {
 
         Map<MaJiangEvent, Integer> selectEvent = ((MaGameEvent)gameEvent).getSelectEvent();
 
-        if(selectEvent.containsKey(MaJiangEvent.PONG)) {
+        if(selectEvent.containsKey(PONG)) {
 
             System.out.println("pong");
             pong.setOnAction(this);
 
-        }else if(selectEvent.containsKey(MaJiangEvent.IN_DIRECT_HU)) {
+        }else if(selectEvent.containsKey(IN_DIRECT_HU)
+                || selectEvent.containsKey(SELF_HU)) {
             hu.setOnAction(this);
             System.out.println("hu");
-        }else {
+        }else if(selectEvent.containsKey(DIRECT_GANG)
+                || selectEvent.containsKey(IN_DIRECT_GANG)
+                || selectEvent.containsKey(SELF_GANG)) {
+            gang.setOnAction(this);
+        } else {
             throw new IllegalArgumentException("not found event!");
         }
+
+        ignore.setOnAction(this);
     }
 
     @Override
@@ -122,16 +128,16 @@ public class OperationTask implements Task {
 
         switch (value) {
             case "碰":
-                eventName = DsConstant.EVENT_PONG_ID;
-                eventValue = MaJiangEvent.PONG;
+                eventName = EVENT_PONG_ID;
+                eventValue = PONG;
                 break;
             case "胡":
-                eventName = DsConstant.EVENT_HU_ID;
+                eventName = EVENT_HU_ID;
                 // 从 selectEvent 中选择优先级一致的
-               eventValue = findPriority(maGameEvent.getSelectEvent(), MaJiangEvent.IN_DIRECT_HU.getPriority());
+               eventValue = findPriority(maGameEvent.getSelectEvent(), IN_DIRECT_HU.getPriority());
                 break;
             case "杠":
-                eventName = DsConstant.EVENT_GANG_ID;
+                eventName = EVENT_GANG_ID;
                 eventValue = findPriority(maGameEvent.getSelectEvent(), MaJiangEvent.DIRECT_GANG.getPriority());
                 break;
             case "过":
@@ -143,14 +149,15 @@ public class OperationTask implements Task {
         }
 
         GameInfoRequest infoRequest = new GameInfoRequest();
+        MaGameEvent actionEvent = new MaGameEvent()
+                .setActionEvent(eventValue)
+                .setPlayId(userId);
         DsMessage<GameInfoRequest> message = DsMessage.build(
                 eventName,
                 userId,
                 infoRequest
                         .setEvent(
-                            new MaGameEvent()
-                                .setActionEvent(eventValue)
-                                .setPlayId(userId))
+                                actionEvent)
                         .setCard(card)
                         .setUserId(userId)
         );
@@ -161,13 +168,18 @@ public class OperationTask implements Task {
             eventResult = eventRequest.execute(null);
 
             if(eventResult.success()) {
+
                 Platform.runLater(() -> {
                     GameInfoResponse eventResp = eventResult.getData();
                     // 做事件处理
                     Room room = CacheUtil.getRoomById(userId);
-                    room.eventHandler(userId, eventValue.getValue(), card.value());
+                    // 做本地的回合切换
+                    room.setCurRoundIndex(eventResp.getCurRoundIndex());
+
+                    room.eventHandler(actionEvent, card.value());
                     System.out.println("......... 做最后的界面渲染........." + eventResp);
                     System.out.println("事件之后： " + room.findPlayerById(userId));
+
                 });
             }
 

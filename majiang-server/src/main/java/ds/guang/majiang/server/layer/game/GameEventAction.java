@@ -2,22 +2,22 @@ package ds.guang.majiang.server.layer.game;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majing.common.game.card.*;
+import ds.guang.majing.common.game.card.Card;
+import ds.guang.majing.common.game.card.MaGameEvent;
+import ds.guang.majing.common.game.card.MaJiangEvent;
+import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
-import ds.guang.majing.common.game.room.RoomManager;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.State;
-import ds.guang.majing.common.util.JsonUtil;
+import ds.guang.majing.common.state.StateMachine;
 import ds.guang.majing.common.util.ResponseUtil;
 
-import java.util.Objects;
-
 import static ds.guang.majing.common.util.DsConstant.*;
-import static java.awt.SystemColor.info;
 
 /**
  * @author guangyong.deng
@@ -36,13 +36,27 @@ public class GameEventAction implements Action {
             return data;
         });
 
-        state.onEvent(EVENT_PONG_ID, data -> {
+        state.onEvent(EVENT_PONG_ID, STATE_TAKE_OUT_CARD_ID, data -> {
             System.out.println("对pong 事件进行处理");
             eventAction(data);
             return DsResult.ok();
         });
 
-        state.onEvent(EVENT_IN_DIRECT_HU_ID, data -> {
+        state.onEvent(EVENT_GANG_ID, STATE_TAKE_CARD_ID, data -> {
+            System.out.println("杠处理");
+            eventAction(data);
+            return DsResult.ok();
+        });
+
+        state.onEvent(EVENT_HU_ID, data -> {
+            eventAction(data);
+            return DsResult.ok();
+        });
+
+
+        state.onEvent(EVENT_IGNORE_ID, data -> {
+            // 1.第一种情况，下一个回合是自己，则进入摸牌状态
+            // 2.第二种情况，下一个回合不是自己，则进入等待状态
             eventAction(data);
             return DsResult.ok();
         });
@@ -59,24 +73,21 @@ public class GameEventAction implements Action {
         int value =  card.value();
 
         MaGameEvent gameEvent = (MaGameEvent)request.getEvent();
-        int eventValue = gameEvent.getEvent();
-        Room room = Room.nextRound(userId, eventValue);
 
-        // condition
+        ServerFourRoom room = ServerFourRoom.getRoomById(userId);
+        // 处理事件（包括两部分-回合切换，事件处理）
+        room.eventHandler(gameEvent, value);
+
+        // 状态切换或者其他处理
         MaJiangEvent event = gameEvent.getActionEvent();
 
         switch (event) {
-            case PONG:
-
-                break;
             case IN_DIRECT_HU:
                 // 因为有可能有多个玩家同时胡牌所以可能需要唤醒其他挂起玩家
                 room.announceNext();
             default:
                 break;
         }
-        // 处理事件
-        room.eventHandler(userId, eventValue, value);
 
         for (Player player : room.getPlayers()) {
 
@@ -90,6 +101,7 @@ public class GameEventAction implements Action {
                                 .setEventStatus("COMPLETE")
                                     // 判断是否还有其他事件需要执行，如果没有则可以进入下一个回合
                                 .setCurRoundIndex(room.getEventHandler().isEmpty() ? room.getCurRoundIndex() : -1)
+                                .setPrevRoundIndex(room.getPrevRoundIndex())
                                 .setEvent(
                                         new MaGameEvent()
                                                 .setPlayId(userId)
@@ -99,7 +111,7 @@ public class GameEventAction implements Action {
                                 .setCard(card)
                     ));
 
-            Room.write(player.id(), ResponseUtil.response(message));
+            ServerFourRoom.write(player.id(), ResponseUtil.response(message));
         }
 
     }

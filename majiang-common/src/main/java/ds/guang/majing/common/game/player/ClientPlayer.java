@@ -26,4 +26,9 @@ public class ClientPlayer extends Player {
                 .setGameUser(getGameUser())
                 .setCards(getCards());
     }
+
+    @Override
+    public void eventHandler(int eventValue, int cardNum) {
+
+    }
 }

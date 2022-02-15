@@ -14,7 +14,8 @@ public enum MaJiangEvent {
     IN_DIRECT_GANG(4, "巴杠", 0),
     SELF_HU(5, "自摸", 1),
     IN_DIRECT_HU(6, "点炮", 1),
-    NOTHING(-1, "忽略", -99)
+    NOTHING(-1, "忽略", -99),
+    OVER(-99, "游戏结束", 100)
     ;
 
 

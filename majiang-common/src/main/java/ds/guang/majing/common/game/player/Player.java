@@ -83,6 +83,11 @@ public abstract class Player implements Cloneable, Serializable {
      */
     public int direction;
 
+    /**
+     * 游戏状态
+     */
+    protected GameState gameState;
+
     public Player() {}
 
     public Player(GameUser gameUser) {
@@ -137,7 +142,7 @@ public abstract class Player implements Cloneable, Serializable {
     public void remove(int cardNum, int count) {
         for (int i = 0; i < count; i++) {
             if(!remove(cardNum)) {
-                throw new IllegalArgumentException("移除失败，移除的次数" + i + 1);
+                throw new IllegalArgumentException("移除失败，移除的次数" + (i + 1));
             }
         }
     }
@@ -169,18 +174,18 @@ public abstract class Player implements Cloneable, Serializable {
 
         Objects.requireNonNull(card, "card is null");
 
-        Integer value = (Integer) card.value();
+        Integer value = card.value();
 
          // 玩家事件集合
          Map<MaJiangEvent, Integer> selectEvent = new HashMap<>(16);
 
         // 1.是否可以 PONG
-        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountArr(cards, value) == 1) {
+        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountArr(cards, value) == 2) {
             selectEvent.put(MaJiangEvent.PONG, value);
         }
 
         // 2.其他玩家出牌自身判断是否可以 GANG
-        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountThree(cards, value)) {
+        if(EVENT_RECEIVE_OTHER_CARD_ID.equals(event) && Algorithm.sortCountArr(cards, value) == 1) {
             selectEvent.put(MaJiangEvent.DIRECT_GANG, value);
         }
 
@@ -218,8 +223,8 @@ public abstract class Player implements Cloneable, Serializable {
             int i = Algorithm.binarySearch(copy, value, true);
 
             copy.add(i, value);
-
-            if(Algorithm.isHu(copy)) {
+            // TODO: 胡牌算法还有些问题，后面修改
+            if(Algorithm.isHu(null)) {
                 selectEvent.put(MaJiangEvent.IN_DIRECT_HU, value);
             }
         }

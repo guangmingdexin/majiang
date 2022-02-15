@@ -55,6 +55,11 @@ public final class DsConstant {
     public static final String STATE_EVENT_ID = "STATE_EVENT_ID";
 
     /**
+     * 本局游戏结束的状态
+     */
+    public static final String STATE_GAME_OVER_ID = "STATE_GAME_OVER_ID";
+
+    /**
      * 事件 id 常量
      */
     public static final String EVENT_LOGIN_ID = "EVENT_LOGIN_ID";
@@ -89,12 +94,12 @@ public final class DsConstant {
     /**
      * 巴杠
      */
-    public static final String EVENT_GANG_ID = "EVENT_IN_DIRECT_GANG_ID";
+    public static final String EVENT_GANG_ID = "EVENT_GANG_ID";
 
     /**
      * 自摸
      */
-    public static final String EVENT_HU_ID = "EVENT_SELF_HU_ID";
+    public static final String EVENT_HU_ID = "EVENT_HU_ID";
 
     /**
      * 放炮

@@ -2,6 +2,7 @@ package ds.guang.majing.common.game.card;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -101,7 +102,7 @@ public class MaGameEvent implements GameEvent {
 
             if(this.getPriority() == e.getPriority()) {
 
-                Room room = Room.getRoomById(playId);
+                ServerFourRoom room = ServerFourRoom.getRoomById(playId);
                 int roundIndex = room.getCurRoundIndex();
                 // 获取各个玩家的位置
                 int cur = room.direction(playId);

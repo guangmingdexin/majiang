@@ -3,6 +3,7 @@ package ds.guang.majiang.server.layer.game;
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majing.common.game.card.GameEventHandler;
 import ds.guang.majiang.server.layer.StateMatchAction;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.DsMessage;
@@ -17,6 +18,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.Objects;
 
+import static ds.guang.majing.common.game.card.MaJiangEvent.NOTHING;
 import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
@@ -43,10 +45,10 @@ public class GameTakeOutAction implements Action {
             GameInfoRequest request = message.getData();
 
             String id = request.getUserId();
-            Room room = Room.getRoomById(id);
+            ServerFourRoom room = ServerFourRoom.getRoomById(id);
             Player p = room.findPlayerById(id);
             Card card = request.getCard();
-            Integer value = (Integer) card.value();
+            int value =  card.value();
 
             // 1.校验是否为当前回合
             if(room.isCurAround(id)) {
@@ -58,11 +60,11 @@ public class GameTakeOutAction implements Action {
                 // 2.移除手牌中的值
                 p.remove(value);
 
-
                 // 3.通知其他玩家
                 Player[] players = room.getPlayers();
                 GameEventHandler eventHandler = room.getEventHandler();
-
+                // 记录回合
+                room.setPrevRoundIndex(room.getCurRoundIndex());
                 for (Player player : players) {
 
                     if(!player.equals(p)) {
@@ -76,7 +78,11 @@ public class GameTakeOutAction implements Action {
                 }
                 int roundIndex = -1;
                 if(eventHandler.isEmpty()) {
-                    roundIndex = eventHandler.nextRound(MaJiangEvent.NOTHING.getValue(), id, room);
+                    roundIndex = eventHandler.nextRound(
+                            new MaGameEvent()
+                                    .setPlayId(id)
+                                    .setActionEvent(NOTHING),
+                            room);
                 }
                 System.out.println("eventHandler: " + eventHandler);
                 for (Player player : players) {
@@ -90,7 +96,8 @@ public class GameTakeOutAction implements Action {
                             .setUserId(playId)
                             .setCard(card)
                             .setServiceName(EVENT_RECEIVE_OTHER_CARD_ID)
-                            .setCurRoundIndex(roundIndex);
+                            .setCurRoundIndex(roundIndex)
+                            .setPrevRoundIndex(room.getPrevRoundIndex());
 
                     DsMessage<DsResult<GameInfoResponse>> reply = DsMessage.build(
                             EVENT_RECEIVE_EVENT_REPLY_ID,
@@ -98,7 +105,7 @@ public class GameTakeOutAction implements Action {
                             DsResult.data(r)
                     );
                     context.channel().eventLoop().execute(() -> {
-                        Room.write(playId, ResponseUtil.response(reply));
+                        ServerFourRoom.write(playId, ResponseUtil.response(reply));
                     });
 
                 }

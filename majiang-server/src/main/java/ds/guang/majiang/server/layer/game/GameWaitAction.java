@@ -5,6 +5,7 @@ import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.util.ResponseUtil;
 
@@ -30,7 +31,9 @@ public class GameWaitAction implements Action {
             System.out.println("判断事件能不能执行！");
             GameInfoRequest request = ResponseUtil.getGameInfoRequest(data);
             // 通知客户端，并确定是否能够执行游戏事件
-            Room.announce(request.getUserId());
+            String userId = request.getUserId();
+            ServerFourRoom room = ServerFourRoom.getRoomById(userId);
+            room.announce(userId);
             return DsResult.data(data);
         });
 

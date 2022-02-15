@@ -3,6 +3,7 @@ package ds.guang.majiang.server.layer.game;
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.game.machines.StateMachines;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.card.*;
 import ds.guang.majing.common.game.message.DsMessage;
@@ -10,7 +11,6 @@ import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
-import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
 import io.netty.channel.ChannelHandlerContext;
@@ -45,34 +45,62 @@ public class GameTakeAction implements Action {
             String id = request.getUserId();
 
             // 1.获取房间信息，判断是否为当前玩家，如果是，则返回棋牌信息，包括判断是否有特殊事件
-            Room room = Room.getRoomById(id);
+            ServerFourRoom room = ServerFourRoom.getRoomById(id);
 
             if(room.isCurAround(id) && room.check(id)) {
 
                 // 从棋牌中，获取一张牌，放入玩家手牌中，并开始判断事件
                 int markIndex = room.getMarkIndex();
-                Integer take = room.getInitialCards().get(markIndex);
-                // 移动初始手牌，到下一张
-                room.setMarkIndex(markIndex + 1);
+                // 返回信息
+                GameInfoResponse info;
                 // 获取当前回合玩家
                 Player p = room.findPlayerById(id);
-                // 加入玩家手牌
-                p.addCard(take);
+                StateMachine<String, String, DsResult> machine = StateMachines
+                        .get(preUserMachinekey(id));
 
-                // 判断事件
-                // 麻将棋牌
-                Card majiang = new MaJiang(take, CardType.generate(take));
-              //  GameEvent event = p.event(majiang, EVENT_TAKE_CARD_ID, id);
-                GameEvent event = null;
-                GameInfoResponse info = new GameInfoResponse()
-                        .setUserId(id)
-                        .setCard(majiang)
-                        .setEvent(event);
+                // 判断是否还有手牌可以摸
+                if(markIndex < room.getMaxCardNum()) {
+                    Integer take = room.getInitialCards().get(markIndex);
+                    // 移动初始手牌，到下一张
+                    room.setMarkIndex(markIndex + 1);
+                    // 加入玩家手牌
+                    p.addCard(take);
+                    // 判断事件
+                    // 麻将棋牌
+                    Card majiang = new MaJiang(take, CardType.generate(take));
+                    GameEvent event = p.event(majiang, EVENT_TAKE_CARD_ID, id);
+
+                    info = new GameInfoResponse()
+                            .setUserId(id)
+                            .setCard(majiang)
+                            .setEvent(event);
+
+                    // 状态转换，根据条件，如果没有特殊事件，则正常进入出牌状态
+                    // 否则进入特殊事件状态，等待玩家响应之后，进入下一个状态
+
+                    if(event == null){
+                        machine.setCurrentState(STATE_TAKE_OUT_CARD_ID, null);
+                    }else {
+                        System.out.println("event: " + event);
+                        machine.setCurrentState(STATE_EVENT_ID, null);
+                    }
+                }else {
+
+                    info = new GameInfoResponse()
+                            .setUserId(id)
+                            .setCard(null)
+                            .setEvent(new MaGameEvent(MaJiangEvent.OVER, id, null, null));
+
+                    machine.setCurrentState(STATE_GAME_OVER_ID, id);
+                }
+
+
+
 
                 // 发送消息给玩家
                 ChannelHandlerContext context = (ChannelHandlerContext)p.getContext();
                 // 返回结果
-                DsResult<GameInfoResponse> r = DsResult.data(info);
+
                 context.channel().eventLoop().execute(() -> {
                     DsMessage<GameInfoResponse> respMessage = DsMessage.build(
                             message.getServiceNo(),
@@ -82,17 +110,8 @@ public class GameTakeAction implements Action {
                     context.writeAndFlush(ResponseUtil.response(respMessage));
                 });
 
-                StateMachine<String, String, DsResult> machine = StateMachines
-                        .get(preUserMachinekey(id));
 
-                // 状态转换，根据条件，如果没有特殊事件，则正常进入出牌状态
-                // 否则进入特殊事件状态，等待玩家响应之后，进入下一个状态
-                if(event == null){
-                    machine.setCurrentState(STATE_TAKE_OUT_CARD_ID, r);
-                }else {
-                    System.out.println("event: " + event);
-                    machine.setCurrentState(STATE_EVENT_ID, r);
-                }
+
                 return DsResult.ok();
             }
             // 2.如果不是当前玩家，直接抛出异常

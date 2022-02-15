@@ -3,13 +3,17 @@ package ds.guang.majing.common.game.card;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoResponse;
+import ds.guang.majing.common.game.player.GameState;
+import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.StateMachine;
 import ds.guang.majing.common.util.ResponseUtil;
 import lombok.Getter;
 
 import java.util.PriorityQueue;
 
+import static ds.guang.majing.common.game.card.MaJiangEvent.*;
 import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
@@ -89,8 +93,8 @@ public class MaEventHandler implements GameEventHandler {
         // 4.都无事件
         String eventStatus = EVENT_STATUS_ACTION;
 
-        if(e.contain(MaJiangEvent.PONG)
-                || e.contain(MaJiangEvent.DIRECT_GANG)) {
+        if(e.contain(PONG)
+                || e.contain(DIRECT_GANG)) {
 
             // 第一种情况
             // 异常判断
@@ -101,7 +105,7 @@ public class MaEventHandler implements GameEventHandler {
 
             eventStatus = cancel ? EVENT_STATUS_CANCEL : eventStatus;
 
-        }else if (!e.contain(MaJiangEvent.IN_DIRECT_HU)) {
+        }else if (!e.contain(IN_DIRECT_HU)) {
             throw new IllegalArgumentException("不是该阶段处理的游戏事件");
         }
 
@@ -119,7 +123,7 @@ public class MaEventHandler implements GameEventHandler {
                 DsResult.data(infoResponse));
 
         // 发信息
-        Room.write(id, ResponseUtil.response(action));
+        ServerFourRoom.write(id, ResponseUtil.response(action));
 
     }
 
@@ -138,36 +142,76 @@ public class MaEventHandler implements GameEventHandler {
 
 
     @Override
-    public int nextRound(int eventValue, String id, Room room) {
+    public int nextRound(GameEvent event, Room r) {
 
-        int direction = room.findPlayerById(id).getDirection();
+        ServerFourRoom room = (ServerFourRoom) r;
 
-        if(eventValue == MaJiangEvent.NOTHING.getValue()) {
-            room.setCurRoundIndex(direction + 1);
-            // 将下家的状态由等待切换到 摸牌状态
-
-            StateMachine stateMachine = room.nextPlayerState();
-            stateMachine.setCurrentState(STATE_TAKE_CARD_ID, id);
-        }
+        String id = event.getPlayId();
+        int eventValue = event.getEvent();
+        // 获取玩家
+        Player p = room.findPlayerById(id);
+        // 获取方位
+        int direction = p.getDirection();
 
         // 1.首先判断是否还有事件没有处理完成
-        if(!priorityQueue.isEmpty()) {
+        if(priorityQueue.isEmpty()) {
 
-            // 当前房间回合切换到下家
-            if(eventValue == MaJiangEvent.PONG.getValue()
-                    || eventValue == MaJiangEvent.IN_DIRECT_HU.getValue()) {
+            if(eventValue == PONG.getValue()) {
+                // 当前回合切换为事件发起者
+                room.setCurRoundIndex(room.skipNextRoundIndex(direction));
+                
+                // 将当前玩家的状态切换为出牌状态（此时应该不能暗杠，也不能自摸）
+                StateMachine stateMachine = room.nextPlayerState();
+                stateMachine.setCurrentState(STATE_TAKE_OUT_CARD_ID, id);
 
-                room.setCurRoundIndex(direction + 1);
+            }else if(eventValue == DIRECT_GANG.getValue()
+            || eventValue == SELF_GANG.getValue()
+            || eventValue == IN_DIRECT_GANG.getValue()) {
+                // 当前回合切换为事件发起者
+                room.setCurRoundIndex(room.skipNextRoundIndex(direction));
+                // 将当前玩家的状态切换为出牌状态
+                StateMachine stateMachine = room.nextPlayerState();
+                stateMachine.setCurrentState(STATE_TAKE_CARD_ID, id);
+            } else if(event.getEvent() == IN_DIRECT_HU.getValue()
+                    || event.getEvent() == SELF_HU.getValue()) {
+                room.setCurRoundIndex(room.skipNextRoundIndex(direction + 1));
+                // 当前玩家状态切换为本局游戏结束状态
+                StateMachine curState = room.findPlayerState(id);
+                curState.setCurrentState(STATE_GAME_OVER_ID, id);
+                p.setGameState(GameState.Game_Over);
+                // TODO: 1.计算分数， 2.计算场上还有多少玩家没有 胡牌，判断是否能够结束游戏
+                // TODO: 更改回合方法需要进行更改，需要跳过游戏状态为 over 的玩家
+                int countHu = room.getCountHu() + 1;
+                room.setCountHu(countHu);
+                // 
+                if(countHu >= room.getPlayerCount() - 1) {
+                    System.out.println("游戏结束了");
+
+                }
+            } else if(eventValue == NOTHING.getValue()) {
+                // 如果点击过，则正常到下一位玩家回合，而不是事件发起者的下一回合
+                // 1.获取前一个回合
+                // 2.前一个回合加一
+                room.setCurRoundIndex(room.skipNextRoundIndex(room.getPrevRoundIndex() + 1));
                 // 将下家的状态由等待切换到 摸牌状态
                 StateMachine stateMachine = room.nextPlayerState();
-                stateMachine.setCurrentState(STATE_TAKE_CARD_ID, null);
 
-            }else if(eventValue == MaJiangEvent.DIRECT_GANG.getValue()) {
-                // 当前回合切换到事件发起者
-                room.setCurRoundIndex(direction);
+                if(room.isCurAround(room.nextPlayerId())) {
+                    stateMachine.setCurrentState(STATE_TAKE_CARD_ID, id);
+                }else {
+                    stateMachine.setCurrentState(STATE_WAIT_ID, id);
+                }
             }
+        }else {
+            // 说明现在还有事件没有处理完，无法正常进行回合
+            room.setCurRoundIndex(-1);
         }
         return room.getCurRoundIndex();
+    }
+
+    @Override
+    public void over() {
+
     }
 
     @Override

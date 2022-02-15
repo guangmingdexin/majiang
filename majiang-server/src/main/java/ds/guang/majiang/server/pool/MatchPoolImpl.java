@@ -2,6 +2,7 @@ package ds.guang.majiang.server.pool;
 
 import ds.guang.majiang.server.exception.MaxCapacityPoolException;
 import ds.guang.majing.common.game.machines.StateMachines;
+import ds.guang.majing.common.game.player.GameState;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.card.MaEventHandler;
 import ds.guang.majing.common.game.message.GameInfoResponse;
@@ -143,6 +144,7 @@ public class MatchPoolImpl implements MatchPool {
                     players[index] = deque.poll();
                     // 设置方位
                     players[index].setDirection(index);
+                    players[index].setGameState(GameState.Game_Start);
                     index ++;
                 }
                 // 获取全局变量

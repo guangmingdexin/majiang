@@ -77,6 +77,13 @@ public class GameInfoResponse implements Serializable {
      */
     private int curRoundIndex;
 
+    /**
+     * 前一个出牌玩家的回合/方向，只有在玩家出牌之后更新
+     * 初始状态更新为 curRoundIndex
+     *
+     */
+    protected int prevRoundIndex;
+
 
     private int cardNum;
 

@@ -58,12 +58,17 @@ public interface GameEventHandler {
     /**
      *
      * 进入下一回合
-     * @param eventValue 游戏事件的的值
-     * @param id 玩家 id
-     * @param room 房间
+     * @param event 游戏事件
+     * @param r 房间
      *
      * @return 回合索引
      */
-    int nextRound(int eventValue, String id, Room room);
+    int nextRound(GameEvent event, Room r);
+
+
+    /**
+     * 游戏结束
+     */
+    void over();
 
 }

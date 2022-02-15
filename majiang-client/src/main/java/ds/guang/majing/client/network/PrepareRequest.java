@@ -2,11 +2,9 @@ package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.common.game.message.GameInfoResponse;
-import ds.guang.majing.common.game.room.ClientFourRoom;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.util.JsonUtil;
-import ds.guang.majing.common.game.room.Room;
 
 import java.io.IOException;
 import java.util.Objects;

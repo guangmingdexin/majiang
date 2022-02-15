@@ -1,5 +1,11 @@
 package ds.guang.majing.common.util;
 
+import ds.guang.majing.common.game.room.ClientFourRoom;
+
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -324,17 +330,26 @@ public final class ClassUtil {
         return null;
     }
 
-    public static  <T> T convert(Object obj, Class<T> clazz) {
+    public static Object convert(Object source, Object target) {
 
-        Objects.requireNonNull(obj, "convert class don't null");
-
+        // 简单的对象复制，属性名一致即可以
+        BeanInfo beanInfo = null;
         try {
-            return (T)obj;
-        }catch (ClassCastException e) {
-            // 打印
-            System.out.println("类型转换错误！");
+            beanInfo = Introspector.getBeanInfo(target.getClass());
+            PropertyDescriptor[] pdes = beanInfo.getPropertyDescriptors() ;
+            for (PropertyDescriptor pd : pdes) {
+                try {
+                    PropertyDescriptor sourcePd = new PropertyDescriptor(pd.getName(), source.getClass());
+                    Method sourceMethod = sourcePd.getReadMethod();
+                    Object result = sourceMethod.invoke(source);
+                    Method pdWriteMethod = pd.getWriteMethod();
+                    pdWriteMethod.invoke(target, result);
+                } catch (Exception ignored) {}
+            }
+        } catch (IntrospectionException e) {
+            e.printStackTrace();
         }
-        return null;
+        return target;
     }
 
     public static String simpleClassName(Class<?> clazz) {
@@ -348,4 +363,5 @@ public final class ClassUtil {
         }
         return className;
     }
+
 }

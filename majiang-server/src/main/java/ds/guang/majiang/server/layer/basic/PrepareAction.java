@@ -3,6 +3,7 @@ package ds.guang.majiang.server.layer.basic;
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.game.machines.StateMachines;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
@@ -45,7 +46,7 @@ public class PrepareAction implements Action {
 
             String id = request.getUserId();
             // 获取房间
-            Room room = Room.getRoomById(id);
+            ServerFourRoom room = ServerFourRoom.getRoomById(id);
             // 获取玩家
             Player player = room.findPlayerById(id);
 

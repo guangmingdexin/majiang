@@ -1,10 +1,12 @@
-package ds.guang.majing.client.rule.platform;
+package ds.guang.majing.common.cache;
 
 import ds.guang.majing.common.cache.Cache;
 import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.room.Room;
+import ds.guang.majing.common.state.StateMachine;
 
 import static ds.guang.majing.common.util.DsConstant.preRoomInfoPrev;
+import static ds.guang.majing.common.util.DsConstant.preUserMachinekey;
 
 /**
  * @author guangyong.deng
@@ -28,5 +30,10 @@ public class CacheUtil {
             throw new NullPointerException("gameUser is null");
         }
         return gameUser.getUserId();
+    }
+
+
+    public static StateMachine getStateMachine() {
+        return (StateMachine) Cache.getInstance().getObject(preUserMachinekey("machine-1"));
     }
 }

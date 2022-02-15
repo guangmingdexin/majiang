@@ -130,9 +130,11 @@ public class StateMachine<T,E,R extends Result> implements State.Notify<T> {
      */
     public void setCurrentState(T stateId, Object data) {
         Objects.requireNonNull(stateId, "state don't null");
-        if(currentState.getId().equals(stateId)) {
-            return;
-        }
+
+        // 如果状态没有发生变化，则不会重新触发 entry
+//        if(currentState.getId().equals(stateId)) {
+//            return;
+//        }
         states.forEach(s -> {
             if(stateId.equals(s.getId())) {
                 // 状态发生了切换
