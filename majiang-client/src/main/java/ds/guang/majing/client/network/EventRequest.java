@@ -8,6 +8,10 @@ import ds.guang.majing.common.game.message.DsResult;
  */
 public class EventRequest extends Request {
 
+    public EventRequest(Object message) {
+        super(message);
+    }
+
     public EventRequest(Object message, String url) {
         super(message, url);
     }

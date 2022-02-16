@@ -1,8 +1,10 @@
 package ds.guang.majing.client.remote.service;
 
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
+import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.message.DsResult;
 
 /**
  * @author guangyong.deng
@@ -15,10 +17,10 @@ public interface IUserService {
      *
      * 获取用户信息
      *
-     * @param uId 用户 id
+     * @param query 用户 id
      * @return 游戏用户信息
      */
-    GameUser getOne(String uId);
+    GameUser getOne(UserQueryAo query);
 
 
     /**
@@ -28,5 +30,5 @@ public interface IUserService {
      * @param accountAo
      * @return
      */
-    LoginVo login(AccountAo accountAo);
+    DsResult<LoginVo> login(AccountAo accountAo);
 }

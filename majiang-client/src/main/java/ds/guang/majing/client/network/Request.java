@@ -1,11 +1,16 @@
 package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majing.client.cache.CacheUtil;
+import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.util.DsConstant;
 import ds.guang.majing.common.util.JsonUtil;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -26,6 +31,9 @@ import static ds.guang.majing.common.util.DsConstant.BASE_URL;
  *
  * @author guangmingdexin
  */
+@Getter
+@Setter
+@Accessors(chain = true)
 public abstract class Request  {
 
     /**
@@ -44,7 +52,7 @@ public abstract class Request  {
     /**
      * 构建超时等配置信息
      */
-    protected static  RequestConfig config;
+    protected static RequestConfig config;
 
     /**
      * 超时等待时间 5 分钟
@@ -56,14 +64,12 @@ public abstract class Request  {
 
     static {
 
-        httpClient = HttpClientBuilder.create().build();
         waitTime = 30 * 60 * 1000;
         config = RequestConfig.custom()
                 .setSocketTimeout(waitTime)
                 .setConnectTimeout(waitTime)
                 .build();
-
-
+        httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
     }
 
@@ -80,13 +86,13 @@ public abstract class Request  {
         this.message = message;
         this.url = url;
         this.httpPost = new HttpPost(url);
-        this.httpPost.setHeader("Content-Type", "application/json;charset=utf8");
+
         try {
             this.getHttpPost().setEntity(new StringEntity(JsonUtil.objToJson(message)));
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        setConfig(config);
+        setAuthorizeHeader();
 
     }
 
@@ -164,77 +170,16 @@ public abstract class Request  {
     }
 
 
+    protected void setAuthorizeHeader() {
 
-    public Request setHttpClient(CloseableHttpClient httpClient) {
-        Request.httpClient = httpClient;
-        return this;
+        this.httpPost.setHeader("Content-Type", "application/json;charset=utf8");
+
+        // 获取缓存的 token
+        LoginVo token = CacheUtil.getToken();
+
+        if(token != null) {
+            this.httpPost.setHeader("UID", token.getUid());
+            this.httpPost.setHeader("TOKEN", token.getToken());
+        }
     }
-
-    public HttpPost setHttpPost(HttpPost httpPost) {
-        this.httpPost = httpPost;
-        return this.httpPost;
-    }
-
-    public Request setMessage(Object message) {
-        this.message = message;
-        return this;
-    }
-
-    public Request setEntity(StringEntity entity) {
-        this.entity = entity;
-        return this;
-    }
-
-    public Request setHeader(String header) {
-        this.header = header;
-        return this;
-    }
-
-    public CloseableHttpClient getHttpClient() {
-        return httpClient;
-    }
-
-    public HttpPost getHttpPost() {
-        return httpPost;
-    }
-
-    public Object getMessage() {
-        return message;
-    }
-
-    public StringEntity getEntity() {
-        return entity;
-    }
-
-    public String getHeader() {
-        return header;
-    }
-
-    public RequestConfig getConfig() {
-        return config;
-    }
-
-    public RequestConfig setConfig(RequestConfig config) {
-        Request.config = config;
-        return Request.config;
-    }
-
-    public long getWaitTime() {
-        return waitTime;
-    }
-
-    public Request setWaitTime(long waitTime) {
-        Request.waitTime = (int) waitTime;
-        return this;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public Request setUrl(String url) {
-        this.url = url;
-        return this;
-    }
-
 }

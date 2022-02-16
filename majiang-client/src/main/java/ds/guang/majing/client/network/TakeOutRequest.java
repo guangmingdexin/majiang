@@ -9,11 +9,8 @@ import ds.guang.majing.common.game.message.DsResult;
  */
 public class TakeOutRequest extends Request {
 
-    public TakeOutRequest(Object message, String url) {
-        super(message, url);
-        if(!(message instanceof DsMessage)) {
-            throw new IllegalArgumentException("消息类型错误");
-        }
+    public TakeOutRequest(Object message) {
+        super(message);
     }
 
     @Override

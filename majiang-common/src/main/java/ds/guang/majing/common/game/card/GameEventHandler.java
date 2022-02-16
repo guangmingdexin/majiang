@@ -69,6 +69,6 @@ public interface GameEventHandler {
     /**
      * 游戏结束
      */
-    void over();
+    void over(Room room);
 
 }

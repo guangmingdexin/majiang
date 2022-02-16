@@ -1,16 +1,18 @@
-package ds.guang.majing.client.rule.platform;
+package ds.guang.majing.client.rule;
 
 import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.client.javafx.task.OperationTask;
 import ds.guang.majing.client.javafx.ui.action.OperationAction;
 import ds.guang.majing.client.cache.Cache;
+import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
 import ds.guang.majing.client.remote.service.IUserService;
 import ds.guang.majing.client.remote.service.UserService;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.GameEvent;
+import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
-import ds.guang.majing.client.ClientFourRoom;
+import ds.guang.majing.client.game.ClientFourRoom;
 import ds.guang.majing.client.network.*;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.util.ClassUtil;
@@ -75,7 +77,8 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
         State<String, String, DsResult> prepareState = prepareSupplier.get();
 
-        prepareState.onEntry(data -> {
+
+        prepareState.onEvent(EVENT_RANDOM_MATCH_ID, data -> {
 
             // 开始进行游戏的匹配
             // 1.发送匹配消息给服务端
@@ -84,9 +87,17 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
             IUserService userService = new UserService();
 
+            GameUser gameUser = userService.getOne(new UserQueryAo(userId));
+
+            if(gameUser == null) {
+                throw new IllegalArgumentException("用户服务调取失败");
+            }
+
+            System.out.println("gameUser: " + gameUser);
+
             GameInfoRequest randomMatchReq = new GameInfoRequest()
                     .setUserId(userId)
-                    .setGameUser(userService.getOne(userId));
+                    .setGameUser(gameUser);
 
             DsMessage<GameInfoRequest> randomMatchMsg = DsMessage.build(EVENT_RANDOM_MATCH_ID, userId, randomMatchReq);
 
@@ -144,7 +155,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
                         ));
                 // 同时更新远程服务器状态，在这里我还需要依据当前状态，同时对服务器设置一个状态切换事件
             }
-            return data;
+            return rs;
         });
 
         State<String, String, DsResult> takeState = gameTakeCardStateSupplier.get();
@@ -169,7 +180,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
                             .setUserId(userId)
             );
 
-            Request takeCardRequest = new TakeCardRequest(tm, GAME_URL);
+            Request takeCardRequest = new TakeCardRequest(tm);
             // 回复消息
             DsResult<GameInfoResponse> takeCardResult = takeCardRequest.execute(null);
 
@@ -235,7 +246,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             Room room = getRoomById(userId);
             room.setCurRoundIndex(-1);
 
-            Request takeOutRequest = new TakeOutRequest(data, GAME_URL);
+            Request takeOutRequest = new TakeOutRequest(data);
             DsResult<GameInfoResponse> takeOutResult = takeOutRequest.execute(null);
             GameInfoResponse takeOutResponse = takeOutResult.getData();
 
@@ -282,7 +293,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             );
 
             // 等待其他玩家出牌
-            Request waitRequest = new WaitRequest(message, GAME_URL);
+            Request waitRequest = new WaitRequest(message);
             DsResult<GameInfoResponse> waitResponseResult = waitRequest.execute(null);
             otherResponse = waitResponseResult.getData();
 
@@ -317,7 +328,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
                     while (eventStatus == null || eventStatus.equals(EVENT_STATUS_WAIT)) {
 
                         // 是否可以执行游戏事件
-                        Request eventRequest = new EventRequest(message, GAME_URL);
+                        Request eventRequest = new EventRequest(message);
                         waitResponseResult = eventRequest.execute(null);
                         otherResponse = getGameInfoResponse(waitResponseResult);
                         eventStatus = otherResponse.getEventStatus();
@@ -352,7 +363,16 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
                 // 渲染界面，同时更新回合
                 Platform.runLater(new OperationAction());
+
                 next(otherResponse, waitResponseResult, room, p);
+            }else if(serviceName.equals(EVENT_OVER_ID)) {
+
+                // 1.摸牌的时候被其他玩家通知游戏结束
+                // 2.其他玩家胡牌之后，如果是当前玩家的回合，会发起摸牌请求，此时无论服务端是否已经发送结束消息，最后都可以正常执行
+
+                System.out.println("游戏结束了");
+
+                stateMachine.setCurrentState(STATE_GAME_OVER_ID, null);
             }
 
             return waitResponseResult;

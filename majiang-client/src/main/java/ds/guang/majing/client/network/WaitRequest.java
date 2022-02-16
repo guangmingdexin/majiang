@@ -15,6 +15,10 @@ import java.util.Objects;
  */
 public class WaitRequest extends Request {
 
+    public WaitRequest(Object message) {
+        super(message);
+    }
+
     public WaitRequest(Object message, String url) {
         super(message, url);
     }

@@ -1,4 +1,4 @@
-package ds.guang.majing.client;
+package ds.guang.majing.client.game;
 
 import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.common.game.card.GameEvent;

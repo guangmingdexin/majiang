@@ -3,6 +3,7 @@ package ds.guang.majiang.server.layer.game;
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.game.machines.StateMachines;
+import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.card.*;
@@ -84,36 +85,24 @@ public class GameTakeAction implements Action {
                         System.out.println("event: " + event);
                         machine.setCurrentState(STATE_EVENT_ID, null);
                     }
+
+
+                    // 发送消息给玩家
+                    ChannelHandlerContext context = (ChannelHandlerContext)p.getContext();
+                    // 返回结果
+
+                    context.channel().eventLoop().execute(() -> {
+                        DsMessage<GameInfoResponse> respMessage = DsMessage.build(
+                                message.getServiceNo(),
+                                message.getRequestNo(),
+                                DsResult.data(info)
+                        );
+                        context.writeAndFlush(ResponseUtil.response(respMessage));
+                    });
+
                 }else {
-
-                    info = new GameInfoResponse()
-                            .setUserId(id)
-                            .setCard(null)
-                            .setEvent(new MaGameEvent(MaJiangEvent.OVER, id, null, null));
-
-                    machine.setCurrentState(STATE_GAME_OVER_ID, id);
-
-                    // 通知其他玩家
+                    room.getEventHandler().over(room);
                 }
-
-
-
-
-                // 发送消息给玩家
-                ChannelHandlerContext context = (ChannelHandlerContext)p.getContext();
-                // 返回结果
-
-                context.channel().eventLoop().execute(() -> {
-                    DsMessage<GameInfoResponse> respMessage = DsMessage.build(
-                            message.getServiceNo(),
-                            message.getRequestNo(),
-                            DsResult.data(info)
-                    );
-                    context.writeAndFlush(ResponseUtil.response(respMessage));
-                });
-
-
-
                 return DsResult.ok();
             }
             // 2.如果不是当前玩家，直接抛出异常

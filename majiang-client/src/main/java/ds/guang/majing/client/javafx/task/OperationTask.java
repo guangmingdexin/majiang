@@ -164,7 +164,7 @@ public class OperationTask implements Task {
 
         CompletableFuture.runAsync(() -> {
 
-            Request eventRequest = new EventRequest(message, GAME_URL);
+            Request eventRequest = new EventRequest(message);
             eventResult = eventRequest.execute(null);
 
             if(eventResult.success()) {

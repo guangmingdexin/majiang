@@ -183,11 +183,7 @@ public class MaEventHandler implements GameEventHandler {
                 // TODO: 更改回合方法需要进行更改，需要跳过游戏状态为 over 的玩家
                 int countHu = room.getCountHu() + 1;
                 room.setCountHu(countHu);
-                // 
-                if(countHu >= room.getPlayerCount() - 1) {
-                    System.out.println("游戏结束了");
 
-                }
             } else if(eventValue == NOTHING.getValue()) {
                 // 如果点击过，则正常到下一位玩家回合，而不是事件发起者的下一回合
                 // 1.获取前一个回合
@@ -210,9 +206,31 @@ public class MaEventHandler implements GameEventHandler {
     }
 
     @Override
-    public void over() {
+    public void over(Room room) {
 
-        //
+        // 1.向还未胡牌的玩家发送信息
+        // 2.如果是由胡牌引起的话
+
+        GameInfoResponse info = new GameInfoResponse()
+                .setCard(null)
+                .setEvent(new MaGameEvent(MaJiangEvent.OVER, null, "Over", null));
+
+        // 通知其他玩家全部进入 over 状态
+        Player[] players = room.getPlayers();
+
+        for (Player player : players) {
+
+            if(!player.isHu()) {
+
+                String userId = player.id();
+                ((ServerFourRoom)room).findPlayerState(userId).setCurrentState(STATE_GAME_OVER_ID, null);
+                ServerFourRoom.write(userId, DsMessage.build(
+                        EVENT_OVER_ID,
+                        userId,
+                        DsResult.data(info)
+                ));
+            }
+        }
     }
 
     @Override

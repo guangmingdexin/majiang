@@ -2,27 +2,27 @@ package ds.guang.majiang.server.layer.basic;
 
 import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
-import ds.guang.majiang.server.pool.MatchPool;
-import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.machines.StateMachines;
-import ds.guang.majing.common.game.player.ServerPlayer;
-import ds.guang.majing.common.game.room.ServerFourRoom;
-import ds.guang.majing.common.util.ResponseUtil;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
+import ds.guang.majing.common.util.ResponseUtil;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
+import java.util.Objects;
 
 import static ds.guang.majing.common.util.DsConstant.*;
 
 /**
+ *
+ * 服务端游戏状态绑定
+ *
  * @author guangmingdexin
  */
 @StateMatchAction(value = STATE_PREPARE_ID)
@@ -35,33 +35,12 @@ public class PrepareAction implements Action {
     @SuppressWarnings("unchecked")
     public void handler(State state) {
 
-        state.onEvent(EVENT_PREPARE_ID, data -> {
+        state.onEntry(data -> {
 
-            DsMessage<GameInfoRequest> message = (DsMessage<GameInfoRequest>) data;
-            // 这里还需要将 data 重新反序列化
-            GameInfoRequest request = message.getData();
-            String userId = request.getUserId();
-            // 开启匹配池
-            MatchPool matchPool = MatchPool.getInstance();
-            matchPool.start();
-            // 1.获取游戏玩家 id
-            // 如果没有匹配好，直接阻塞？
-            GameUser gameUser = request.getGameUser();
+            System.out.println("开始进行匹配！");
 
-            if(message.getAttrMap() != null && message.getAttrMap().containsKey(SYS_CONTEXT)) {
-                CompletableFuture.runAsync(() -> {
-                    Player player = new ServerPlayer(gameUser).setContext((ChannelHandlerContext)message.getAttrMap().get(SYS_CONTEXT));
-                    matchPool.addPlayer(player);
-                    matchPool.match();
-                });
-            }else {
-                throw new NullPointerException("context is null!");
-            }
-
-            return DsResult.wait("游戏匹配中！");
+            return null;
         });
-
-        state.onEvent(EVENT_MATCH_FRIEND_ID, STATE_MATCH_FRIEND_ID);
 
         state.onEvent(EVENT_HANDCARD_ID,  data -> {
             // data 必须为 Message<GameInfoRequest>

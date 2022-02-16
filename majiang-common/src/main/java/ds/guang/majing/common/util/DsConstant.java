@@ -88,12 +88,16 @@ public final class DsConstant {
      */
     public static final String EVENT_HU_ID = "EVENT_HU_ID";
 
-
-
     /**
      * 过
      */
     public static final String EVENT_IGNORE_ID = "EVENT_IGNORE_ID";
+
+
+    /**
+     * 结束事件
+     */
+    public static final String EVENT_OVER_ID  = "EVENT_OVER_ID";
 
     /**
      * 客户端发起等待事件，等待服务端处理完成之后，响应
@@ -169,8 +173,9 @@ public final class DsConstant {
 
     public static final String BASE_URL = "http://localhost:9001/";
 
-    public static final String REMOTE_URL = "http://localhost:9999/";
+    public static final String REMOTE_LOGIN_URL = "http://localhost:9999/";
 
-    public static final String GAME_URL = "v3/game/";
+    public static final String REMOTE_USER_URL = "http://localhost:8081/";
+
 
 }

@@ -68,6 +68,12 @@ public class ServerFourRoom extends Room implements Serializable {
         Player p = findPlayerById(id);
         p.eventHandler(eventValue, cardNum);
 
+        //
+        if(countHu >= playerCount - 1) {
+            System.out.println("游戏结束了");
+            eventHandler.over(this);
+        }
+
     }
 
 

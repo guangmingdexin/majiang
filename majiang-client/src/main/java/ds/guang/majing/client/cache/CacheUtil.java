@@ -31,11 +31,16 @@ public class CacheUtil {
     public static String getUserId() {
         LoginVo loginVo = (LoginVo) Cache.getInstance().getObject("User-Token:");
         if(loginVo == null) {
-            throw new NullPointerException("请先登录！");
+//            throw new NullPointerException("请先登录！");
+            return "NULL";
         }
         return loginVo.getUid();
     }
 
+    public static LoginVo getToken() {
+
+        return (LoginVo) Cache.getInstance().getObject("User-Token:");
+    }
 
     public static StateMachine getStateMachine() {
         return (StateMachine) Cache.getInstance().getObject(preUserMachinekey("machine-1"));

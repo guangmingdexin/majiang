@@ -81,12 +81,9 @@ public class GameEventAction implements Action {
         // 状态切换或者其他处理
         MaJiangEvent event = gameEvent.getActionEvent();
 
-        switch (event) {
-            case IN_DIRECT_HU:
-                // 因为有可能有多个玩家同时胡牌所以可能需要唤醒其他挂起玩家
-                room.announceNext();
-            default:
-                break;
+        if (event == MaJiangEvent.IN_DIRECT_HU) {
+            // 因为有可能有多个玩家同时胡牌所以可能需要唤醒其他挂起玩家
+            room.announceNext();
         }
 
         for (Player player : room.getPlayers()) {

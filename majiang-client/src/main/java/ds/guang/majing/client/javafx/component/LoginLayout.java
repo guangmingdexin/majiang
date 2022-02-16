@@ -1,20 +1,28 @@
 package ds.guang.majing.client.javafx.component;
 
 
+import ds.guang.majing.client.remote.dto.ao.AccountAo;
+import ds.guang.majing.client.remote.dto.vo.LoginVo;
+import ds.guang.majing.client.remote.service.IUserService;
+import ds.guang.majing.client.remote.service.UserService;
+import ds.guang.majing.client.rule.PlatFormRuleImpl;
+import ds.guang.majing.common.game.message.DsResult;
+import ds.guang.majing.common.game.rule.Rule;
+import ds.guang.majing.common.state.StateMachine;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  *
@@ -34,6 +42,7 @@ public class LoginLayout extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         stage = primaryStage;
+
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -73,15 +82,55 @@ public class LoginLayout extends Application {
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
 
+
+        Rule<String, StateMachine<String, String, DsResult>> rule = new PlatFormRuleImpl();
+
+        rule.create("V3-PLATFORM");
+
+        StateMachine<String, String, DsResult> ruleActor = rule.getRuleActor();
+
         login.setOnAction(e -> {
             System.out.println("登陆！");
-            String tel = userTextField.getText();
+            String username = userTextField.getText();
             String pwd = pwBox.getText();
+
+            AccountAo accountAo = new AccountAo(username, pwd);
+
+            CompletableFuture.runAsync(() -> {
+                IUserService userService = new UserService();
+                DsResult<LoginVo> rs = userService.login(accountAo);
+
+                if(rs.success()) {
+                    // 跳转
+                    Platform.runLater(() -> {
+
+                        try {
+
+                            StartMenu startMenu = new StartMenu();
+                            startMenu.start(new Stage());
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+
+                    });
+
+                }else {
+                    // 弹框
+                    Platform.runLater(() -> {
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("登录失败");
+                        alert.setContentText(rs.getMsg());
+
+                        alert.showAndWait();
+
+                    });
+                }
+            });
 
         });
         primaryStage.setTitle("登陆");
         primaryStage.show();
-
 
     }
 }

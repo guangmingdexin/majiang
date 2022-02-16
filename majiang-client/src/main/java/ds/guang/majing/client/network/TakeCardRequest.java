@@ -16,9 +16,10 @@ import java.io.IOException;
  */
 public class TakeCardRequest extends Request {
 
-    public TakeCardRequest(Object message, String url) {
-        super(message, url);
+    public TakeCardRequest(Object message) {
+        super(message);
     }
+
 
     @Override
     protected void before(Runnable task) {

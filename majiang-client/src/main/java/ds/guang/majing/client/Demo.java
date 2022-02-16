@@ -1,11 +1,11 @@
 package ds.guang.majing.client;
 
 
+import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
-import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.client.remote.service.IUserService;
 import ds.guang.majing.client.remote.service.UserService;
-import ds.guang.majing.client.rule.platform.PlatFormRuleImpl;
+import ds.guang.majing.client.rule.PlatFormRuleImpl;
 import ds.guang.majing.common.game.card.CardType;
 import ds.guang.majing.common.game.card.MaJiang;
 import ds.guang.majing.common.game.message.GameInfoRequest;
@@ -49,6 +49,8 @@ public class Demo extends Application {
     public static Button hu;
 
     public static Button ignore;
+
+    public static StateMachine<String, String, DsResult> ruleActor;
 
     @Override
     public void start(Stage primaryStage) throws Exception  {
@@ -128,7 +130,17 @@ public class Demo extends Application {
             // 1.加入游戏池，将状态机状态设置为进入游戏状态
             // 2.匹配成功，则获取到房间信息
             CompletableFuture.runAsync(() -> {
+
+                System.out.println("开始匹配！........");
+
                 ruleActor.setCurrentState(STATE_PREPARE_ID, null);
+
+                ruleActor.event(EVENT_RANDOM_MATCH_ID, null);
+            }).exceptionally(e -> {
+
+                e.printStackTrace();
+
+                return null;
             });
         });
 

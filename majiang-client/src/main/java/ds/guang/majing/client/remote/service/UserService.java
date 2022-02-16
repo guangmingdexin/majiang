@@ -3,6 +3,7 @@ package ds.guang.majing.client.remote.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.client.network.Request;
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
+import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.client.cache.Cache;
 import ds.guang.majing.common.game.dto.GameUser;
@@ -13,7 +14,7 @@ import ds.guang.majing.common.util.JsonUtil;
 import java.io.IOException;
 import java.util.Objects;
 
-import static ds.guang.majing.common.util.DsConstant.REMOTE_URL;
+import static ds.guang.majing.common.util.DsConstant.REMOTE_LOGIN_URL;
 
 /**
  *
@@ -26,12 +27,14 @@ public class UserService implements IUserService {
 
 
     @Override
-    public GameUser getOne(String uId) {
+    public GameUser getOne(UserQueryAo query) {
         // 1.创建一个连接，发起请求
-        Request request = new Request(uId, DsConstant.REMOTE_URL + "majiang/ds-user/user") {
+        Request request = new Request(query, REMOTE_LOGIN_URL + "majiang/ds-user/user") {
 
             @Override
-            protected void before(Runnable task) {}
+            protected void before(Runnable task) {
+
+            }
 
             @Override
             protected DsResult after(String content) {
@@ -53,6 +56,10 @@ public class UserService implements IUserService {
                     GameUser data = responseVo.getData();
                     Cache.getInstance().setObject("User-Session:", data, -1);
                     return responseVo;
+                }else {
+
+                    System.out.println("调用远程用户服务获取失败: " + responseVo);
+
                 }
                 return responseVo;
             }
@@ -61,9 +68,9 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public LoginVo login(AccountAo accountAo) {
+    public DsResult<LoginVo> login(AccountAo accountAo) {
 
-        Request request = new Request(accountAo, REMOTE_URL + "majiang/ds-auth/login") {
+        Request request = new Request(accountAo, REMOTE_LOGIN_URL + "majiang/ds-auth/login") {
             @Override
             protected void before(Runnable task) {
 
@@ -96,6 +103,6 @@ public class UserService implements IUserService {
             }
         };
 
-        return (LoginVo) request.execute(null).getData();
+        return request.execute(null);
     }
 }

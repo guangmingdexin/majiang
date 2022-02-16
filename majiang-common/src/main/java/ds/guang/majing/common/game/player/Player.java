@@ -14,6 +14,7 @@ import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static ds.guang.majing.common.util.DsConstant.EVENT_RECEIVE_OTHER_CARD_ID;
 import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
@@ -161,6 +162,8 @@ public abstract class Player implements Cloneable, Serializable {
         throw new IllegalArgumentException("错误的出牌-这张牌不存在手牌中！");
     }
 
+
+    AtomicInteger hu = new AtomicInteger(0);
     /**
      *
      * 1.摸牌阶段，会先将 value 添加到手牌中，再做判断
@@ -224,7 +227,7 @@ public abstract class Player implements Cloneable, Serializable {
 
             copy.add(i, value);
             // TODO: 胡牌算法还有些问题，后面修改
-            if(Algorithm.isHu(null)) {
+            if(Algorithm.isHu(null) || hu.incrementAndGet() == 5) {
                 selectEvent.put(MaJiangEvent.IN_DIRECT_HU, value);
             }
         }
