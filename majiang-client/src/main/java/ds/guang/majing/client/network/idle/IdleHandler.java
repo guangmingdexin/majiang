@@ -133,7 +133,16 @@ public class IdleHandler {
         try {
             outputStream = socket.getOutputStream();
             // 1.写入心跳包
-            outputStream.write("Hello World".getBytes(StandardCharsets.UTF_8));
+
+            String line = "POST / HTTP/1.1" + "\r\n";
+
+            String header = "Host: http://127.0.0.1:9001" + "\r\n"
+                    + "Connection: keep-alive" + "\r\n"
+                    + "Content-Type: application/json" + "\r\n"
+                    + "\r\n";
+
+
+            outputStream.write((line + header).getBytes(StandardCharsets.UTF_8));
             outputStream.flush();
             System.out.println("写入数据！");
             return;

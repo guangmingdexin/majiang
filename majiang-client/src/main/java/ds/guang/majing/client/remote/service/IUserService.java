@@ -6,6 +6,8 @@ import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.message.DsResult;
 
+import java.io.IOException;
+
 /**
  * @author guangyong.deng
  * @date 2022-02-15 14:49
@@ -30,5 +32,5 @@ public interface IUserService {
      * @param accountAo
      * @return
      */
-    DsResult<LoginVo> login(AccountAo accountAo);
+    DsResult<LoginVo> login(AccountAo accountAo) ;
 }

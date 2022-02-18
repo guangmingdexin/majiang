@@ -76,7 +76,11 @@ public class WorkState extends Thread  {
                 }else {
                     // 执行任务
                     Runnable r = taskQueue.poll();
-                    r.run();
+                    try {
+                        r.run();
+                    }catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
             }
 

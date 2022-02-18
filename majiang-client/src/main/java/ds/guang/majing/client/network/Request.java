@@ -183,7 +183,8 @@ public abstract class Request  {
             System.out.println("reply: " + reply + " closed: " + socket.isClosed());
 
         } catch (IOException e) {
-            e.printStackTrace();
+           // e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return reply;
     }

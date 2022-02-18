@@ -508,3 +508,19 @@ java.net.ConnectException: 连接已经关闭了
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
 	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
 	at java.lang.Thread.run(Thread.java:748)
+20:14:46.818 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：Socket[addr=localhost/127.0.0.1,port=9001,localport=62003]
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:154)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:197)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+20:19:07.989 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：Socket[addr=localhost/127.0.0.1,port=9001,localport=62102]
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:154)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:197)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)

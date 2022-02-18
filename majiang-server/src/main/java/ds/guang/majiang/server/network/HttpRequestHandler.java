@@ -15,7 +15,10 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.HttpObject;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static ds.guang.majing.common.util.DsConstant.*;
@@ -42,8 +45,11 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
                 return;
             }
             String content = HttpRequestParser.getContent(request);
-            // System.out.println("content: " + content);
 
+            if(content == null || "".equals(content)) {
+                System.out.println("接受到心跳包" + LocalDateTime.now());
+                return;
+            }
             // 不忽略大小写
             DsMessage message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<GameInfoRequest>>() {});
 
@@ -88,5 +94,20 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
        // ctx.writeAndFlush(DsMessage.build("-1", "-1", DsResult.error(cause.getMessage())));
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+
+        if(evt instanceof IdleStateEvent) {
+
+            System.out.println("空闲检测服务： " + evt);
+
+            //
+            ctx.channel().close();
+        }else {
+            super.userEventTriggered(ctx, evt);
+        }
+
     }
 }

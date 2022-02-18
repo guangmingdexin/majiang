@@ -75,7 +75,7 @@ public class HttpRequestParser {
                 return content.toString(CharsetUtil.UTF_8);
             }
         }
-        return "{}";
+        return null;
     }
 
     public static String getContent(FullHttpRequest request) {

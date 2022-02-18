@@ -14,6 +14,9 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.timeout.IdleStateHandler;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @ClassName GameServer
@@ -58,10 +61,9 @@ public class GameServer {
                             pipeline.addLast("codec", new HttpServerCodec());
                             pipeline.addLast("aggregator", new HttpObjectAggregator(1024*1024));
                             //
-                            pipeline.addLast("string-decoder", new StringDecoder());
                             pipeline.addLast("handler", new HttpRequestHandler());
-                            pipeline.addLast("idleCodec", new IdleStateCodec());
 
+                            pipeline.addLast("idle", new IdleStateHandler(0, 0, 10, TimeUnit.SECONDS));
 //                            pipeline.addLast("ping", new IdleStateHandler(30, 0,
 //                                    0, TimeUnit.SECONDS));
 
@@ -85,6 +87,6 @@ public class GameServer {
     }
 
     public static void main(String[] args) {
-        new GameServer(9002).run();
+        new GameServer(9001).run();
     }
 }

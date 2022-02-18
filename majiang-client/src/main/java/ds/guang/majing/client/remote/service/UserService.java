@@ -86,7 +86,8 @@ public class UserService implements IUserService {
                             content,
                             new TypeReference<DsResult<LoginVo>>() {});
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
+                    System.out.println(e.getMessage());
                 }
 
                 Objects.requireNonNull(responseVo, "response is null");

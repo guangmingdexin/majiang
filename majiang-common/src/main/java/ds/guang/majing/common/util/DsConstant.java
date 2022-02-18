@@ -163,12 +163,13 @@ public final class DsConstant {
      */
     public static final String SYS_CONTEXT = "sys-context";
 
-     public static final String BASE_URL = "http://localhost:9002/";
+     public static final String BASE_URL = "http://localhost:9001/";
     // public static final String BASE_URL = "http://120.26.198.241:9001/";
 
     public static final String REMOTE_LOGIN_URL = "http://localhost:9999/";
 
     public static final String REMOTE_USER_URL = "http://localhost:8081/";
+
 
 
 }
