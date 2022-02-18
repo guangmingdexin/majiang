@@ -350,3 +350,43 @@ java.lang.NullPointerException: null
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
 	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
 	at java.lang.Thread.run(Thread.java:748)
+16:16:24.481 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：Socket[addr=localhost/127.0.0.1,port=9001,localport=49926]
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:141)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+16:16:24.492 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：Socket[addr=localhost/127.0.0.1,port=9001,localport=49890]
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:141)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+16:41:21.753 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：null
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:160)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:201)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+16:51:11.766 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：null
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:160)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:201)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+18:08:33.148 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：null
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:160)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:201)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)

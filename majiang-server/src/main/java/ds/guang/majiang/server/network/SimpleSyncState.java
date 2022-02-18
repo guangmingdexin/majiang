@@ -20,7 +20,7 @@ public class SimpleSyncState implements SyncState {
     public boolean syncState(String userId) {
 
         int requestOffset = session.getOffset();
-        Channel context = session.getContext(userId);
+        Channel context = (Channel) session.getContext(userId);
         MessageBuffer buffer = session.getBuffer();
         int offset = buffer.getOffset();
         context.eventLoop().execute(() -> {

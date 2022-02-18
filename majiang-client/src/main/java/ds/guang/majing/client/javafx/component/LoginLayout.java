@@ -1,6 +1,7 @@
 package ds.guang.majing.client.javafx.component;
 
 
+import ds.guang.majing.client.network.idle.WorkState;
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.client.remote.service.IUserService;
@@ -22,7 +23,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.concurrent.CompletableFuture;
+import static ds.guang.majing.common.util.DsConstant.EVENT_START_ID;
 
 /**
  *
@@ -33,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
  **/
 public class LoginLayout extends Application {
 
-    public static Stage stage;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -41,7 +42,7 @@ public class LoginLayout extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        stage = primaryStage;
+
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -89,6 +90,8 @@ public class LoginLayout extends Application {
 
         StateMachine<String, String, DsResult> ruleActor = rule.getRuleActor();
 
+        WorkState workState = new WorkState("work-state");
+
         login.setOnAction(e -> {
             System.out.println("登陆！");
             String username = userTextField.getText();
@@ -96,11 +99,13 @@ public class LoginLayout extends Application {
 
             AccountAo accountAo = new AccountAo(username, pwd);
 
-            CompletableFuture.runAsync(() -> {
+            workState.runAsync(() -> {
+
                 IUserService userService = new UserService();
                 DsResult<LoginVo> rs = userService.login(accountAo);
 
                 if(rs.success()) {
+                    ruleActor.event(EVENT_START_ID, null);
                     // 跳转
                     Platform.runLater(() -> {
 
@@ -108,6 +113,12 @@ public class LoginLayout extends Application {
 
                             StartMenu startMenu = new StartMenu();
                             startMenu.start(new Stage());
+                            startMenu.set("actor", ruleActor);
+                            startMenu.set("token", rs.getData().getToken());
+                            startMenu.set("userId", rs.getData().getUid());
+                            startMenu.set("worker", workState);
+
+                          //  primaryStage.close();
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -127,6 +138,12 @@ public class LoginLayout extends Application {
                     });
                 }
             });
+
+
+            // ui 线程唤醒 工作线程处理工作
+            synchronized (WorkState.LOCK) {
+                WorkState.LOCK.notifyAll();
+            }
 
         });
         primaryStage.setTitle("登陆");

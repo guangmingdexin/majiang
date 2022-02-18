@@ -60,7 +60,7 @@ public final class DsConstant {
     /**
      * 事件 id 常量
      */
-    public static final String EVENT_PREPARE_ID = "EVENT_PREPARE_ID";
+    public static final String EVENT_START_ID = "EVENT_START_ID";
 
     public static final String EVENT_MATCH_FRIEND_ID = "EVENT_MATCH_FRIEND_ID";
 
@@ -99,10 +99,7 @@ public final class DsConstant {
      */
     public static final String EVENT_OVER_ID  = "EVENT_OVER_ID";
 
-    /**
-     * 客户端发起等待事件，等待服务端处理完成之后，响应
-     */
-    public static final String EVENT_WAIT_ID = "EVENT_WAIT_ID";
+
 
     /**
      * 接受到其他玩家出牌
@@ -136,16 +133,12 @@ public final class DsConstant {
     /**
      * 设置缓存前缀
      */
-    public static final String GAMEUSER_INFO_PREV = "user-game-info-id:";
 
     public static final String USER_MACHINE_PREV = "user-machine-id:";
 
     public static final String ROOM_INFO_PREV = "room-info-id:";
 
 
-    public static String preGameUserInfoKey(String id) {
-        return GAMEUSER_INFO_PREV + id;
-    }
 
     public static String preUserMachinekey(String id) {
         return USER_MACHINE_PREV + id;

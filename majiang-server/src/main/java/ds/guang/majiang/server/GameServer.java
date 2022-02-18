@@ -2,6 +2,7 @@ package ds.guang.majiang.server;
 
 
 import ds.guang.majiang.server.network.HttpRequestHandler;
+import ds.guang.majiang.server.network.codec.IdleStateCodec;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -56,6 +57,7 @@ public class GameServer {
                             pipeline.addLast("codec", new HttpServerCodec());
                             pipeline.addLast("aggregator", new HttpObjectAggregator(1024*1024));
                             pipeline.addLast("handler", new HttpRequestHandler());
+                            pipeline.addLast("idleCodec", new IdleStateCodec());
                           //  pipeline.addLast("aggregator", new HttpObjectAggregator());
 //                            pipeline.addLast("ping", new IdleStateHandler(30, 0,
 //                                    0, TimeUnit.SECONDS));

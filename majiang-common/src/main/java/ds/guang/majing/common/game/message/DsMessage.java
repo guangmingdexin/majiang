@@ -1,5 +1,6 @@
 package ds.guang.majing.common.game.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import ds.guang.majing.common.util.DsConstant;
 
@@ -34,6 +35,7 @@ public class DsMessage<T> implements Serializable {
 
     private LocalDateTime date;
 
+    @JsonIgnore
     private Map<String, Object> attrMap;
 
     public DsMessage() {
@@ -181,6 +183,7 @@ public class DsMessage<T> implements Serializable {
                 .append(", \"data\":").append(data)
                 .append(", \"version\":").append(version)
                 .append(", \"date\":").append(date)
+                .append(", \"attrMap\":").append(attrMap)
                 .append('}');
         return sb.toString();
     }

@@ -10,8 +10,12 @@ import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.player.ServerPlayer;
 import ds.guang.majing.common.state.State;
+import ds.guang.majing.common.util.ResponseUtil;
+import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 import static ds.guang.majing.common.util.DsConstant.*;
@@ -27,6 +31,20 @@ public class StartAction implements Action {
 
     @Override
     public void handler(State state) {
+
+
+        state.onEvent(EVENT_START_ID, data -> {
+
+            System.out.println("data: " + data);
+            // 1.获取 context
+            DsMessage message = (DsMessage) data;
+
+            ChannelHandlerContext context = (ChannelHandlerContext)message.getAttrMap().get(SYS_CONTEXT);
+
+            context.writeAndFlush(ResponseUtil.response(message));
+
+            return DsResult.ok();
+        });
 
         state.onEvent(EVENT_RANDOM_MATCH_ID, STATE_PREPARE_ID, data -> {
 

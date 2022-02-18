@@ -2,6 +2,7 @@ package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.client.cache.CacheUtil;
+import ds.guang.majing.client.network.idle.WorkState;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
@@ -12,15 +13,22 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.ManagedHttpClientConnection;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 import java.util.Objects;
 
 import static ds.guang.majing.common.util.DsConstant.BASE_URL;
@@ -54,6 +62,8 @@ public abstract class Request  {
      */
     protected static RequestConfig config;
 
+    protected static HttpClientContext ctx;
+
     /**
      * 超时等待时间 5 分钟
      */
@@ -62,6 +72,11 @@ public abstract class Request  {
 
     protected String url;
 
+    /**
+     * 底层 socket 对象
+     */
+    protected Socket socket;
+
     static {
 
         waitTime = 30 * 60 * 1000;
@@ -69,7 +84,13 @@ public abstract class Request  {
                 .setSocketTimeout(waitTime)
                 .setConnectTimeout(waitTime)
                 .build();
-        httpClient = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
+
+        httpClient = HttpClientBuilder
+                .create()
+                .setDefaultRequestConfig(config)
+                .build();
+
+        ctx = HttpClientContext.create();
 
     }
 
@@ -124,9 +145,9 @@ public abstract class Request  {
      *
      * 发起 http 请求
      *
-     * @return
+     * @return 返回数据
      */
-    public String call() {
+    private String call() {
 
         System.out.println("发起请求的线程-" + Thread.currentThread().getName() + " service: " + url);
         // 1.向远程服务器发送准备游戏的请求
@@ -138,12 +159,28 @@ public abstract class Request  {
             reply =  httpClient.execute(httpPost, res -> {
                 // 从响应模型中获取响应实体
                 HttpEntity responseEntity = res.getEntity();
+                // 更新读时间
+                // WorkState.idleHandler.
+                ManagedHttpClientConnection connection = ctx.getConnection(ManagedHttpClientConnection.class);
+                // Can be null if the response encloses no content
+                if(null != connection) {
+                    Socket socket = connection.getSocket();
+                    if(socket != null) {
+                        this.socket = socket;
+                        System.out.println("获取连接：" + socket);
+                    }else {
+                        throw new NullPointerException("连接为空！");
+                    }
+                }
                 if (responseEntity != null) {
                     return EntityUtils.toString(responseEntity);
                 }
                 return null;
-            });
+            }, ctx);
+
             Objects.requireNonNull(reply, "reply is null");
+
+            System.out.println("reply: " + reply);
 
         } catch (IOException e) {
             e.printStackTrace();

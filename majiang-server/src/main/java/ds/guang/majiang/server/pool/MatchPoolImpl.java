@@ -188,7 +188,7 @@ public class MatchPoolImpl implements MatchPool {
                 System.out.println("条件不满足！..." + System.currentTimeMillis());
             }
         };
-        DsTimeout dsTimeout = wheelTimer.newTimeout(timerTask, 5, TimeUnit.SECONDS);
+        DsTimeout dsTimeout = wheelTimer.newTimeout(timerTask, 1, TimeUnit.SECONDS);
 
     }
 }

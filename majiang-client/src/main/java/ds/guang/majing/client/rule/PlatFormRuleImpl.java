@@ -4,6 +4,7 @@ import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.client.javafx.task.OperationTask;
 import ds.guang.majing.client.javafx.ui.action.OperationAction;
 import ds.guang.majing.client.cache.Cache;
+import ds.guang.majing.client.network.idle.WorkState;
 import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
 import ds.guang.majing.client.remote.service.IUserService;
 import ds.guang.majing.client.remote.service.UserService;
@@ -26,6 +27,7 @@ import ds.guang.majing.common.game.rule.AbstractRule;
 import ds.guang.majing.common.game.rule.Rule;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
+import ds.guang.majing.common.util.DsConstant;
 import javafx.application.Platform;
 
 import java.util.List;
@@ -78,6 +80,32 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         State<String, String, DsResult> prepareState = prepareSupplier.get();
 
 
+        State<String, String, DsResult> startState = startSupplier.get();
+
+        startState.onEvent(EVENT_START_ID, data -> {
+
+            DsMessage message = DsMessage.build(EVENT_START_ID, CacheUtil.getUserId(), null);
+
+            Request startReq = new Request(message) {
+
+                @Override
+                protected void before(Runnable task) {}
+
+                @Override
+                protected DsResult after(String content) {
+                    return null;
+                }
+            };
+
+            startReq.execute(null);
+
+            System.out.println("发起心跳请求！----------------");
+
+            WorkState.idleHandler.initialize(startReq.getSocket());
+
+            return DsResult.ok();
+        });
+
         prepareState.onEvent(EVENT_RANDOM_MATCH_ID, data -> {
 
             // 开始进行游戏的匹配
@@ -102,8 +130,8 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             DsMessage<GameInfoRequest> randomMatchMsg = DsMessage.build(EVENT_RANDOM_MATCH_ID, userId, randomMatchReq);
 
             Request request = new PrepareRequest(randomMatchMsg);
-
             DsResult<GameInfoResponse> matchResp = request.execute(null);
+
 
             System.out.println("进入游戏准备阶段：" );
             // 注意：这里的 data 是上一个状态的返回值，也即是玩家成功匹配后的房间信息
@@ -389,7 +417,6 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
         // 缓存
         Cache.getInstance().setObject(preUserMachinekey("machine-1"), ruleActor, -1);
 
-        State<String, String, DsResult> startState = startSupplier.get();
 
         ruleActor.registerInitialState(startState);
         ruleActor.registerState(prepareState, takeState, takeOutState, waitState);

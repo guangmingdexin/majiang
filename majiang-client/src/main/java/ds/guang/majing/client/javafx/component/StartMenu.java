@@ -1,6 +1,8 @@
 package ds.guang.majing.client.javafx.component;
 
 
+import ds.guang.majing.client.network.idle.WorkState;
+import ds.guang.majing.common.state.StateMachine;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -14,6 +16,9 @@ import javafx.stage.Stage;
 import java.util.HashMap;
 import java.util.Map;
 
+import static ds.guang.majing.common.util.DsConstant.EVENT_RANDOM_MATCH_ID;
+import static ds.guang.majing.common.util.DsConstant.STATE_PREPARE_ID;
+
 /**
  * 开始菜单
  *
@@ -21,7 +26,7 @@ import java.util.Map;
  * @date 2021/3/21 14:53
  *
  **/
-public class StartMenu extends Application {
+public class StartMenu extends Application implements Layout {
 
     public static void main(String[] args) {
         launch(args);
@@ -30,7 +35,7 @@ public class StartMenu extends Application {
     /**
      *  跳转时带入的数据
      */
-    public Map<String, Object> params = new HashMap<>(8);
+    public Map<String, Object> params;
 
     public StartMenu() {
         this.params = new HashMap<>(8);
@@ -66,8 +71,22 @@ public class StartMenu extends Application {
 
         randomMatch.setOnAction(event -> {
 
-            // 随机匹配
+            WorkState worker = (WorkState)get("worker");
+            StateMachine actor = (StateMachine)get("actor");
 
+            // 随机匹配
+            worker.runAsync(() -> {
+
+                System.out.println("开始匹配！........");
+                actor.setCurrentState(STATE_PREPARE_ID, null);
+                actor.event(EVENT_RANDOM_MATCH_ID, null);
+
+            });
+
+            synchronized (WorkState.LOCK) {
+                // 唤醒工作线程
+                WorkState.LOCK.notifyAll();
+            }
         });
 
         friendMenu.setGraphic(friendMenuItem);
@@ -84,5 +103,19 @@ public class StartMenu extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+
+    @Override
+    public void set(String name, Object value) {
+        params.put(name, value);
+    }
+
+    @Override
+    public Object get(String name) {
+        Object o = params.get(name);
+        if(o == null) {
+            throw new NullPointerException(name + " is null");
+        }
+        return o;
     }
 }

@@ -17,7 +17,7 @@ public interface Session {
      * @param userId 用户 id
      * @return
      */
-    Channel getContext(String userId);
+    Object getContext(String userId);
 
 
     /**
