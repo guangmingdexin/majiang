@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.CardType;
 import ds.guang.majing.common.game.card.MaJiang;
-import ds.guang.majing.common.game.card.MaJiangEvent;
 import ds.guang.majing.common.game.dto.GameUser;
 import io.netty.channel.ChannelHandlerContext;
+import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
 
@@ -16,13 +16,12 @@ import static ds.guang.majing.common.game.card.MaJiangEvent.*;
  *
  * @author asus
  */
-public class ServerPlayer extends Player  {
+@NoArgsConstructor
+public class ServerPlayer extends Player {
 
     @JsonIgnore
     private transient ChannelHandlerContext context;
 
-    public ServerPlayer() {
-    }
 
     public ServerPlayer(GameUser gameUser) {
         super(gameUser);
@@ -39,13 +38,6 @@ public class ServerPlayer extends Player  {
         return context;
     }
 
-    @Override
-    public Player convertTo() {
-        // 对象复制
-        return new ClientPlayer()
-                .setGameUser(getGameUser())
-                .setCards(getCards());
-    }
 
     @Override
     public void eventHandler(int eventValue, int cardNum) {

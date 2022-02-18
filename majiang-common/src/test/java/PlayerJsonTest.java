@@ -1,4 +1,3 @@
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.CardType;
 import ds.guang.majing.common.game.card.MaJiang;

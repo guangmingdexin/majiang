@@ -8,12 +8,7 @@ import ds.guang.majing.common.game.room.Room;
  * @author guangyong.deng
  * @date 2022-01-26 9:11
  */
-@JsonTypeInfo(
-        use = JsonTypeInfo.Id.NAME,
-        property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = MaEventHandler.class, name = "eventHandler")
-})
+
 public interface GameEventHandler {
 
 

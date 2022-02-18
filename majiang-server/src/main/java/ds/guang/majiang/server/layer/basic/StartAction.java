@@ -10,16 +10,12 @@ import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.player.ServerPlayer;
 import ds.guang.majing.common.state.State;
-import ds.guang.majing.common.util.ResponseUtil;
-import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
+import ds.guang.majiang.server.game.ResponseUtil;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 
 import static ds.guang.majing.common.util.DsConstant.*;
-import static ds.guang.majing.common.util.DsConstant.STATE_MATCH_FRIEND_ID;
 
 /**
  * @author guangyong.deng

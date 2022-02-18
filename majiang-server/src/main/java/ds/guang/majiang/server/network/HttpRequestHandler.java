@@ -9,7 +9,7 @@ import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.util.JsonUtil;
 import ds.guang.majing.common.state.StateMachine;
-import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majiang.server.game.ResponseUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.DecoderResult;
@@ -30,6 +30,8 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
     @Override
     protected void channelRead0(ChannelHandlerContext context, HttpObject httpObject) throws Exception {
 
+        System.out.println("连接对象： " + context);
+
         // 判断 msg 是否为 http 请求
         // 后期会将游戏业务与普通业务分类，所以可以添加 uri 做判断
         if(httpObject instanceof FullHttpRequest) {
@@ -46,7 +48,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
             DsMessage message = JsonUtil.getMapper().readValue(content, new TypeReference<DsMessage<GameInfoRequest>>() {});
 
             Objects.requireNonNull(message, "message is null");
-            Objects.requireNonNull(message.getRequestNo(), "requestNo is null");
+            Objects.requireNonNull(message.getRequestNo(), "requestNo is null: " + message.getId());
 
             // 根据不同业务调用不同的处理逻辑
             StateMachine<String, String, DsResult> machine = StateMachines
@@ -79,12 +81,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
 
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("----------------------- 连接 inactive");
+        System.out.println(ctx + "----------------------- 连接 inactive");
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         cause.printStackTrace();
-        ctx.writeAndFlush(DsMessage.build("-1", "-1", DsResult.error(cause.getMessage())));
+       // ctx.writeAndFlush(DsMessage.build("-1", "-1", DsResult.error(cause.getMessage())));
     }
 }

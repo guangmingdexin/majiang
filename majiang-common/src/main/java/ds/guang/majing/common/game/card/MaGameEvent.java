@@ -1,7 +1,6 @@
 package ds.guang.majing.common.game.card;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.room.ServerFourRoom;
 import lombok.*;
 import lombok.experimental.Accessors;

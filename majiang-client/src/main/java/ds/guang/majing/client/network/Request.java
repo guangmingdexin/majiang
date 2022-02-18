@@ -167,7 +167,7 @@ public abstract class Request  {
                     Socket socket = connection.getSocket();
                     if(socket != null) {
                         this.socket = socket;
-                        System.out.println("获取连接：" + socket);
+                        System.out.println("获取连接：" + socket + " closed: " + socket.isClosed());
                     }else {
                         throw new NullPointerException("连接为空！");
                     }
@@ -180,7 +180,7 @@ public abstract class Request  {
 
             Objects.requireNonNull(reply, "reply is null");
 
-            System.out.println("reply: " + reply);
+            System.out.println("reply: " + reply + " closed: " + socket.isClosed());
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -210,7 +210,7 @@ public abstract class Request  {
     protected void setAuthorizeHeader() {
 
         this.httpPost.setHeader("Content-Type", "application/json;charset=utf8");
-
+        this.httpPost.setHeader("Connection", "keep-alive");
         // 获取缓存的 token
         LoginVo token = CacheUtil.getToken();
 

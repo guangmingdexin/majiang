@@ -259,11 +259,6 @@ public abstract class Player implements Cloneable, Serializable {
     public abstract Object getContext();
 
 
-    /**
-     * 不同类型的 Player 之间的转换
-     * @return
-     */
-    public abstract Player convertTo();
 
 
     /**

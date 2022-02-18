@@ -11,7 +11,7 @@ import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.State;
 import ds.guang.majing.common.state.StateMachine;
-import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majiang.server.game.ResponseUtil;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.List;

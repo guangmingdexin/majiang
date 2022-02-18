@@ -20,12 +20,7 @@ public class ClientPlayer extends Player {
         return null;
     }
 
-    @Override
-    public Player convertTo() {
-        return new ServerPlayer()
-                .setGameUser(getGameUser())
-                .setCards(getCards());
-    }
+
 
     @Override
     public void eventHandler(int eventValue, int cardNum) {

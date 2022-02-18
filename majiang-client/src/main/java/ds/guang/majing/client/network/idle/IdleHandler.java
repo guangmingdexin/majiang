@@ -1,6 +1,5 @@
 package ds.guang.majing.client.network.idle;
 
-import ds.guang.majing.client.network.Request;
 import ds.guang.majing.common.timer.DsTimeout;
 import ds.guang.majing.common.timer.DsTimerTask;
 import io.netty.handler.timeout.IdleState;
@@ -9,10 +8,12 @@ import lombok.Setter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.util.Arrays;
+import java.net.SocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -44,6 +45,11 @@ public class IdleHandler {
 
     @Setter
     private byte state; // 0 - none, 1 - initialized, 2 - destroyed
+
+    /**
+     * 发送的心跳包个数
+     */
+    private int readIdleCount;
 
 
     public IdleHandler(long idleTime) {
@@ -114,48 +120,27 @@ public class IdleHandler {
      * @param socket 通道
      * @param idleStateEvent 心跳事件
      */
-    void sendIdleMsg(Socket socket, IdleStateEvent idleStateEvent) {
+    void sendIdleMsg(Socket socket, IdleStateEvent idleStateEvent) throws IOException {
 
         // 1.构造一个心跳包
 
         // 2.获取连接（http ？ （相对于来说，成本较高了，但是使用 tcp 又需要自定义心跳处理解析器））
-
-        if(socket != null) {
-//            OutputStream outputStream = null;
-//            try {
-//                outputStream = socket.getOutputStream();
-//                // 1.写入心跳包
-//                outputStream.write(Integer.MAX_VALUE);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }finally {
-//
-//                if(outputStream != null) {
-//                    try {
-//                        outputStream.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//            }
-            SocketChannel channel = socket.getChannel();
-            ByteBuffer buf = ByteBuffer.allocate(32);
-            byte[] data = new byte[32];
-            for (int i = 0; i < data.length; i++) {
-                data[i] = 1;
-            }
-            buf.put(data);
-            buf.flip();
-            try {
-
-                channel.write(buf);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return;
+        if(socket == null || !socket.isConnected() || socket.isClosed()) {
+            throw new ConnectException("连接已经关闭了");
         }
+
+        OutputStream outputStream;
+        try {
+            outputStream = socket.getOutputStream();
+            // 1.写入心跳包
+            outputStream.write("Hello World".getBytes(StandardCharsets.UTF_8));
+            outputStream.flush();
+            System.out.println("写入数据！");
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         throw new IllegalArgumentException("获取通道失败：" + socket);
     }
@@ -190,6 +175,8 @@ public class IdleHandler {
 
             // 超时
             if(nextDelay <= 0) {
+                System.out.println("读空闲： " + LocalDateTime.now() + " " + (readIdleCount + 1));
+                readIdleCount ++;
                 // 将 秒转换成 unit
                 long delay = idleTimeNanos;
 

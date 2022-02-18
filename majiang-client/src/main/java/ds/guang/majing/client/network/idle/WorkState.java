@@ -34,7 +34,7 @@ public class WorkState extends Thread  {
     /**
      * 定时心跳处理 - 读空闲
      */
-    public static IdleHandler idleHandler = new IdleHandler(5);
+    public static IdleHandler idleHandler = new IdleHandler(3);
 
 
     public static final Object LOCK = new Object();

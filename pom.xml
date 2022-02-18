@@ -14,6 +14,8 @@
         <module>majiang-common</module>
     </modules>
 
+
+
     <properties>
         <!-- 文件拷贝时的编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,16 +28,12 @@
         <maven.compiler.compilerVersion>8</maven.compiler.compilerVersion>
 
         <java.version>8</java.version>
+        <netty.version>4.1.70.Final</netty.version>
 
     </properties>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/io.netty/netty-all -->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty-all</artifactId>
-            <version>4.1.70.Final</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux -->
         <!--<dependency>-->
             <!--<groupId>org.springframework</groupId>-->
@@ -56,6 +54,48 @@
         <!--</dependency>-->
 
     </dependencies>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>localRepository</id>
+            <url>file:C:\Users\guangyong.deng\.m2\repository</url>
+        </repository>
+    </distributionManagement>
+
+    <build>
+        <plugins>
+            <!--<plugin>-->
+
+                <!--<configuration>-->
+                    <!--<excludes>-->
+                        <!--<exclude>-->
+                            <!--<groupId>org.projectlombok</groupId>-->
+                            <!--<artifactId>lombok</artifactId>-->
+                        <!--</exclude>-->
+                    <!--</excludes>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--&lt;!&ndash;be careful 在parent pom 里面一定要加这个属性&ndash;&gt;-->
+                            <!--<goal>repackage</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
 
 
 

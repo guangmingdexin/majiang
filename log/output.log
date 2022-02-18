@@ -215,7 +215,7 @@ java.util.concurrent.RejectedExecutionException: 获取通道失败！
 13:45:01.776 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:164)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -267,7 +267,7 @@ java.util.ConcurrentModificationException: null
 15:12:10.331 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1387016645@555a12d2
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:85)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -279,7 +279,7 @@ java.lang.NullPointerException: null
 15:21:59.324 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1340713777@567c5e0a
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:82)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -291,7 +291,7 @@ java.lang.NullPointerException: null
 15:26:51.666 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1349313202@42aaeac5
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:82)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -303,7 +303,7 @@ java.lang.NullPointerException: null
 15:32:35.032 [nioEventLoopGroup-3-1] WARN  i.n.u.c.AbstractEventExecutor - A task raised an exception. Task: ds.guang.majiang.server.layer.game.GameTakeAction$$Lambda$61/1387016645@555a12d2
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.layer.game.GameTakeAction.lambda$null$1(GameTakeAction.java:82)
 	at io.netty.util.concurrent.AbstractEventExecutor.safeExecute(AbstractEventExecutor.java:164)
 	at io.netty.util.concurrent.SingleThreadEventExecutor.runAllTasks(SingleThreadEventExecutor.java:469)
@@ -335,7 +335,7 @@ java.lang.NullPointerException: null
 16:03:23.172 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:174)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -344,7 +344,7 @@ java.lang.NullPointerException: null
 16:07:18.873 [match-pool-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
 java.lang.NullPointerException: null
 	at java.util.Objects.requireNonNull(Objects.java:203)
-	at ds.guang.majing.common.util.ResponseUtil.response(ResponseUtil.java:27)
+	at ds.guang.majiang.server.game.ResponseUtil.response(ResponseUtil.java:27)
 	at ds.guang.majiang.server.pool.MatchPoolImpl.lambda$match$0(MatchPoolImpl.java:174)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
@@ -386,6 +386,124 @@ java.lang.IllegalArgumentException: 获取通道失败：null
 java.lang.IllegalArgumentException: 获取通道失败：null
 	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:160)
 	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:201)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+09:03:26.961 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.NullPointerException: null
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:152)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:201)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+09:10:01.213 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.NullPointerException: null
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:152)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:201)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+09:20:16.234 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.SocketException: Socket is closed
+	at java.net.Socket.connect(Socket.java:566)
+	at java.net.Socket.connect(Socket.java:538)
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:128)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:209)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+09:32:34.111 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: connect: The address can't be null
+	at java.net.Socket.connect(Socket.java:560)
+	at java.net.Socket.connect(Socket.java:538)
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:129)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:210)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+09:37:19.839 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:131)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:212)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+09:37:51.584 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.ConnectException: Connection refused: connect
+	at java.net.DualStackPlainSocketImpl.connect0(Native Method)
+	at java.net.DualStackPlainSocketImpl.socketConnect(DualStackPlainSocketImpl.java:79)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:172)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:589)
+	at java.net.Socket.connect(Socket.java:538)
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:131)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:212)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+15:20:53.544 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.ConnectException: 连接已经关闭了
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:124)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+15:24:14.265 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.ConnectException: 连接已经关闭了
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:124)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+15:24:59.720 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.ConnectException: 连接已经关闭了
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:124)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+15:43:14.461 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：Socket[addr=localhost/127.0.0.1,port=9002,localport=65491]
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:140)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+15:48:08.313 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.lang.IllegalArgumentException: 获取通道失败：Socket[addr=localhost/127.0.0.1,port=9002,localport=50557]
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:140)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
+	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
+	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)
+	at java.lang.Thread.run(Thread.java:748)
+15:48:24.513 [pool-2-thread-1] WARN  d.g.majing.common.timer.DsWheelTimer - An exception was thrown by DsTimerTask.
+java.net.ConnectException: 连接已经关闭了
+	at ds.guang.majing.client.network.idle.IdleHandler.sendIdleMsg(IdleHandler.java:124)
+	at ds.guang.majing.client.network.idle.IdleHandler$ReaderIdleTimeoutTask.run(IdleHandler.java:182)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelTimeout.expire(DsWheelTimer.java:341)
 	at ds.guang.majing.common.timer.DsWheelTimer$DsWheelBucket.expireTimeouts(DsWheelTimer.java:488)
 	at ds.guang.majing.common.timer.DsWheelTimer$Worker.run(DsWheelTimer.java:559)

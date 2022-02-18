@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.util.StdConverter;
-import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.player.ServerPlayer;
 
 import java.io.IOException;

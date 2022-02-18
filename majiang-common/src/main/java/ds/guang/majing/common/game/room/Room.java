@@ -135,8 +135,8 @@ public abstract class Room implements Serializable {
      *
      * 根据用户 id 获取玩家信息
      *
-     * @param userId
-     * @return
+     * @param userId 玩家 id
+     * @return 玩家
      */
     public Player findPlayerById(String userId) {
 

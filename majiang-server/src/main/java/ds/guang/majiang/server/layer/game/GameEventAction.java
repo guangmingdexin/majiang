@@ -5,17 +5,14 @@ import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.MaGameEvent;
 import ds.guang.majing.common.game.card.MaJiangEvent;
-import ds.guang.majing.common.game.machines.StateMachines;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
-import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.State;
-import ds.guang.majing.common.state.StateMachine;
-import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majiang.server.game.ResponseUtil;
 
 import static ds.guang.majing.common.util.DsConstant.*;
 

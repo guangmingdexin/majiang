@@ -4,10 +4,9 @@ import ds.guang.majiang.server.layer.Action;
 import ds.guang.majiang.server.layer.StateMatchAction;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoRequest;
-import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.game.room.ServerFourRoom;
 import ds.guang.majing.common.state.State;
-import ds.guang.majing.common.util.ResponseUtil;
+import ds.guang.majiang.server.game.ResponseUtil;
 
 import static ds.guang.majing.common.util.DsConstant.*;
 
