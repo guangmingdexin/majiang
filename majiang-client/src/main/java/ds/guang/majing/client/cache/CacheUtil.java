@@ -1,9 +1,15 @@
 package ds.guang.majing.client.cache;
 
+import ds.guang.majing.client.game.ClientFourRoom;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.dto.GameUser;
+import ds.guang.majing.common.game.player.Player;
+import ds.guang.majing.common.game.player.ServerPlayer;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.StateMachine;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static ds.guang.majing.common.util.DsConstant.preRoomInfoPrev;
 import static ds.guang.majing.common.util.DsConstant.preUserMachinekey;
@@ -31,8 +37,8 @@ public class CacheUtil {
     public static String getUserId() {
         LoginVo loginVo = (LoginVo) Cache.getInstance().getObject("User-Token:");
         if(loginVo == null) {
-//            throw new NullPointerException("请先登录！");
-            return "NULL";
+            throw new NullPointerException("请先登录！");
+//            return "NULL";
         }
         return loginVo.getUid();
     }
@@ -46,7 +52,16 @@ public class CacheUtil {
         return (StateMachine) Cache.getInstance().getObject(preUserMachinekey("machine-1"));
     }
 
-    public static Room getRoom(String id) {
-        return (Room) Cache.getInstance().getObject(preRoomInfoPrev(id));
+    public static ClientFourRoom getRoom() {
+
+        ClientFourRoom room = new ClientFourRoom();
+
+        room.setCurRoundIndex(0);
+        room.setPlayerCount(2);
+        room.setPlayers(new Player[]{new ServerPlayer().setCards(Arrays.asList(11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11))});
+
+        return room;
+
+       // return (ClientFourRoom) Cache.getInstance().getObject(preRoomInfoPrev(getUserId()));
     }
 }

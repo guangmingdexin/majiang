@@ -1,13 +1,18 @@
 package ds.guang.majing.client.game;
 
 import ds.guang.majing.client.cache.CacheUtil;
+import ds.guang.majing.common.game.card.Card;
 import ds.guang.majing.common.game.card.GameEvent;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.player.Player;
 import ds.guang.majing.common.game.room.Room;
 import ds.guang.majing.common.state.StateMachine;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static ds.guang.majing.common.game.card.MaJiangEvent.*;
 import static ds.guang.majing.common.util.DsConstant.STATE_TAKE_CARD_ID;
@@ -18,10 +23,18 @@ import static ds.guang.majing.common.util.DsConstant.STATE_WAIT_ID;
  * @author guangyong.deng
  * @date 2022-01-07 16:21
  */
-@NoArgsConstructor
 @SuppressWarnings("unchecked")
+@Getter
 public class ClientFourRoom extends Room {
 
+    /**
+     * 麻将手牌对象
+     */
+    private List<ClientMaJiang> srcList;
+
+    public ClientFourRoom() {
+        srcList = new ArrayList<>();
+    }
 
     @Override
     public boolean isCurAround(String userId) {
@@ -79,5 +92,10 @@ public class ClientFourRoom extends Room {
                 throw new IllegalArgumentException("没有设置的事件");
             }
         }
+    }
+
+
+    public void addSrcCard(ClientMaJiang card) {
+        srcList.add(card);
     }
 }

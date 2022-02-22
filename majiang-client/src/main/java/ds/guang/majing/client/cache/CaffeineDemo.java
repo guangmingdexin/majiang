@@ -50,6 +50,6 @@ public class CaffeineDemo {
     }
 
     public static void main(String[] args) {
-        countMinSketchDemo();
+
     }
 }

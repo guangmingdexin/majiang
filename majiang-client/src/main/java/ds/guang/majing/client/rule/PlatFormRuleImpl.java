@@ -2,7 +2,6 @@ package ds.guang.majing.client.rule;
 
 import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.client.javafx.task.OperationTask;
-import ds.guang.majing.client.javafx.ui.action.OperationAction;
 import ds.guang.majing.client.cache.Cache;
 import ds.guang.majing.client.network.idle.WorkState;
 import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
@@ -390,7 +389,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
                 System.out.println(otherId + " 发起了 " + event + " 任务");
 
                 // 渲染界面，同时更新回合
-                Platform.runLater(new OperationAction());
+                Platform.runLater(() -> {});
 
                 next(otherResponse, waitResponseResult, room, p);
             }else if(serviceName.equals(EVENT_OVER_ID)) {

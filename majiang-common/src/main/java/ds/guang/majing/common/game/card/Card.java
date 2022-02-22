@@ -28,4 +28,5 @@ public interface Card extends Serializable {
      */
     int value();
 
+
 }

@@ -54,6 +54,11 @@ public class HttpRequestParser {
                 StringBuilder builder = new StringBuilder();
                 HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), request);
                 List<InterfaceHttpData> parmList = decoder.getBodyHttpDatas();
+                // 判断是否为空，为空可能为心跳包
+                if(parmList == null) {
+                    return null;
+                }
+
                 builder.append("{");
                 for (InterfaceHttpData parm : parmList) {
                     if (parm.getHttpDataType() == InterfaceHttpData.HttpDataType.Attribute) {

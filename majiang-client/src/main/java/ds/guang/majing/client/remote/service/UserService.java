@@ -29,7 +29,7 @@ public class UserService implements IUserService {
     @Override
     public GameUser getOne(UserQueryAo query) {
         // 1.创建一个连接，发起请求
-        Request request = new Request(query, REMOTE_LOGIN_URL + "majiang/ds-user/user") {
+        Request request = new Request(query, REMOTE_LOGIN_URL + "ds/ds-user/user") {
 
             @Override
             protected void before(Runnable task) {
@@ -70,7 +70,7 @@ public class UserService implements IUserService {
     @Override
     public DsResult<LoginVo> login(AccountAo accountAo) {
 
-        Request request = new Request(accountAo, REMOTE_LOGIN_URL + "majiang/ds-auth/login") {
+        Request request = new Request(accountAo, REMOTE_LOGIN_URL + "ds/ds-auth/login") {
             @Override
             protected void before(Runnable task) {
 

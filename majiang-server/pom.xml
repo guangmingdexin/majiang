@@ -78,7 +78,7 @@
                     <!--<archive>-->
                         <!--<manifest>-->
                             <!--<addClasspath>true</addClasspath>-->
-                            <!--<mainClass>ds.guang.majiang.server.GameServer</mainClass>-->
+                            <!--<mainClass>ds.guang.ds.server.GameServer</mainClass>-->
                         <!--</manifest>-->
                     <!--</archive>-->
                 <!--</configuration>-->

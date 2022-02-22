@@ -1,9 +1,11 @@
 package ds.guang.majing.common.game.card;
 
+import lombok.Getter;
+
 /**
  * @author guangmingdexin
  */
-
+@Getter
 public enum CardType {
 
     /**

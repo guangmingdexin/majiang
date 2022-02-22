@@ -20,7 +20,7 @@ public class ActionManager {
         // package 应该能够动态配置
 
         Set<Class<?>> clazz = ClassUtil.getClassFromPath(
-                "ds.guang.majiang.server.layer",
+                "ds.guang.ds.server.layer",
                 StateMatchAction.class, true);
 
 
