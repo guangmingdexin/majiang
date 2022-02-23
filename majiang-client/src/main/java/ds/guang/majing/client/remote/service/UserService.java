@@ -85,9 +85,10 @@ public class UserService implements IUserService {
                     responseVo = JsonUtil.getMapper().readValue(
                             content,
                             new TypeReference<DsResult<LoginVo>>() {});
+                    System.out.println("responseVo: " + responseVo);
                 } catch (IOException e) {
-                    // e.printStackTrace();
-                    System.out.println(e.getMessage());
+                     e.printStackTrace();
+                    System.out.println("登陆失败： " + e.getMessage());
                 }
 
                 Objects.requireNonNull(responseVo, "response is null");
@@ -100,7 +101,7 @@ public class UserService implements IUserService {
                     return responseVo;
                 }
 
-                return DsResult.error("登录错误！");
+                return responseVo;
             }
         };
 

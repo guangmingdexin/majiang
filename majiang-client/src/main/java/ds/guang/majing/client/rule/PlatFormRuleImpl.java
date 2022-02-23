@@ -93,7 +93,7 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
 
                 @Override
                 protected DsResult after(String content) {
-                    return null;
+                    return DsResult.data("启动成功");
                 }
             };
 

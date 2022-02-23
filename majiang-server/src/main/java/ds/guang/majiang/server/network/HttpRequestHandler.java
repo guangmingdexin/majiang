@@ -47,7 +47,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
             String content = HttpRequestParser.getContent(request);
 
             if(content == null || "".equals(content)) {
-                System.out.println("接受到心跳包" + LocalDateTime.now());
+                System.out.println(context + " 接受到心跳包: " + LocalDateTime.now());
                 return;
             }
             // 不忽略大小写

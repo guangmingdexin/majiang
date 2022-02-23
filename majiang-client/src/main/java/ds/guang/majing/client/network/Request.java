@@ -159,13 +159,16 @@ public abstract class Request  {
             reply =  httpClient.execute(httpPost, res -> {
                 // 从响应模型中获取响应实体
                 HttpEntity responseEntity = res.getEntity();
-                // 更新读时间
-                // WorkState.idleHandler.
+
                 ManagedHttpClientConnection connection = ctx.getConnection(ManagedHttpClientConnection.class);
                 // Can be null if the response encloses no content
-                if(null != connection) {
+                if(null != connection && url.equals(BASE_URL)) {
                     Socket socket = connection.getSocket();
                     if(socket != null) {
+                        // 更新读时间
+                        WorkState.idleHandler.setLastReadTime(System.nanoTime());
+                        // 每次请求成功，则将失败次数减为 0
+                        WorkState.idleHandler.clearFailIdle();
                         this.socket = socket;
                         System.out.println("获取连接：" + socket + " closed: " + socket.isClosed());
                     }else {
@@ -180,11 +183,9 @@ public abstract class Request  {
 
             Objects.requireNonNull(reply, "reply is null");
 
-            System.out.println("reply: " + reply + " closed: " + socket.isClosed());
 
         } catch (IOException e) {
-           // e.printStackTrace();
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return reply;
     }
