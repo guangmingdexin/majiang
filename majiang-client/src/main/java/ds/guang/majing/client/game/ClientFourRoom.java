@@ -27,15 +27,6 @@ import static ds.guang.majing.common.util.DsConstant.STATE_WAIT_ID;
 @Getter
 public class ClientFourRoom extends Room {
 
-    /**
-     * 麻将手牌对象
-     */
-    private List<ClientMaJiang> srcList;
-
-    public ClientFourRoom() {
-        srcList = new ArrayList<>();
-    }
-
     @Override
     public boolean isCurAround(String userId) {
         // 1.判断 curIndex 下标是否为 存在玩家
@@ -92,10 +83,5 @@ public class ClientFourRoom extends Room {
                 throw new IllegalArgumentException("没有设置的事件");
             }
         }
-    }
-
-
-    public void addSrcCard(ClientMaJiang card) {
-        srcList.add(card);
     }
 }

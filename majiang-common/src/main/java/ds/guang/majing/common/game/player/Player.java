@@ -30,8 +30,7 @@ import static ds.guang.majing.common.util.DsConstant.EVENT_TAKE_CARD_ID;
         use = JsonTypeInfo.Id.NAME,
         property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = ServerPlayer.class, name = "serverPlayer"),
-        @JsonSubTypes.Type(value = ClientPlayer.class, name = "clientPlayer")
+        @JsonSubTypes.Type(value = ServerPlayer.class, name = "serverPlayer")
 })
 @Getter
 @Setter

@@ -16,13 +16,14 @@ import java.net.URL;
  */
 public class GameLayout extends Application implements Layout {
 
+    public static Scene scene;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL resource = getClass().getClassLoader().getResource("game_layout_2.fxml");
         System.out.println("resource: " + resource);
         Parent root = FXMLLoader.load(resource);
-        Scene scene = new Scene(root, 600, 500);
+        scene = new Scene(root, 600, 500);
 
         // 1.获取整个屏幕大小
         // 2.获取单张麻将的所有属性（左，右，上）

@@ -1,18 +1,16 @@
 package ds.guang.majing.client.javafx.controller;
 
 import ds.guang.majing.client.cache.CacheUtil;
-import ds.guang.majing.client.game.ClientFourRoom;
+import ds.guang.majing.client.game.CardState;
 import ds.guang.majing.client.game.ClientMaJiang;
-import ds.guang.majing.common.game.card.Card;
+import ds.guang.majing.client.game.ClientPlayer;
 import ds.guang.majing.common.game.card.CardType;
-import ds.guang.majing.common.game.player.Player;
-import ds.guang.majing.common.game.room.Room;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 
 import java.net.URL;
@@ -31,8 +29,11 @@ public class GameLayoutController implements Initializable {
     @FXML
     HBox bottom_card;
 
+    @FXML
+    FlowPane bottom_out_card;
 
-    private final static String CARD_IMAGE_URL = "image/";
+
+    public final static String CARD_IMAGE_URL = "image/";
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,16 +42,13 @@ public class GameLayoutController implements Initializable {
         // 1.获取各个玩家用户信息（暂时先不做）
         bottom_username.setText("123456");
 
-        ClientFourRoom room =  CacheUtil.getRoom();
+
 
         // 2.获取房间信息
         // 3.获取棋牌，生成 MaJiang 对象
 
-        Player[] players = room.getPlayers();
-
         // 当前玩家
-        Player cur = players[room.getCurRoundIndex() % room.getPlayerCount()];
-
+        ClientPlayer cur = CacheUtil.getPlayer();
         List<Integer> cards = cur.getCards();
 
 
@@ -63,12 +61,22 @@ public class GameLayoutController implements Initializable {
              card.setCardType(CardType.generate(v));
              card.setSrc(new Image(CARD_IMAGE_URL + getSrcName(v, card.getCardType())));
              card.setView(new ImageView(card.getSrc()));
+             card.setState(CardState.CARD_INIT);
 
-             room.addSrcCard(card);
+             // 注册游戏动作
+
+             cur.addSrcCard(card);
+
+             card.onbind(event -> card.onFocusEvent());
              bottom_card.getChildren().add(card.getView());
 
         }
 
+        // 加一张阻断牌
+
+        ImageView block = new ImageView(new Image(CARD_IMAGE_URL + getSrcName(19, CardType.generate(19))));
+        bottom_card.getChildren().add(block);
+//        block.setVisible(false);
     }
 
 

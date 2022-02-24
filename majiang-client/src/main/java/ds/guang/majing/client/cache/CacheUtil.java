@@ -1,6 +1,7 @@
 package ds.guang.majing.client.cache;
 
 import ds.guang.majing.client.game.ClientFourRoom;
+import ds.guang.majing.client.game.ClientPlayer;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.player.Player;
@@ -37,8 +38,9 @@ public class CacheUtil {
     public static String getUserId() {
         LoginVo loginVo = (LoginVo) Cache.getInstance().getObject("User-Token:");
         if(loginVo == null) {
-            throw new NullPointerException("请先登录！");
-//            return "NULL";
+            // TODO: 测试阶段
+          //  throw new NullPointerException("请先登录！");
+            return "NULL";
         }
         return loginVo.getUid();
     }
@@ -52,16 +54,28 @@ public class CacheUtil {
         return (StateMachine) Cache.getInstance().getObject(preUserMachinekey("machine-1"));
     }
 
-    public static ClientFourRoom getRoom() {
+    public static ClientFourRoom room;
 
-        ClientFourRoom room = new ClientFourRoom();
+    static {
+
+       room = new ClientFourRoom();
 
         room.setCurRoundIndex(0);
         room.setPlayerCount(2);
-        room.setPlayers(new Player[]{new ServerPlayer().setCards(Arrays.asList(11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11))});
+        room.setPlayers(new Player[]{new ClientPlayer()
+                .setGameUser(new GameUser().setUserId("NULL"))
+                .setCards(Arrays.asList(11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11))});
+    }
+
+    public static ClientFourRoom getRoom() {
 
         return room;
 
        // return (ClientFourRoom) Cache.getInstance().getObject(preRoomInfoPrev(getUserId()));
+    }
+
+
+    public static ClientPlayer getPlayer() {
+        return (ClientPlayer) getRoom().findPlayerById(CacheUtil.getUserId());
     }
 }

@@ -1,6 +1,7 @@
 package ds.guang.majing.client.rule;
 
 import ds.guang.majing.client.cache.CacheUtil;
+import ds.guang.majing.client.game.ClientPlayer;
 import ds.guang.majing.client.javafx.task.OperationTask;
 import ds.guang.majing.client.cache.Cache;
 import ds.guang.majing.client.network.idle.WorkState;
@@ -141,7 +142,21 @@ public class PlatFormRuleImpl extends AbstractRule<String, StateMachine<String, 
             // 类型转换
             Room target = response.getRoom();
             Room room = new ClientFourRoom();
+
+            // 将玩家对象转换成 ClientPlay
+
             ClassUtil.convert(target, room);
+
+            Player[] players = target.getPlayers();
+
+            ClientPlayer[] clientPlayer = new ClientPlayer[players.length];
+
+            for (int i = 0; i < players.length; i++) {
+                clientPlayer[i] = new ClientPlayer();
+                ClassUtil.convert(players[i], clientPlayer[i]);
+            }
+
+            room.setPlayers(clientPlayer);
 
             String id = response.getUserId();
 
