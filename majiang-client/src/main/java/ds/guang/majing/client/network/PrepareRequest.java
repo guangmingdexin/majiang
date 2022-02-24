@@ -1,10 +1,16 @@
 package ds.guang.majing.client.network;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import ds.guang.majing.client.javafx.component.GameLayout;
+import ds.guang.majing.client.javafx.component.Layout;
+import ds.guang.majing.client.javafx.component.LayoutManager;
+import ds.guang.majing.client.javafx.component.StartMenu;
 import ds.guang.majing.common.game.message.GameInfoResponse;
 import ds.guang.majing.common.game.message.DsMessage;
 import ds.guang.majing.common.game.message.DsResult;
 import ds.guang.majing.common.util.JsonUtil;
+import javafx.application.Platform;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -41,6 +47,27 @@ public class PrepareRequest extends Request {
         Objects.requireNonNull(message, "message is null");
 
         if(message.getData().success()) {
+
+            // 体积一个初始任务给 ui
+            Platform.runLater(() -> {
+
+                // 1.获取 菜单界面实例
+                StartMenu layout = (StartMenu) LayoutManager.INSTANCE.getCurLayout();
+                layout.close();
+
+                // 2.跳转到 游戏界面
+                GameLayout gameLayout = new GameLayout();
+
+                try {
+                    gameLayout.start(new Stage());
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
             return message.getData();
         }
 

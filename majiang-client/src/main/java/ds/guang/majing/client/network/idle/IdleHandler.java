@@ -52,6 +52,21 @@ public class IdleHandler {
     private int readIdleCount;
 
 
+    /**
+     * 心跳失败个数
+     */
+    private int failIdle;
+
+    /**
+     * 心跳任务结果
+     */
+    private DsTimeout idleTimeTask;
+
+    /**
+     * 心跳失败次数到达之后，尝试进行重连
+     */
+    private final int reconnect = 3;
+
     public IdleHandler(long idleTime) {
         this(idleTime, TimeUnit.SECONDS);
     }
@@ -120,41 +135,55 @@ public class IdleHandler {
      * @param socket 通道
      * @param idleStateEvent 心跳事件
      */
-    void sendIdleMsg(Socket socket, IdleStateEvent idleStateEvent) throws IOException {
+    void sendIdleMsg(Socket socket, IdleStateEvent idleStateEvent)  {
 
         // 1.构造一个心跳包
 
         // 2.获取连接（http ？ （相对于来说，成本较高了，但是使用 tcp 又需要自定义心跳处理解析器））
         if(socket == null || !socket.isConnected() || socket.isClosed()) {
-            throw new ConnectException("连接已经关闭了");
+            // 心跳失败加一 尝试五次之后
+            failIdle ++;
+
+        }else {
+            OutputStream outputStream;
+            try {
+                outputStream = socket.getOutputStream();
+                // 1.写入心跳包
+
+                String line = "POST / HTTP/1.1" + "\r\n";
+
+                String header = "Host: http://127.0.0.1:9001" + "\r\n"
+                        + "Connection: keep-alive" + "\r\n"
+                        + "Content-Type: application/json" + "\r\n"
+                        + "\r\n";
+
+
+                outputStream.write((line + header).getBytes(StandardCharsets.UTF_8));
+                outputStream.flush();
+
+            } catch (IOException e) {
+                failIdle ++;
+                e.printStackTrace();
+            }
         }
 
-        OutputStream outputStream;
-        try {
-            outputStream = socket.getOutputStream();
-            // 1.写入心跳包
-
-            String line = "POST / HTTP/1.1" + "\r\n";
-
-            String header = "Host: http://127.0.0.1:9001" + "\r\n"
-                    + "Connection: keep-alive" + "\r\n"
-                    + "Content-Type: application/json" + "\r\n"
-                    + "\r\n";
-
-
-            outputStream.write((line + header).getBytes(StandardCharsets.UTF_8));
-            outputStream.flush();
-            System.out.println("写入数据！");
-            return;
-        } catch (IOException e) {
-            e.printStackTrace();
+        // 心跳失败次数到达重连次数
+        if(failIdle >= reconnect) {
+            idleTimeTask.cancel();
+            reconnect();
         }
 
-
-        throw new IllegalArgumentException("获取通道失败：" + socket);
     }
 
 
+    public void clearFailIdle() {
+        failIdle = 0;
+    }
+
+
+    void reconnect() {
+        System.out.println("尝试重连服务器！");
+    }
 
 
     private final class ReaderIdleTimeoutTask implements DsTimerTask {
@@ -197,9 +226,10 @@ public class IdleHandler {
                 sendIdleMsg(socket, event);
 
                 // 进行下次检测
-                WorkState.wheelTimer.newTimeout(this, delay, TimeUnit.NANOSECONDS);
+                idleTimeTask = WorkState.wheelTimer.newTimeout(this, delay, TimeUnit.NANOSECONDS);
+
             }else {
-                WorkState.wheelTimer.newTimeout(this, nextDelay, TimeUnit.NANOSECONDS);
+                idleTimeTask = WorkState.wheelTimer.newTimeout(this, nextDelay, TimeUnit.NANOSECONDS);
             }
         }
 

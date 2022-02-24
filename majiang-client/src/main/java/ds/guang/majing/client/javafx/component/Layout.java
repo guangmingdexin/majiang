@@ -25,4 +25,10 @@ public interface Layout {
      * @return value
      */
     Object get(String name);
+
+
+    /**
+     * 关闭 Layout
+     */
+    void close();
 }

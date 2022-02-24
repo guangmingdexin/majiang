@@ -32,17 +32,19 @@ import static ds.guang.majing.common.util.DsConstant.EVENT_START_ID;
  * @author guangmingdexin
  * @date 2021/4/16 16:05
  **/
-public class LoginLayout extends Application {
-
+public class LoginLayout extends Application implements Layout {
 
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    private Stage stage;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        stage = primaryStage;
 
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
@@ -105,20 +107,25 @@ public class LoginLayout extends Application {
                 DsResult<LoginVo> rs = userService.login(accountAo);
 
                 if(rs.success()) {
+                    System.out.println("登陆成功！");
                     ruleActor.event(EVENT_START_ID, null);
-                    // 跳转
+
+                    LayoutManager.INSTANCE.setCurLayout(this);
                     Platform.runLater(() -> {
 
+                        StartMenu startMenu = new StartMenu();
                         try {
-
-                            StartMenu startMenu = new StartMenu();
                             startMenu.start(new Stage());
                             startMenu.set("actor", ruleActor);
                             startMenu.set("token", rs.getData().getToken());
                             startMenu.set("userId", rs.getData().getUid());
                             startMenu.set("worker", workState);
 
-                          //  primaryStage.close();
+                            // 跳转
+                            LayoutManager.INSTANCE.next(this);
+                            LayoutManager.INSTANCE.setCurLayout(startMenu);
+
+
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
@@ -127,6 +134,7 @@ public class LoginLayout extends Application {
 
                 }else {
                     // 弹框
+                    System.out.println("登陆失败！");
                     Platform.runLater(() -> {
 
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -149,5 +157,20 @@ public class LoginLayout extends Application {
         primaryStage.setTitle("登陆");
         primaryStage.show();
 
+    }
+
+    @Override
+    public void set(String name, Object value) {
+
+    }
+
+    @Override
+    public Object get(String name) {
+        return null;
+    }
+
+    @Override
+    public void close() {
+        stage.close();
     }
 }

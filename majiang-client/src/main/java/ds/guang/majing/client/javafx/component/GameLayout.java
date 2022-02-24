@@ -55,4 +55,9 @@ public class GameLayout extends Application implements Layout {
         return null;
     }
 
+    @Override
+    public void close() {
+
+    }
+
 }

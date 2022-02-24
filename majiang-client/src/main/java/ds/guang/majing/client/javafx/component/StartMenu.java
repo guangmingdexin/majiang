@@ -41,8 +41,12 @@ public class StartMenu extends Application implements Layout {
         this.params = new HashMap<>(8);
     }
 
+    private Stage stage;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        stage = primaryStage;
 
         BorderPane root = new BorderPane();
         Scene scene = new Scene(root, 300, 250, Color.WHITE);
@@ -76,7 +80,6 @@ public class StartMenu extends Application implements Layout {
 
             // 随机匹配
             worker.runAsync(() -> {
-
                 System.out.println("开始匹配！........");
                 actor.setCurrentState(STATE_PREPARE_ID, null);
                 actor.event(EVENT_RANDOM_MATCH_ID, null);
@@ -117,5 +120,10 @@ public class StartMenu extends Application implements Layout {
             throw new NullPointerException(name + " is null");
         }
         return o;
+    }
+
+    @Override
+    public void close() {
+        stage.close();
     }
 }
