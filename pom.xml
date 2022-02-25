@@ -12,6 +12,7 @@
         <module>majiang-server</module>
         <module>majiang-client</module>
         <module>majiang-common</module>
+        <module>chat-client</module>
     </modules>
 
 
