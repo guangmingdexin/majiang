@@ -147,20 +147,21 @@ public class IdleHandler {
         }else {
             OutputStream outputStream;
             try {
-                outputStream = socket.getOutputStream();
-                // 1.写入心跳包
+                synchronized (socket) {
+                    outputStream = socket.getOutputStream();
+                    // 1.写入心跳包
 
-                String line = "POST / HTTP/1.1" + "\r\n";
+                    String line = "POST / HTTP/1.1" + "\r\n";
 
-                String header = "Host: http://127.0.0.1:9001" + "\r\n"
-                        + "Connection: keep-alive" + "\r\n"
-                        + "Content-Type: application/json" + "\r\n"
-                        + "\r\n";
+                    String header = "Host: http://127.0.0.1:9001" + "\r\n"
+                            + "Connection: keep-alive" + "\r\n"
+                            + "Content-Type: application/json" + "\r\n"
+                            + "\r\n";
 
 
-                outputStream.write((line + header).getBytes(StandardCharsets.UTF_8));
-                outputStream.flush();
-
+                    outputStream.write((line + header).getBytes(StandardCharsets.UTF_8));
+                    outputStream.flush();
+                }
             } catch (IOException e) {
                 failIdle ++;
                 e.printStackTrace();
@@ -213,7 +214,7 @@ public class IdleHandler {
 
             // 超时
             if(nextDelay <= 0) {
-                System.out.println("读空闲： " + LocalDateTime.now() + " " + (readIdleCount + 1));
+               // System.out.println("读空闲： " + LocalDateTime.now() + " " + (readIdleCount + 1));
                 readIdleCount ++;
                 // 将 秒转换成 unit
                 long delay = idleTimeNanos;

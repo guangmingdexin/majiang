@@ -131,19 +131,19 @@ public class ClientMaJiang extends MaJiang {
 
 //        bottom_out_card.getChildren().add(view);
 
-        FlowPane flowPane = (FlowPane)GameLayout.scene.lookup("#bottom_out_card");
-
-        flowPane.getChildren().add(view);
-
-        int r = new Random().nextInt(8) + 11;
-
-        ClientMaJiang card = new ClientMaJiang();
-
-        card.setView(new ImageView(new Image(CARD_IMAGE_URL + "dot" + (r % 10) + ".png")));
-        card.setValue(r);
-        card.setCardType(CardType.generate(r));
-
-        Platform.runLater(new TakeCardTask(card));
+//        FlowPane flowPane = (FlowPane)GameLayout.scene.lookup("#bottom_out_card");
+//
+//        flowPane.getChildren().add(view);
+//
+//        int r = new Random().nextInt(8) + 11;
+//
+//        ClientMaJiang card = new ClientMaJiang();
+//
+//        card.setView(new ImageView(new Image(CARD_IMAGE_URL + "dot" + (r % 10) + ".png")));
+//        card.setValue(r);
+//        card.setCardType(CardType.generate(r));
+//
+//        Platform.runLater(new TakeCardTask(card));
     }
 
 

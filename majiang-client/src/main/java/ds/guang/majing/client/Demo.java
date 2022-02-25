@@ -3,6 +3,7 @@ package ds.guang.majing.client;
 
 import ds.guang.majing.client.cache.CacheUtil;
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
+import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
 import ds.guang.majing.client.remote.service.IUserService;
 import ds.guang.majing.client.remote.service.UserService;
 import ds.guang.majing.client.rule.PlatFormRuleImpl;
@@ -116,11 +117,13 @@ public class Demo extends Application {
             // 并需要时刻同步两个状态机的状态一致，缓存
             System.out.println("登陆开始了！");
 
-            AccountAo accountAo = new AccountAo("guangmingdexin", "123");
+            AccountAo accountAo = new AccountAo("test3", "123");
 
             CompletableFuture.runAsync(() -> {
                 IUserService userService = new UserService();
                 userService.login(accountAo);
+
+                userService.getFriends(new UserQueryAo().setUserId(CacheUtil.getUserId()));
             });
 
         });

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="390.0" prefWidth="362.0"
+            xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <BorderPane prefHeight="387.0" prefWidth="358.0">
+         <left>
+            <ListView prefHeight="347.0" prefWidth="70.0" BorderPane.alignment="CENTER" />
+         </left>
+         <center>
+            <ListView fx:id="chat_view_list" prefHeight="316.0" prefWidth="288.0" BorderPane.alignment="CENTER"/>
+         </center>
+         <top>
+            <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </top>
+         <bottom>
+            <HBox alignment="CENTER_LEFT" prefHeight="21.0" prefWidth="358.0" spacing="35.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Circle fill="DODGERBLUE" radius="17.0" stroke="BLACK" strokeType="INSIDE" />
+                  <TextField fx:id="chat_text" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="295.0" />
+               </children>
+            </HBox>
+         </bottom>
+      </BorderPane>
+   </content>
+</ScrollPane>

@@ -54,6 +54,13 @@ public class GameInfoRequest implements Serializable {
     private GameUser gameUser;
 
 
+
+    private String data;
+
+
+    private String friendId;
+
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();

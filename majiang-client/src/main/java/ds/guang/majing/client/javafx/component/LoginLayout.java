@@ -1,6 +1,7 @@
 package ds.guang.majing.client.javafx.component;
 
 
+import ds.guang.majing.client.javafx.controller.FriendViewController;
 import ds.guang.majing.client.network.idle.WorkState;
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
@@ -115,15 +116,14 @@ public class LoginLayout extends Application implements Layout {
 
                         StartMenu startMenu = new StartMenu();
                         try {
-                            startMenu.start(new Stage());
-                            startMenu.set("actor", ruleActor);
-                            startMenu.set("token", rs.getData().getToken());
-                            startMenu.set("userId", rs.getData().getUid());
-                            startMenu.set("worker", workState);
+//                            startMenu.start(new Stage());
+//                            startMenu.set("actor", ruleActor);
+//                            startMenu.set("token", rs.getData().getToken());
+//                            startMenu.set("userId", rs.getData().getUid());
+//                            startMenu.set("worker", workState);
 
-                            // 跳转
-                            LayoutManager.INSTANCE.next(this);
-                            LayoutManager.INSTANCE.setCurLayout(startMenu);
+                            FriendViewController friendViewController = new FriendViewController(workState);
+                            friendViewController.showStage();
 
 
                         } catch (Exception ex) {
@@ -132,6 +132,11 @@ public class LoginLayout extends Application implements Layout {
 
                     });
 
+                    // 唤醒
+                    synchronized (WorkState.LOCK) {
+                        // 唤醒工作线程
+                        WorkState.LOCK.notifyAll();
+                    }
                 }else {
                     // 弹框
                     System.out.println("登陆失败！");

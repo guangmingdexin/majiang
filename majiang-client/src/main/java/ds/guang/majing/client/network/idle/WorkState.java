@@ -12,14 +12,15 @@ import java.util.concurrent.*;
  * @author guangyong.deng
  * @date 2022-02-17 11:05
  */
-public class WorkState extends Thread  {
+public class WorkState   {
 
+    private Thread workThread;
 
     public WorkState(String name) {
-        super(name);
         this.taskQueue = new LinkedBlockingDeque<>(128);
         // 启动线程
-        start();
+        workThread = new WorkThread(name);
+        workThread.start();
     }
 
 
@@ -42,8 +43,7 @@ public class WorkState extends Thread  {
     /**
      *  任务阻塞队列
      */
-    private BlockingDeque<Runnable> taskQueue;
-
+   private  BlockingDeque<Runnable> taskQueue;
 
 
     public void runAsync(Runnable runnable) {
@@ -60,31 +60,47 @@ public class WorkState extends Thread  {
         taskQueue.offer(runnable);
     }
 
-    @Override
-    public void run() {
 
-        while (true) {
+     class WorkThread extends Thread {
 
-            synchronized (LOCK) {
-                if(taskQueue.isEmpty()) {
-                    // 进入等待？
-                    try {
-                        LOCK.wait();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    // 执行任务
-                    Runnable r = taskQueue.poll();
-                    try {
-                        r.run();
-                    }catch (Exception e) {
-                        System.out.println(e.getMessage());
+        public WorkThread(String name) {
+            super(name);
+        }
+
+        @Override
+        public void run() {
+
+            while (true) {
+
+                synchronized (LOCK) {
+                    if(taskQueue.isEmpty()) {
+                        // 进入等待？
+                        try {
+                            System.out.println("进入等待!");
+                            LOCK.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }else {
+                        // 执行任务
+                        System.out.println("执行任务！");
+                        Runnable r = taskQueue.poll();
+
+                        if(r == null) {
+                            continue;
+                        }
+                        try {
+                            r.run();
+                        }catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
                     }
                 }
-            }
 
+            }
         }
     }
+
+
 
 }

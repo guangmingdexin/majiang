@@ -30,10 +30,12 @@ import static ds.guang.majing.common.util.DsConstant.*;
  */
 public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> {
 
+    public static final Context<String, ChannelHandlerContext> map = new Context<>();
+
     @Override
     protected void channelRead0(ChannelHandlerContext context, HttpObject httpObject) throws Exception {
 
-        System.out.println("连接对象： " + context);
+        // System.out.println("连接对象： " + context);
 
         // 判断 msg 是否为 http 请求
         // 后期会将游戏业务与普通业务分类，所以可以添加 uri 做判断
@@ -47,7 +49,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
             String content = HttpRequestParser.getContent(request);
 
             if(content == null || "".equals(content)) {
-                System.out.println(context + " 接受到心跳包: " + LocalDateTime.now());
+              //  System.out.println(context + " 接受到心跳包: " + LocalDateTime.now());
                 return;
             }
             // 不忽略大小写
@@ -55,6 +57,12 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<HttpObject> 
 
             Objects.requireNonNull(message, "message is null");
             Objects.requireNonNull(message.getRequestNo(), "requestNo is null: " + message.getId());
+
+            map.put(message.getRequestNo(), context);
+            // 将消息传递给下一个 handler
+            if(message.getServiceNo().equals(EVENT_CHART)) {
+                context.fireChannelRead(message);
+            }
 
             // 根据不同业务调用不同的处理逻辑
             StateMachine<String, String, DsResult> machine = StateMachines

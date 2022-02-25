@@ -19,9 +19,6 @@ public class WaitRequest extends Request {
         super(message);
     }
 
-    public WaitRequest(Object message, String url) {
-        super(message, url);
-    }
 
     @Override
     protected void before(Runnable task) {

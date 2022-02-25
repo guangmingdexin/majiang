@@ -1,6 +1,7 @@
 package ds.guang.majiang.server;
 
 
+import ds.guang.majiang.server.network.HttpChatHandler;
 import ds.guang.majiang.server.network.HttpRequestHandler;
 import ds.guang.majiang.server.network.codec.IdleStateCodec;
 import io.netty.bootstrap.ServerBootstrap;
@@ -62,8 +63,9 @@ public class GameServer {
                             pipeline.addLast("aggregator", new HttpObjectAggregator(1024*1024));
                             //
                             pipeline.addLast("handler", new HttpRequestHandler());
-
+                            pipeline.addLast("chat", new HttpChatHandler());
                             pipeline.addLast("idle", new IdleStateHandler(0, 0, 10, TimeUnit.SECONDS));
+
 //                            pipeline.addLast("ping", new IdleStateHandler(30, 0,
 //                                    0, TimeUnit.SECONDS));
 

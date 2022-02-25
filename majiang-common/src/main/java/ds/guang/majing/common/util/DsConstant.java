@@ -130,6 +130,14 @@ public final class DsConstant {
 
     public static final String EVENT_STATUS_ACTION = "ACTION";
 
+
+    /**
+     *
+     * 其他模块
+     */
+    public static final String EVENT_CHART = "EVENT_CHART";
+
+
     /**
      * 设置缓存前缀
      */

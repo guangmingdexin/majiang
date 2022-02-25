@@ -93,6 +93,7 @@ public class StartMenu extends Application implements Layout {
         });
 
         friendMenu.setGraphic(friendMenuItem);
+
         friendMenuItem.setOnMouseClicked(event -> {
             // 启动 friendList
             System.out.println("获取好友列表！");

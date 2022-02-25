@@ -20,7 +20,7 @@ public class ActionManager {
         // package 应该能够动态配置
 
         Set<Class<?>> clazz = ClassUtil.getClassFromPath(
-                "ds.guang.ds.server.layer",
+                "ds.guang.majiang.server.layer",
                 StateMatchAction.class, true);
 
 
@@ -65,7 +65,7 @@ public class ActionManager {
         List<Action> actions = map.get(stateId);
 
         if(actions == null || actions.isEmpty()) {
-            throw new NullPointerException("actions is empty!");
+            throw new NullPointerException("actions is empty!" + stateId);
         }
 
         Action maxOrderAction = actions.get(0);

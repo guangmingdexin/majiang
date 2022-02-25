@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import ds.guang.majing.client.network.Request;
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
 import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
+import ds.guang.majing.client.remote.dto.vo.FriendVo;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.client.cache.Cache;
 import ds.guang.majing.common.game.dto.GameUser;
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 import static ds.guang.majing.common.util.DsConstant.REMOTE_LOGIN_URL;
+import static ds.guang.majing.common.util.DsConstant.REMOTE_USER_URL;
 
 /**
  *
@@ -29,7 +31,7 @@ public class UserService implements IUserService {
     @Override
     public GameUser getOne(UserQueryAo query) {
         // 1.创建一个连接，发起请求
-        Request request = new Request(query, REMOTE_LOGIN_URL + "ds/ds-user/user") {
+        Request request = new Request(query, REMOTE_LOGIN_URL + "ds-user/user") {
 
             @Override
             protected void before(Runnable task) {
@@ -70,7 +72,7 @@ public class UserService implements IUserService {
     @Override
     public DsResult<LoginVo> login(AccountAo accountAo) {
 
-        Request request = new Request(accountAo, REMOTE_LOGIN_URL + "ds/ds-auth/login") {
+        Request request = new Request(accountAo, REMOTE_LOGIN_URL + "ds-auth/login") {
             @Override
             protected void before(Runnable task) {
 
@@ -104,7 +106,42 @@ public class UserService implements IUserService {
                 return responseVo;
             }
         };
+        return request.execute(null);
+    }
+
+
+    @Override
+    public DsResult<FriendVo> getFriends(UserQueryAo queryAo) {
+
+        Request request = new Request(queryAo, REMOTE_LOGIN_URL + "ds-friend/friends") {
+
+            @Override
+            protected void before(Runnable task) {
+
+            }
+
+            @Override
+            protected DsResult after(String content) {
+
+                DsResult<FriendVo> responseVo = null;
+
+                try {
+                    responseVo = JsonUtil.getMapper().readValue(
+                            content,
+                            new TypeReference<DsResult<FriendVo>>() {});
+                    System.out.println("responseVo: " + responseVo);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("失败： " + e.getMessage());
+                }
+
+
+                return responseVo;
+            }
+        };
+
 
         return request.execute(null);
+
     }
 }

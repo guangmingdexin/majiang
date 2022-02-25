@@ -2,6 +2,7 @@ package ds.guang.majing.client.remote.service;
 
 import ds.guang.majing.client.remote.dto.ao.AccountAo;
 import ds.guang.majing.client.remote.dto.ao.UserQueryAo;
+import ds.guang.majing.client.remote.dto.vo.FriendVo;
 import ds.guang.majing.client.remote.dto.vo.LoginVo;
 import ds.guang.majing.common.game.dto.GameUser;
 import ds.guang.majing.common.game.message.DsResult;
@@ -32,5 +33,18 @@ public interface IUserService {
      * @param accountAo
      * @return
      */
-    DsResult<LoginVo> login(AccountAo accountAo) ;
+    DsResult<LoginVo> login(AccountAo accountAo);
+
+
+    /**
+     *
+     * 获取好友信息
+     *
+     * @param queryAo 查询条件
+     * @return 好友列表
+     */
+    DsResult<FriendVo> getFriends(UserQueryAo queryAo);
+
+
+
 }
