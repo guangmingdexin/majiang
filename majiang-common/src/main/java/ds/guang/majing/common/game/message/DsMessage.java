@@ -35,6 +35,8 @@ public class DsMessage<T> implements Serializable {
 
     private LocalDateTime date;
 
+
+
     @JsonIgnore
     private Map<String, Object> attrMap;
 
